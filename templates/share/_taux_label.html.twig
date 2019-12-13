@@ -1,0 +1,26 @@
+
+{%  if color is not defined %}
+    {% if taux1 == 0 %}
+        {% set color='danger' %}
+    {% elseif taux1 < 50 %}
+        {% set color='warning' %}
+    {% elseif taux1 < 65 %}
+        {% set color='info' %}
+    {% elseif taux1 < 80 %}
+        {% set color='primary' %}
+    {% else %}
+        {% set color='success' %}
+    {% endif %}
+{% endif %}
+
+<span class="badge-{{ color }} badge">{{ taux1 }} %</span>
+
+      {% if (taux2 - taux1) == 1 %}
+        <span class="text-muted text-xs">
+           + 1 point
+        </span>
+      {% elseif (taux2 - taux1) > 1 %}
+        <span class="text-muted text-xs">
+           + {{taux2 - taux1}} points
+        </span>
+      {% endif %}

@@ -1,0 +1,6 @@
+<a class="btn btn-primary  {{  sm | default('') ?  'btn-sm' : ''  }} {{  mr | default('') ?  'mr-1' : ''  }}"
+   href="{{ path(url, {'id': id}) }}{{  anchor | default('')}}"
+   data-html="true"
+   data-toggle="tooltip" data-placement="top" title="Consulter">
+    <i class="fas fa-eye"></i> {{ titre | default('Consulter') }}
+</a>

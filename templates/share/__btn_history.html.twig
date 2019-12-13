@@ -1,0 +1,5 @@
+<a class="btn bg-warning  {{  sm | default('') ?  'btn-sm' : ''  }}"
+   href="{{ path(url, {'id': id}) }}"data-html="true"
+   data-toggle="tooltip" data-placement="top" title="Historique">
+    <i class="fas fa-history"></i>  {{ titre | default('Historique') }}
+</a>

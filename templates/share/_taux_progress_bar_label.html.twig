@@ -1,0 +1,23 @@
+{% if taux1 == 0 %}
+    {% set color='danger' %}
+{% elseif taux1 < 50 %}
+    {% set color='warning' %}
+{% elseif taux1 < 65 %}
+    {% set color='info' %}
+{% elseif taux1 < 80 %}
+    {% set color='primary' %}
+{% else %}
+    {% set color='success' %}
+{% endif %}
+
+<div class="progress progress-sm">
+    <div class="progress-bar bg-{{ color }}"
+         role="progressbar"
+         aria-volumenow="{{ taux1 }}"
+         aria-volumemin="0"
+         aria-volumemax="100"
+         style="width: {{ taux1 }}%">
+    </div>
+</div>
+
+{{ include('share/_taux_label.html.twig', {'taux1': taux1,'taux2': taux2,'color':color }) }}
