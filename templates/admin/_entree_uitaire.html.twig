@@ -1,0 +1,17 @@
+<tr>
+    <td class="text-secondary">
+        <span class="ml-5">{{ title }}</span>
+    </td>
+    <td class="d-flex justify-content-around">
+        <a class="btn btn-primary btn-sm" href="{{ path(domaine ~ '_index') }}"> <i class="  fas fa-list-alt"></i>
+            Consulter la liste </a>
+
+        {% if is_granted('ROLE_GESTIONNAIRE') or ( is_granted('ROLE_GESTIONNAIRE_LOCAL') and domaine== 'corbeille' ) %}
+            {{ include('share/__btn_new.html.twig',
+                {
+                    'url':domaine ~ '_new',
+                    'sm':true
+                }) }}
+        {% endif %}
+    </td>
+</tr>

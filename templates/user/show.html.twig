@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Utilisateur{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Utilisateur' , 'id' : user.id, 'index' : 'user_index'}) }}
+{% endblock %}
+
+
+    {% block body %}
+
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-12 col-lg-6  ">
+                <div class="card ">
+                    <div class="card-footer">
+                        Les informations de l'utilisateur
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tbody>
+                            <tr>
+                                <th>Nom de l'utilisateur</th>
+                                <td colspan="2">{{ user.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td colspan="2">{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Téléphone</th>
+                                <td colspan="2">{{ user.phone }}</td>
+                            </tr>
+                            <tr>
+                                <th>Afficher</th>
+                                <td class="text-center">
+                                    {% if user.enable %}
+                                        <span class="text-success" ><i class="fas fa-eye"></i></span>
+                                    {% else %}
+                                        <span class="text-danger" ><i class="fas fa-eye-slash"></i></span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Administrateur</th>
+                                <td class="text-center">
+                                    <span class="text-{{ 'ROLE_ADMIN' in user.roles ? 'info' : 'light' }} " ><i class="fas fa-circle"></i></span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">Administrateur de l'application</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Gestionnaire</th>
+                                <td class="text-center">
+                                    <span class="text-{{ 'ROLE_GESTIONNAIRE' in user.roles ? 'info' : 'light' }} " ><i class="fas fa-circle"></i></span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">Gestionnaire de l'application</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Gestionnaire local</th>
+                                <td class="text-center">
+                                    <span class="text-{{ 'ROLE_GESTIONNAIRE_LOCAL' in user.roles ? 'info' : 'light' }} " ><i class="fas fa-circle"></i></span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">Gestion des corbeilles pour son organisme</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Utilisateur</th>
+                                <td class="text-center">
+                                    <span class="text-{{ 'ROLE_USER' in user.roles ? 'info' : 'light' }} " ><i class="fas fa-circle"></i></span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">Utilisateur de l'application</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Dernière connexion</th>
+                                <td colspan="2"><span class="text-muted">{{ user.loginat?user.loginat|date("m/d/Y", "Europe/Paris") }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Date de création </th>
+                                <td colspan="2"><span class="text-muted">{{ user.createdat?user.createdat|date("m/d/Y", "Europe/Paris")}}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Dernière modification</th>
+                                <td colspan="2"><span class="text-muted">{{ user.modifiedat?user.modifiedat|date("m/d/Y", "Europe/Paris") }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td colspan="2"><span class="text-muted">{{ user.content }}</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col  d-flex justify-content-between align-items-center">
+                                {{ include('share/__btn_return_list.html.twig',
+                                    {   'url':'user_index'
+                                    }) }}
+
+                                {% if is_granted('ROLE_GESTIONNAIRE') %}
+
+                                    {{ include('share/__btn_edit.html.twig',
+                                        {   'url':'user_edit',
+                                            'id':user.id
+                                        }) }}
+
+                                {% endif %}
+                                {{ include('share/_delete_form.html.twig',{'domaine':'user','id':user.id}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-4 ">
+
+
+
+            </div>
+        </div>
+
+
+{% endblock %}
