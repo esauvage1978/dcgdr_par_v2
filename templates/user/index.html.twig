@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Utilisateur{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Utilisateur' }) }}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="tableAdministration" class="table table-striped display" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th class="all">#</th>
+                                    <th class="all">Nom</th>
+                                    <th class="desktop">Email</th>
+                                    <th class="desktop text-center">Administrateur</th>
+                                    <th class="desktop text-center">Mail non vérifié</th>
+                                    <th class="all text-center">actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.id }}</td>
+                                        <td>
+                                            <span class="text-{{ user.enable ? 'gray-dark' : 'danger text-bold' }}">
+                                                {{ user.name }}
+                                            </span>
+                                        </td>
+                                        <td>{{ user.email }}</td>
+                                        <td class="text-center">
+                                            <span class="text-{{ 'ROLE_ADMIN' in user.roles ? 'info' : 'light' }} " ><i class="fas fa-circle"></i></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="text-{{ not user.activate ? 'danger' : 'light' }} " ><i class="fas fa-circle"></i></span>
+
+                                        </td>
+                                        <td class="d-flex justify-content-center align-items-center">
+
+                                            {{ include('share/__btn_show.html.twig',
+                                                {   'url':'user_show',
+                                                    'id':user.id,
+                                                    'mr':true,
+                                                    'sm':true
+                                                }) }}
+
+                                            {% if is_granted('ROLE_GESTIONNAIRE') %}
+
+                                                {{ include('share/__btn_edit.html.twig',
+                                                    {   'url':'user_edit',
+                                                        'id':user.id,
+                                                        'sm':true
+                                                    }) }}
+
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="9">Pas d'enregistrements</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-header">
+                    {{ include('share/__btn_new.html.twig',
+                        {'url':'user_new'}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('plugins/datatables/jquery.dataTables.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/datatables/user.js')) }}"></script>
+{% endblock %}
