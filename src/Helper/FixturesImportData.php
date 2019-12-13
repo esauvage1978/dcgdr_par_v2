@@ -47,7 +47,7 @@ class FixturesImportData
 
     private function checkFile()
     {
-        return  file_exists($this->getPath());
+        return  is_file($this->getPath());
     }
 
     private function getPath() {

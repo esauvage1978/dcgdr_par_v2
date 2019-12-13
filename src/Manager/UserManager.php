@@ -119,19 +119,19 @@ class UserManager
         return true;
     }
 
-    public function initialisePasswordRecover(User $user, string $plainPassword, string $plainPasswordConfirmation): bool
+    public function initialisePasswordRecover(User $user, string $plainPassword, string $plainPasswordConfirmm): bool
     {
         $user->setForgetToken(date_format(new DateTime(), 'Y-m-d H:i:s'));
         $user->setPlainPassword($plainPassword);
-        $user->setPlainPasswordConfirmation($plainPasswordConfirmation);
+        $user->setPlainPasswordConfirmation($plainPasswordConfirmm);
 
         return true;
     }
 
-    public function initialisePasswordChange(User $user, string $plainPassword, string $plainPasswordConfirmation): bool
+    public function initialisePasswordChange(User $user, string $plainPassword, string $plainPasswordConfirm): bool
     {
         $user->setPlainPassword($plainPassword);
-        $user->setPlainPasswordConfirmation($plainPasswordConfirmation);
+        $user->setPlainPasswordConfirmation($plainPasswordConfirmm);
 
         return true;
     }

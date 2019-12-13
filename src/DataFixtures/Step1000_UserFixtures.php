@@ -38,12 +38,12 @@ class Step1000_UserFixtures extends Fixture implements FixtureGroupInterface
         FixturesImportData $importData,
         UserValidator $validator,
         UserManager $userManager,
-        EntityManagerInterface $entityManagerInterface
+        EntityManagerInterface $entityManagerI
     ) {
         $this->importData = $importData;
         $this->validator = $validator;
         $this->userManager = $userManager;
-        $this->entityManagerInterface=$entityManagerInterface;
+        $this->entityManagerInterface=$entityManagerI;
     }
 
     public function load(ObjectManager $manager)
@@ -69,9 +69,9 @@ class Step1000_UserFixtures extends Fixture implements FixtureGroupInterface
             $metadata = $this->entityManagerInterface->getClassMetadata(User::class);
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $this->entityManagerInterface->persist($instance);
-        } else {
-            var_dump('Validator : ' . $this->validator->getErrors($instance) . $instance->getName());
+            return;
         }
+        var_dump('Validator : ' . $this->validator->getErrors($instance) . $instance->getName());
     }
 
     private function initialise(User $instance, $data): User
