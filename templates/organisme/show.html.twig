@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Organisme{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body_header %}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Organisme' , 'id' : organisme.id, 'index' : 'organisme_index'}) }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-center">
+        <div class="{{ col_primary }}">
+            <div class="card ">
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Nom de l'organisme</th>
+                            <td colspan="2">{{ organisme.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Référence</th>
+                            <td colspan="2">{{ organisme.ref }}</td>
+                        </tr>
+                        <tr>
+                            <th>Afficher</th>
+                            <td class="text-center">
+                                {% if organisme.enable %}
+                                    <span class="text-success"><i class="fas fa-eye"></i></span>
+                                {% else %}
+                                    <span class="text-danger"><i class="fas fa-eye-slash"></i></span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Administrable</th>
+                            <td class="text-center">
+                                <span class="text-{{ organisme.alterable ? 'info' : 'light' }}"><i
+                                            class="fas fa-circle"></i></span>
+                            </td>
+                            <td>
+                                <small class="text-muted">Permet au gestionnaire local associé à cet organisme d'en
+                                    administrer les corbeilles.</small>
+                            </td>
+                        </tr>
+                        {% if  organisme.content %}
+                            <tr>
+                                <th>Description</th>
+                                <td colspan="2">{{ organisme.content | raw }}</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col  d-flex justify-content-between align-items-center">
+
+                            {{ include('share/__btn_return_list.html.twig',
+                                {   'url':'organisme_index'
+                                }) }}
+
+                            {% if is_granted('ROLE_GESTIONNAIRE') %}
+
+                                {{ include('share/__btn_edit.html.twig',
+                                    {   'url':'organisme_edit',
+                                        'id':organisme.id
+                                    }) }}
+
+                            {% endif %}
+
+                            {{ include('share/_delete_form.html.twig',{'domaine': 'organisme','id':organisme.id}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="{{ col_secondary }}">
+            <div class="card mt-4">
+                <div class="card-footer">
+                    Utilisateurs
+                </div>
+                <div class="card-body text-justify">
+                    {% for user in organisme.users %}
+                        {{ include('user/_show_item.html.twig') }}
+                    {% else %}
+                        <div class="list-group-item">En attente d'ajout</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

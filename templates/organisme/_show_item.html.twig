@@ -1,0 +1,9 @@
+    <a href="{{ path('organisme_show', {'id': organisme.id}) }}"  class="btn btn-info m-1">
+
+        {% if organisme.enable == false   %}
+            <span class="text-danger" ><i class="fas fa-eye-slash"></i></span>
+        {%  endif %}
+
+        {{ organisme.name }}
+
+    </a>

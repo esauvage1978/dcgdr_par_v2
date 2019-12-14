@@ -31,7 +31,10 @@
                     <table class="table">
                         <tbody>
                         {%  if is_granted('ROLE_USER') %}
-                            {{ include('admin/_entree_uitaire.html.twig',{'title':'Utilisateur', 'domaine':'user'} ) }}
+                            {{ include('admin/_entree_unitaire.html.twig',{'title':'Utilisateur', 'domaine':'user'} ) }}
+                            {{ include('admin/_entree_unitaire.html.twig',{'title':'Organisme', 'domaine':'organisme'} ) }}
+
+
                         {%  endif %}
                         </tbody>
                     </table>
