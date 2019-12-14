@@ -1,0 +1,9 @@
+    <a href="{{ path('user_show', {'id': user.id}) }}"  class="btn btn-info m-1">
+
+        {% if user.enable == false   %}
+            <span class="text-danger" ><i class="fas fa-eye-slash"></i></span>
+        {%  endif %}
+
+        {{ user.name }}
+
+    </a>

@@ -3,6 +3,8 @@
 namespace App\Manager;
 
 use App\Entity\User;
+use App\Helper\ToolCollecion;
+use App\Repository\OrganismeRepository;
 use App\Validator\UserValidator;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -27,34 +29,43 @@ class UserManager
      */
     private $validator;
 
-    public function __construct(EntityManagerInterface $manager, UserValidator $validator, UserPasswordEncoderInterface $passwordEncoder)
-    {
+    private $organismeRepository;
+
+    public function __construct(
+        EntityManagerInterface $manager,
+        UserValidator $validator,
+        UserPasswordEncoderInterface $passwordEncoder,
+        OrganismeRepository $organismeRepository
+    ) {
         $this->manager = $manager;
         $this->validator = $validator;
         $this->passwordEncoder = $passwordEncoder;
+        $this->organismeRepository =$organismeRepository;
     }
 
-    public function save(User $entity,User $entityClone=null): bool
+    public function save(User $user): bool
     {
-        $this->initialise($entity, $entityClone);
+        $this->initialise($user);
 
-        if (!$this->validator->isValid($entity)) {
+        if (!$this->validator->isValid($user)) {
             return false;
         }
 
-        $this->manager->persist($entity);
+        $this->manager->persist($user);
         $this->manager->flush();
 
         return true;
     }
 
-    public function initialise(User $user,User $userClone=null)
+    public function initialise(User $user)
     {
         $this->encodePassword($user);
 
-        if(!$user->getCreatedAt()) {
+        if( $user->getCreatedAt()===null) {
             $user->setCreatedAt(new \DateTime());
             $user->setEnable(true);
+        } else {
+            $user->setModifiedAt(new \DateTime());
         }
 
         if (!$user->getActivateToken()) {
@@ -63,7 +74,28 @@ class UserManager
                 ->setActivateToken(md5(random_bytes(50)));
         }
 
+        if(!empty($user->getId())) {
+            $this->setRelation(
+                $user,
+                $this->organismeRepository->findAllForUser($user->getId()),
+                $user->getOrganismes()
+            );
+        }
+
         return true;
+    }
+
+    public function setRelation(User $user, $entitysOld, $entitysNew)
+    {
+        $em = new ToolCollecion($entitysOld, $entitysNew->toArray());
+
+        foreach ($em->getDeleteDiff() as $entity) {
+            $entity->removeUser($user);
+        }
+
+        foreach ($em->getInsertDiff() as $entity) {
+            $entity->addUser($user);
+        }
     }
 
     public function checkPassword($user, $pwd): bool
@@ -131,7 +163,7 @@ class UserManager
     public function initialisePasswordChange(User $user, string $plainPassword, string $plainPasswordConfirm): bool
     {
         $user->setPlainPassword($plainPassword);
-        $user->setPlainPasswordConfirmation($plainPasswordConfirmm);
+        $user->setPlainPasswordConfirmation($plainPasswordConfirm);
 
         return true;
     }

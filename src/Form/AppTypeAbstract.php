@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Organisme;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -42,6 +43,38 @@ abstract class AppTypeAbstract extends AbstractType
                 self::LABEL => 'Description',
                 self::REQUIRED => false,
                 self::ATTR => [self::ROWS => 3, self::CSS_CLASS => 'textarea'],
+            ]);
+    }
+
+    public function buildFormOrganismes(FormBuilderInterface $builder): FormBuilderInterface
+    {
+        return $builder
+            ->add('organismes', EntityType::class, [
+                'class' => Organisme::class,
+                self::CHOICE_LABEL => 'name',
+                self::MULTIPLE => true,
+                self::ATTR => ['class' => 'select2'],
+                self::REQUIRED => false,
+                self::QUERY_BUILDER => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('o')
+                        ->orderBy('o.name', 'ASC');
+                },
+            ]);
+    }
+
+    public function buildFormUsers(FormBuilderInterface $builder): FormBuilderInterface
+    {
+        return $builder
+            ->add('users', EntityType::class, [
+                'class' => User::class,
+                self::CHOICE_LABEL => 'name',
+                self::MULTIPLE => true,
+                self::ATTR => ['class' => 'select2'],
+                self::REQUIRED => false,
+                self::QUERY_BUILDER => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.name', 'ASC');
+                },
             ]);
     }
 }

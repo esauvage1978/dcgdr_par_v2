@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppControllerAbstract;
 use App\Entity\User;
 use App\Form\Admin\UserType;
+use App\Form\Admin\UserTypeNew;
 use App\Repository\UserRepository;
 use App\Manager\UserManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -23,12 +24,8 @@ class UserController extends AppControllerAbstract
 
     /**
      * @Route("/", name="user_index", methods={"GET"})
-     *
      * @return Response
-     *
      * @IsGranted("ROLE_GESTIONNAIRE")
-     *
-     * @var UserRepository $userRepository
      */
     public function indexAction(UserRepository $userRepository): Response
     {
@@ -65,24 +62,21 @@ class UserController extends AppControllerAbstract
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      *
-     * @param Request     $request
-     * @param User        $user
-     * @param UserManager $manager
-     * @param string      $message =self::MSG_CREATE
-     *
      * @return Response
      *
      * @IsGranted("ROLE_GESTIONNAIRE")
      */
-    public function editAction(Request $request, User $user, UserManager $manager, string $message = self::MSG_MODIFY): Response
+    public function editAction(
+        Request $request,
+        User $user,
+        UserManager $manager,
+        string $message = self::MSG_MODIFY): Response
     {
-        $userClone = clone $user;
-
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(self::MSG_CREATE === $message ? UserTypeNew::class : UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($manager->save($user, $userClone)) {
+            if ($manager->save($user)) {
                 $this->addFlash(self::SUCCESS, $message);
 
                 return $this->redirectToRoute(self::ENTITY.'_index');
