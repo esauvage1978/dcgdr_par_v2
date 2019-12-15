@@ -56,6 +56,11 @@
                                             <span class="text-{{ axe.archiving ? 'info' : 'light' }}" ><i class="fas fa-circle"></i></span>
                                         </td>
                                         <td class="text-center">
+                                            {% if   axe.poles.count==0 %}
+                                                <span class="text-light" ><i class="fas fa-circle"></i></span>
+                                            {% else %}
+                                                <small class="badge bg-info">{{ axe.poles.count}}</small>
+                                            {% endif %}
                                         </td>
                                         <td class=" d-flex  justify-content-end ">
 
@@ -77,7 +82,7 @@
                                     </tr>
                                 {% else %}
                                     <tr>
-                                        <td colspan="6">Aucun d'enregistrement</td>
+                                        <td colspan="7">Aucun d'enregistrement</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

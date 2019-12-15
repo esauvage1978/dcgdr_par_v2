@@ -76,6 +76,20 @@
             </div>
         </div>
         <div class="{{ col_secondary }}">
+            <div class="card">
+                <div class="card-footer">
+                    Pôles
+                </div>
+                <div class="card-body">
+                    {% for pole in axe.poles %}
+                        {{ include('pole/_show_item.html.twig') }}
+                    {% else %}
+                        <div class="list-group-item">
+                            <a class="text-success" href="{{ path('pole_new') }}">Créer un pôle</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
 
     </div>

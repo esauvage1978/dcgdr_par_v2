@@ -48,11 +48,16 @@ class Axe implements EntityInterface
      */
     private $archiving;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Pole", mappedBy="axe", orphanRemoval=true)
+     */
+    private $poles;
 
     public function __construct()
     {
         $this->setTaux1('0');
         $this->setTaux2('0');
+        $this->poles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -135,6 +140,37 @@ class Axe implements EntityInterface
     public function setArchiving(bool $archiving): self
     {
         $this->archiving = $archiving;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Pole[]
+     */
+    public function getPoles(): Collection
+    {
+        return $this->poles;
+    }
+
+    public function addPole(Pole $pole): self
+    {
+        if (!$this->poles->contains($pole)) {
+            $this->poles[] = $pole;
+            $pole->setAxe($this);
+        }
+
+        return $this;
+    }
+
+    public function removePole(Pole $pole): self
+    {
+        if ($this->poles->contains($pole)) {
+            $this->poles->removeElement($pole);
+            // set the owning side to null (unless already changed)
+            if ($pole->getAxe() === $this) {
+                $pole->setAxe(null);
+            }
+        }
 
         return $this;
     }

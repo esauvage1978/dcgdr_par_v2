@@ -25,7 +25,8 @@ class AxeRepository extends ServiceEntityRepository
     public function findAllForAdmin()
     {
         return $this->createQueryBuilder(self::AXE)
-            ->select(self::AXE)
+            ->select(self::AXE,PoleRepository::POLE)
+            ->leftJoin(self::AXE.'.poles',PoleRepository::POLE)
             ->orderBy(self::AXE.'.name', 'ASC')
             ->getQuery()
             ->getResult();
