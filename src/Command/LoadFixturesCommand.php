@@ -39,6 +39,10 @@ class LoadFixturesCommand extends Command
         passthru($command);
         $command = 'php '.dirname(__DIR__, 2).'/bin/console doctrine:fixtures:load --group=step1020 --append -n ';
         passthru($command);
+        $command = 'php '.dirname(__DIR__, 2).'/bin/console doctrine:fixtures:load --group=step1030 --append -n ';
+        passthru($command);
+        $command = 'php '.dirname(__DIR__, 2).'/bin/console doctrine:fixtures:load --group=step1040 --append -n ';
+        passthru($command);
 
         $fin = microtime(true);
 

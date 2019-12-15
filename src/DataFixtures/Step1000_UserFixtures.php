@@ -59,7 +59,7 @@ class Step1000_UserFixtures extends Fixture implements FixtureGroupInterface
         }
 
 
-        $manager->flush();
+        $this->entityManagerInterface->flush();
     }
 
 

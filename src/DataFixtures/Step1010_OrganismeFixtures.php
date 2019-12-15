@@ -51,7 +51,7 @@ class Step1010_OrganismeFixtures extends Fixture implements FixtureGroupInterfac
 
         }
 
-        $manager->flush();
+        $this->entityManagerInterface->flush();
     }
 
 
