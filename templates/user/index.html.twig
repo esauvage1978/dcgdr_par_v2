@@ -22,11 +22,29 @@
                                 <thead>
                                 <tr>
                                     <th class="all">#</th>
-                                    <th class="all">Nom</th>
-                                    <th class="desktop">Email</th>
-                                    <th class="desktop text-center">Administrateur</th>
-                                    <th class="desktop text-center">Mail non vérifié</th>
-                                    <th class="desktop text-center">Nombre d'organismes</th>
+                                    <th class="all">Nom / Email</th>
+                                    <th class="desktop">Description</th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-user-cog"  data-toggle="tooltip" data-placement="top" title="Administrateur"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-user-astronaut"  data-toggle="tooltip" data-placement="top" title="Gestionnaire"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-user-secret"  data-toggle="tooltip" data-placement="top" title="Gestionnaire local"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-user"  data-toggle="tooltip" data-placement="top" title="Utilisateur"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-envelope-open-text"  data-toggle="tooltip" data-placement="top" title="Mail non vérifié"></i>
+                                        </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-city"  data-toggle="tooltip" data-placement="top" title="Nombre d'organismes"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-boxes"  data-toggle="tooltip" data-placement="top" title="Nombre de corbeilles"></i>
+                                    </th>
                                     <th class="all text-center"></th>
                                 </tr>
                                 </thead>
@@ -37,11 +55,21 @@
                                         <td>
                                             <span class="text-{{ user.enable ? 'gray-dark' : 'danger text-bold' }}">
                                                 {{ user.name }}
-                                            </span>
+                                            </span><br/>
+                                            <small>{{ user.email }}</small>
                                         </td>
-                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.content | raw }}</td>
                                         <td class="text-center">
                                             <span class="text-{{ 'ROLE_ADMIN' in user.roles ? 'info' : 'light' }} " ><i class="fas fa-circle"></i></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="text-{{ 'ROLE_GESTIONNAIRE' in user.roles ? 'info' : 'light' }} " ><i class="fas fa-circle"></i></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="text-{{ 'ROLE_GESTIONNAIRE_LOCAL' in user.roles ? 'info' : 'light' }} " ><i class="fas fa-circle"></i></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="text-{{ 'ROLE_USER' in user.roles ? 'info' : 'light' }} " ><i class="fas fa-circle"></i></span>
                                         </td>
                                         <td class="text-center">
                                             <span class="text-{{ not user.activate ? 'danger' : 'light' }} " ><i class="fas fa-circle"></i></span>
@@ -51,6 +79,13 @@
                                                 <span class="text-light" ><i class="fas fa-circle"></i></span>
                                             {% else %}
                                                 <small class="badge bg-info">{{ user.organismes.count}}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if   user.corbeilles.count==0 %}
+                                                <span class="text-light" ><i class="fas fa-circle"></i></span>
+                                            {% else %}
+                                                <small class="badge bg-info">{{ user.corbeilles.count}}</small>
                                             {% endif %}
                                         </td>
                                         <td class="d-flex justify-content-center align-items-center">
@@ -75,7 +110,7 @@
                                     </tr>
                                 {% else %}
                                     <tr>
-                                        <td colspan="9">Pas d'enregistrements</td>
+                                        <td colspan="8">Pas d'enregistrements</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

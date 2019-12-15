@@ -1,0 +1,14 @@
+App\Entity\Corbeille:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        fields: [organisme, name]
+        errorPath: name
+        message: 'Le nom de la corbeille "{{ value }}" est déjà déclaré pour cet organisme.'
+  properties:
+    name:
+      - NotBlank: ~
+      - Length:
+          min: 3
+          max: 40
+          minMessage: 'Le nom de la corbeille "{{ value }}" doit avoir plus de 3 caractères'
+          maxMessage: 'Le nom de la corbeille "{{ value }}" ne peut pas avoir plus de 40 caractères'

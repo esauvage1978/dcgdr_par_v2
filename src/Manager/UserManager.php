@@ -4,16 +4,15 @@ namespace App\Manager;
 
 use App\Entity\User;
 use App\Helper\ToolCollecion;
+use App\Repository\CorbeilleRepository;
 use App\Repository\OrganismeRepository;
 use App\Validator\UserValidator;
 use DateTime;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserManager
 {
-
     /**
      * @var UserPasswordEncoderInterface
      */
@@ -29,18 +28,28 @@ class UserManager
      */
     private $validator;
 
+    /**
+     * @var OrganismeRepository
+     */
     private $organismeRepository;
+
+    /**
+     * @var CorbeilleRepository
+     */
+    private $corbeilleRepository;
 
     public function __construct(
         EntityManagerInterface $manager,
         UserValidator $validator,
         UserPasswordEncoderInterface $passwordEncoder,
-        OrganismeRepository $organismeRepository
+        OrganismeRepository $organismeRepository,
+    CorbeilleRepository $corbeilleRepository
     ) {
         $this->manager = $manager;
         $this->validator = $validator;
         $this->passwordEncoder = $passwordEncoder;
-        $this->organismeRepository =$organismeRepository;
+        $this->organismeRepository = $organismeRepository;
+        $this->corbeilleRepository = $corbeilleRepository;
     }
 
     public function save(User $user): bool
@@ -61,7 +70,7 @@ class UserManager
     {
         $this->encodePassword($user);
 
-        if( $user->getCreatedAt()===null) {
+        if (null === $user->getCreatedAt()) {
             $user->setCreatedAt(new \DateTime());
             $user->setEnable(true);
         } else {
@@ -74,11 +83,16 @@ class UserManager
                 ->setActivateToken(md5(random_bytes(50)));
         }
 
-        if(!empty($user->getId())) {
+        if (!empty($user->getId())) {
             $this->setRelation(
                 $user,
                 $this->organismeRepository->findAllForUser($user->getId()),
                 $user->getOrganismes()
+            );
+            $this->setRelation(
+                $user,
+                $this->corbeilleRepository->findAllForUser($user->getId()),
+                $user->getCorbeilles()
             );
         }
 

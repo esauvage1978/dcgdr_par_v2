@@ -79,6 +79,20 @@
             </div>
         </div>
         <div class="{{ col_secondary }}">
+            <div class="card">
+                <div class="card-footer">
+                    Corbeilles
+                </div>
+                <div class="list-group list-group-flush dropright">
+                    {% for corbeille in organisme.corbeilles %}
+                        {{ include('corbeille/_show_list_group_item.html.twig') }}
+                    {% else %}
+                        <div class="list-group-item">
+                            <a class="text-success" href="{{ path('corbeille_new') }}">Créer une corbeille</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
             <div class="card mt-4">
                 <div class="card-footer">
                     Utilisateurs
