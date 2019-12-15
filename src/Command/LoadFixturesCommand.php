@@ -33,20 +33,24 @@ class LoadFixturesCommand extends Command
     {
         $debut = microtime(true);
 
-        $command = 'php '.dirname(__DIR__, 2).'/bin/console doctrine:fixtures:load --group=step1000 -n ';
-        passthru($command);
-        $command = 'php '.dirname(__DIR__, 2).'/bin/console doctrine:fixtures:load --group=step1010 --append -n ';
-        passthru($command);
-        $command = 'php '.dirname(__DIR__, 2).'/bin/console doctrine:fixtures:load --group=step1020 --append -n ';
-        passthru($command);
-        $command = 'php '.dirname(__DIR__, 2).'/bin/console doctrine:fixtures:load --group=step1030 --append -n ';
-        passthru($command);
-        $command = 'php '.dirname(__DIR__, 2).'/bin/console doctrine:fixtures:load --group=step1040 --append -n ';
-        passthru($command);
+        $this->loadFixtures('1000', false);
+        $this->loadFixtures('1010');
+        $this->loadFixtures('1020');
+        $this->loadFixtures('1030');
+        $this->loadFixtures('1040');
+        $this->loadFixtures('1050');
 
         $fin = microtime(true);
 
         return 'Traitement effectué en  '.$this->calculTime($fin, $debut).' millisecondes.';
+    }
+
+    private function loadFixtures(string $groups, bool $append = true)
+    {
+        $command = 'php '.dirname(__DIR__, 2).
+        '/bin/console doctrine:fixtures:load --group=step'.
+        $groups.' '. ($append ? ' --append ' : '') .' -n ';
+        passthru($command);
     }
 
     private function calculTime($fin, $debut): int

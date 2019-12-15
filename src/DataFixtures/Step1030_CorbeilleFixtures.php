@@ -73,7 +73,6 @@ class Step1030_CorbeilleFixtures extends Fixture implements  FixtureGroupInterfa
 
     private function checkAndPersist(Corbeille $instance)
     {
-
         if ($this->validator->isValid($instance)) {
             $metadata = $this->entityManagerInterface->getClassMetadata(Corbeille::class);
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
