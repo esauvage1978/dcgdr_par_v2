@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Corbeille{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Corbeille' , 'id' : corbeille.id, 'index' : 'corbeille_index'}) }}
+{% endblock %}
+
+    {% block body %}
+
+        <div class="row justify-content-center">
+            <div class="{{ col_primary }}">
+                <div class="card ">
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tbody>
+                            <tr>
+                                <th>Organisme</th>
+                                <td colspan="2">
+                                    <a href="{{ path('organisme_show', {'id': corbeille.organisme.id}) }}">
+                                        {{ corbeille.organisme.name }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Nom de la corbeille</th>
+                                <td colspan="2">{{ corbeille.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Afficher</th>
+                                <td class="text-center">
+                                    {% if corbeille.enable %}
+                                        <span class="text-success"><i class="fas fa-eye"></i></span>
+                                    {% else %}
+                                        <span class="text-danger"><i class="fas fa-eye-slash"></i></span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Défaut</th>
+                                <td class="text-center">
+                                    <span class="text-{{ corbeille.showDefault ? 'info' : 'light' }}"><i
+                                                class="fas fa-circle"></i></span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">Associé automatiquement lors de la création d'un
+                                        déploiement.</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Consultation</th>
+                                <td class="text-center">
+                                    <span class="text-{{ corbeille.showRead ? 'info' : 'light' }}"><i
+                                                class="fas fa-circle"></i></span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">Filtre activé pour les rédacteurs.</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Pilotage</th>
+                                <td class="text-center">
+                                    <span class="text-{{ corbeille.showWrite ? 'info' : 'light' }}"><i
+                                                class="fas fa-circle"></i></span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">Filtre activé pour les pilotes.</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Validation</th>
+                                <td class="text-center">
+                                    <span class="text-{{ corbeille.showValidate ? 'info' : 'light' }}"><i
+                                                class="fas fa-circle"></i></span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">Filtre activé pour les valideurs.</small>
+                                </td>
+                            </tr>
+                            {% if corbeille.content %}
+                                <tr>
+                                    <th>Description</th>
+                                    <td colspan="2">{{ corbeille.content | raw }}</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col  d-flex justify-content-between align-items-center">
+
+                                {{ include('share/__btn_return_list.html.twig',
+                                    {   'url':'corbeille_index'
+                                    }) }}
+
+                                {% if is_granted('ROLE_GESTIONNAIRE') or (is_granted('ROLE_GESTIONNAIRE_LOCAL') and  corbeille.organisme in app.user.organismes) %}
+                                    {{ include('share/__btn_edit.html.twig',
+                                        {   'url':'corbeille_edit',
+                                            'id':corbeille.id
+                                        }) }}
+                                {% endif %}
+                                {{ include('share/_delete_form.html.twig',{'domaine': 'corbeille','id':corbeille.id}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="{{ col_secondary }}">
+
+                <div class="card">
+                    <div class="card-footer">
+                        Utilisateurs
+                    </div>
+                    <div class="card-body text-justify">
+                        {% for user in corbeille.users %}
+                            {{ include('user/_show_item.html.twig') }}
+                        {% else %}
+                            <div class="list-group-item">En attente d'ajout</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}

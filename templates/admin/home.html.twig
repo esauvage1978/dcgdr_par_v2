@@ -33,8 +33,7 @@
                         {%  if is_granted('ROLE_USER') %}
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Utilisateur', 'domaine':'user'} ) }}
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Organisme', 'domaine':'organisme'} ) }}
-
-
+                            {{ include('admin/_entree_unitaire.html.twig',{'title':'Corbeille', 'domaine':'corbeille'} ) }}
                         {%  endif %}
                         </tbody>
                     </table>

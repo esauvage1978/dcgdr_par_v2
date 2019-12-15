@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} Corbeille {% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Corbeille' }) }}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="tableAdministration"  class="table table-striped display" style="width:100%" >
+                                <thead>
+                                <tr>
+                                    <th class="all">#</th>
+                                    <th class="desktop" >Organisme</th>
+                                    <th class="all">Nom</th>
+                                    <th class="desktop">Description</th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-crosshairs"  data-toggle="tooltip" data-placement="top" title="Corbeille par défault"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-eye"  data-toggle="tooltip" data-placement="top" title="Corbeille pour la consultation"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-bullhorn"  data-toggle="tooltip" data-placement="top" title="Corbeille pour le pilotage"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-check-double"  data-toggle="tooltip" data-placement="top" title="Corbeille pour la validation"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-users"  data-toggle="tooltip" data-placement="top" title="Nombre d'utilisateurs"></i>
+                                    </th>
+                                    <th class="all text-center">actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for corbeille in corbeilles %}
+                                    <tr>
+                                        <td>{{ corbeille.id }}</td>
+                                        <td>
+                                            <span class="text-{{ corbeille.organisme.enable ? 'gray-dark' : 'danger text-bold' }}">
+                                                {{ corbeille.organisme.ref }} - {{ corbeille.organisme.name }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-{{ corbeille.enable ? 'gray-dark' : 'danger text-bold' }}">
+                                                {{ corbeille.name }}
+                                            </span>
+                                        </td>
+                                        <td>{{ corbeille.content | raw }}</td>
+                                         <td class="text-center">
+                                             <span class="text-{{ corbeille.showDefault ? 'info' : 'light' }}" ><i class="fas fa-circle"></i></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="text-{{ corbeille.showRead ? 'info' : 'light' }}" ><i class="fas fa-circle"></i></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="text-{{ corbeille.showWrite ? 'info' : 'light' }}" ><i class="fas fa-circle"></i></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="text-{{ corbeille.showValidate ? 'info' : 'light' }}" ><i class="fas fa-circle"></i></span>
+                                        </td>
+                                        <td class="text-center">
+                                            {% if   corbeille.users.count==0 %}
+                                                <span class="text-light" ><i class="fas fa-circle"></i></span>
+                                            {% else %}
+                                                <small class="badge bg-info">{{ corbeille.users.count}}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td class=" d-flex  justify-content-end ">
+
+
+                                            {{ include('share/__btn_show.html.twig',
+                                                {   'url':'corbeille_show',
+                                                    'id':corbeille.id,
+                                                    'mr':true,
+                                                    'sm':true
+                                                }) }}
+                                            {% if is_granted('ROLE_GESTIONNAIRE') or (is_granted('ROLE_GESTIONNAIRE_LOCAL') and  corbeille.organisme in app.user.organismes) %}
+                                                {{ include('share/__btn_edit.html.twig',
+                                                    {   'url':'corbeille_edit',
+                                                        'id':corbeille.id,
+                                                        'sm':true
+                                                    }) }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="9">Pas d'enregistrement</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                {% if is_granted('ROLE_GESTIONNAIRE') or is_granted('ROLE_GESTIONNAIRE_LOCAL')  %}
+                    <div class="card-header">
+                        {{ include('share/__btn_new.html.twig',
+                            {'url':'corbeille_new'}) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('plugins/datatables/jquery.dataTables.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/datatables/corbeille.js')) }}"></script>
+{% endblock %}
