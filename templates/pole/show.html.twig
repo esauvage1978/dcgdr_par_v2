@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Pôle{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body_header %}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Pôle' , 'id' : pole.id, 'index' : 'pole_index'}) }}
+{% endblock %}
+
+    {% block body %}
+
+        <div class="row justify-content-center">
+            <div class="{{ col_primary }}">
+                <div class="card ">
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tbody>
+                            <tr>
+                                <th>Plan d'actions</th>
+                                <td colspan="2">
+                                    <a href="{{ path('axe_show', {'id': pole.axe.id}) }}">
+                                        {{ pole.axe.name }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Nom</th>
+                                <td colspan="2">{{ pole.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Afficher</th>
+                                <td class="text-center  col-2">
+                                    {% if pole.enable %}
+                                        <span class="text-success"><i class="fas fa-eye"></i></span>
+                                    {% else %}
+                                        <span class="text-danger"><i class="fas fa-eye-slash"></i></span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            {{ include('share/_taux_tr_progress_bar_label.html.twig', {'taux1': pole.taux1,'taux2': pole.taux2 }) }}
+                            {% if  pole.content %}
+                                <tr>
+                                    <th>Description</th>
+                                    <td colspan="2">{{ pole.content | raw }}</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col  d-flex justify-content-between align-items-center">
+                                {{ include('share/__btn_return_list.html.twig',
+                                    {   'url':'pole_index'
+                                    }) }}
+
+                                {% if is_granted('ROLE_GESTIONNAIRE') %}
+
+                                    {{ include('share/__btn_edit.html.twig',
+                                        {   'url':'pole_edit',
+                                            'id':pole.id
+                                        }) }}
+
+                                {% endif %}
+
+                                {{ include('share/_delete_form.html.twig',{'domaine': 'pole','id':pole.id}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="{{ col_secondary }}">
+
+            </div>
+        </div>
+
+    {% endblock %}

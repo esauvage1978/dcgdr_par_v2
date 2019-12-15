@@ -1,0 +1,9 @@
+    <a href="{{ path('pole_show', {'id': pole.id}) }}"  class="btn btn-info m-1">
+
+        {% if pole.enable == false   %}
+            <span class="text-danger" ><i class="fas fa-eye-slash"></i></span>
+        {%  endif %}
+
+        {{ pole.name }}
+
+    </a>
