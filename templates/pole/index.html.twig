@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent() }} Plan d\'actions {% endblock %}
+{% block title %} {{ parent() }} Pôle {% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body_header %}
-    {{ include('admin/_body_header.html.twig', {'domaine': 'Plan d\'actions' }) }}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Pôle' }) }}
 {% endblock %}
 
 {% block body %}
@@ -24,57 +24,50 @@
                                 <thead>
                                 <tr>
                                     <th class="all">#</th>
-                                    <th class="all">Nom</th>
-                                    <th class="desktop">
-                                        Description
-                                    </th>
+                                    <th class="desktop">Plan d'actions</th>
+                                    <th class="all">Nom du pôle</th>
+                                    <th class="desktop">Description</th>
                                     <th class="desktop text-center">Taux</th>
                                     <th class="desktop text-center">
-                                        <i class="fa fa-file-archive"  data-toggle="tooltip" data-placement="top" title="Archive"></i>
-                                    </th>
-                                    <th class="desktop text-center">
-                                        <i class="fa fa-boxes"  data-toggle="tooltip" data-placement="top" title="Nombre de Pôles"></i>
+                                        <i class="fa fa-boxes"  data-toggle="tooltip" data-placement="top" title="Nombre de thématiques"></i>
                                     </th>
                                     <th class="all text-center"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for axe in axes %}
+                                {% for pole in poles %}
                                     <tr>
-                                        <td>{{ axe.id }}</td>
-                                        <td>
-                                        <span class="text-{{ axe.enable ? 'gray-dark' : 'danger text-bold' }}">
-                                            {{ axe.name }}
+                                        <td>{{ pole.id }}</td>
+                                        <td class="text-xs col-1">
+                                        <span class="text-{{ pole.axe.enable ? 'gray-dark' : 'danger text-bold' }}">
+                                            {{ pole.axe.name }}
                                         </span>
                                         </td>
-                                        <td>{{ axe.content | raw }}</td>
+                                        <td>
+                                        <span class="text-{{ pole.enable ? 'gray-dark' : 'danger text-bold' }}">
+                                            {{ pole.name }}
+                                        </span>
+                                        </td>
+                                        <td>{{ pole.content | raw }}</td>
+                                        <td class="text-center">
+                                            {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': pole.taux1, 'taux2': pole.taux2  }) }}
+                                        </td>
+                                        <td class="text-center">
 
-                                        <td class="text-center">
-                                            {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': axe.taux1, 'taux2': axe.taux2  }) }}
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="text-{{ axe.archiving ? 'info' : 'light' }}" ><i class="fas fa-circle"></i></span>
-                                        </td>
-                                        <td class="text-center">
-                                            {% if   axe.poles.count==0 %}
-                                                <span class="text-light" ><i class="fas fa-circle"></i></span>
-                                            {% else %}
-                                                <small class="badge bg-info">{{ axe.poles.count}}</small>
-                                            {% endif %}
                                         </td>
                                         <td class=" d-flex  justify-content-end ">
 
                                             {{ include('share/__btn_show.html.twig',
-                                                {   'url':'axe_show',
-                                                    'id':axe.id,
+                                                {   'url':'pole_show',
+                                                    'id':pole.id,
                                                     'mr':true,
                                                     'sm':true,
                                                 }) }}
 
                                             {% if is_granted('ROLE_GESTIONNAIRE') %}
                                                 {{ include('share/__btn_edit.html.twig',
-                                                    {   'url':'axe_edit',
-                                                        'id':axe.id,
+                                                    {   'url':'pole_edit',
+                                                        'id':pole.id,
                                                         'sm':true,
                                                     }) }}
                                             {% endif %}
@@ -82,7 +75,7 @@
                                     </tr>
                                 {% else %}
                                     <tr>
-                                        <td colspan="7">Aucun d'enregistrement</td>
+                                        <td colspan="6">Aucun d'enregistrement</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -92,10 +85,10 @@
 
                 </div>
                 {% if is_granted('ROLE_GESTIONNAIRE') %}
-                    <div class="card-header">
-                        {{ include('share/__btn_new.html.twig',
-                            {'url':'axe_new'}) }}
-                    </div>
+                <div class="card-header">
+                    {{ include('share/__btn_new.html.twig',
+                        {'url':'pole_new'}) }}
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -109,5 +102,5 @@
     <script src="{{ absolute_url( asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')) }}"></script>
     <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')) }}"></script>
     <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')) }}"></script>
-    <script src="{{ absolute_url( asset('js/datatables/axe.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/datatables/pole.js')) }}"></script>
 {% endblock %}

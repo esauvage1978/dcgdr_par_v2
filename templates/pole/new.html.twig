@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Pôle{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Pôle' , 'id' : pole.id, 'index' : 'pole_index'}) }}
+{% endblock %}
+
+
+{% block body %}
+
+    {{ form_start(form) }}
+    <div class="row justify-content-center">
+        <div class="{{ col_primary }}">
+            <div class="card ">
+
+                {{  include ('pole/_form.html.twig') }}
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col  d-flex justify-content-between align-items-center">
+
+                            {{ include('share/__btn_return_list.html.twig',
+                                {   'url':'pole_index'
+                                }) }}
+
+                            {{ include('share/__btn_save.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="d-none">
+        {{ form_rest(form) }}
+    </div>
+    {{ form_end(form) }}
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- Select2 -->
+    <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
+
+{% endblock %}

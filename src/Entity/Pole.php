@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AxeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PoleRepository")
  */
-class Axe implements EntityInterface
+class Pole implements EntityInterface
 {
     /**
      * @ORM\Id()
@@ -19,7 +19,7 @@ class Axe implements EntityInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=100)
      */
     private $name;
 
@@ -44,20 +44,16 @@ class Axe implements EntityInterface
     private $taux2;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Axe", inversedBy="poles")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $archiving;
+    private $axe;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Pole", mappedBy="axe", orphanRemoval=true)
-     */
-    private $poles;
 
     public function __construct()
     {
-        $this->setTaux1('0');
-        $this->setTaux2('0');
-        $this->poles = new ArrayCollection();
+        $this->setTaux1(0);
+        $this->setTaux2(0);
     }
 
     public function getId(): ?int
@@ -132,45 +128,14 @@ class Axe implements EntityInterface
         return $this;
     }
 
-    public function getArchiving(): ?bool
+    public function getAxe(): ?Axe
     {
-        return $this->archiving;
+        return $this->axe;
     }
 
-    public function setArchiving(bool $archiving): self
+    public function setAxe(?Axe $axe): self
     {
-        $this->archiving = $archiving;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Pole[]
-     */
-    public function getPoles(): Collection
-    {
-        return $this->poles;
-    }
-
-    public function addPole(Pole $pole): self
-    {
-        if (!$this->poles->contains($pole)) {
-            $this->poles[] = $pole;
-            $pole->setAxe($this);
-        }
-
-        return $this;
-    }
-
-    public function removePole(Pole $pole): self
-    {
-        if ($this->poles->contains($pole)) {
-            $this->poles->removeElement($pole);
-            // set the owning side to null (unless already changed)
-            if ($pole->getAxe() === $this) {
-                $pole->setAxe(null);
-            }
-        }
+        $this->axe = $axe;
 
         return $this;
     }
