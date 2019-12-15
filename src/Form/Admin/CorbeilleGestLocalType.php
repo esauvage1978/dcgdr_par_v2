@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 
-class CorbeilleGestionnaireLocalType extends CorbeilleType
+class CorbeilleGestLocalType extends CorbeilleType
 {
     /**
      * @var Security
