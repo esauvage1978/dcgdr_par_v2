@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppControllerAbstract;
 use App\Entity\Corbeille;
-use App\Form\Admin\CorbeilleGestionnaireLocalType;
+use App\Form\Admin\CorbeilleGestLocalType;
 use App\Form\Admin\CorbeilleType;
 use App\Manager\CorbeilleManager;
 use App\Repository\CorbeilleRepository;
@@ -69,7 +69,7 @@ class CorbeilleController extends AppControllerAbstract
         if ($this->isgranted('ROLE_GESTIONNAIRE')) {
             $form = $this->createForm(CorbeilleType::class, $entity);
         } else {
-            $form = $this->createForm(CorbeilleGestionnaireLocalType::class, $entity);
+            $form = $this->createForm(CorbeilleGestLocalType::class, $entity);
         }
 
         $form->handleRequest($request);

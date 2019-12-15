@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Plan d\'actions{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body_header %}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Plan d\'actions' , 'id' : axe.id, 'index' : 'axe_index'}) }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-center">
+        <div class="{{ col_primary }}">
+            <div class="card ">
+
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tbody>
+                        <tr>
+                            <th>Nom</th>
+                            <td colspan="2">{{ axe.name }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Afficher</th>
+                            <td class="text-center">
+                                {% if axe.enable %}
+                                    <span class="text-success"><i class="fas fa-eye"></i></span>
+                                {% else %}
+                                    <span class="text-danger"><i class="fas fa-eye-slash"></i></span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Archiver</th>
+                            <td class="text-center col-2">
+                                <span class="text-{{ axe.archiving ? 'info' : 'light' }}"><i class="fas fa-circle"></i></span>
+                            </td>
+                            <td>
+                                <small class="text-muted">Permet d'archiver toutes les actions associées.</small>
+                            </td>
+                        </tr>
+                        {{ include('share/_taux_tr_progress_bar_label.html.twig', {'taux1': axe.taux1,'taux2': axe.taux2 }) }}
+                        {% if axe.content %}
+                            <tr>
+                                <th>Description</th>
+                                <td colspan="2">{{ axe.content | raw }}</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col  d-flex justify-content-between align-items-center">
+
+                            {{ include('share/__btn_return_list.html.twig',
+                                {   'url':'axe_index'
+                                }) }}
+
+                            {% if is_granted('ROLE_GESTIONNAIRE') %}
+
+                                {{ include('share/__btn_edit.html.twig',
+                                    {   'url':'axe_edit',
+                                        'id':axe.id
+                                    }) }}
+
+                            {% endif %}
+
+                            {{ include('share/_delete_form.html.twig',{'domaine': 'axe','id':axe.id}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="{{ col_secondary }}">
+        </div>
+
+    </div>
+{% endblock %}
+
