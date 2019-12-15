@@ -19,6 +19,7 @@ class UserTypeNew extends AppTypeAbstract
     {
         $builder = $this->buildFormNameEnableContent($builder);
         $this->buildFormOrganismes($builder);
+        $this->buildFormCorbeilles($builder);
 
         $roles = [
             'Utilisateur' => 'ROLE_USER',

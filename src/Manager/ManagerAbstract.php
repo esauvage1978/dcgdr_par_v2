@@ -26,6 +26,8 @@ abstract class ManagerAbstract implements ManagerInterface
 
     public function save(EntityInterface $entity): bool
     {
+        $this->initialise($entity);
+
         if (!$this->validator->isValid($entity)) {
             return false;
         }
@@ -34,6 +36,11 @@ abstract class ManagerAbstract implements ManagerInterface
         $this->manager->flush();
 
         return true;
+    }
+
+    public function initialise(EntityInterface $entity): void
+    {
+
     }
 
     public function getErrors(EntityInterface $entity)

@@ -103,9 +103,15 @@ class User implements UserInterface, EntityInterface
      */
     private $organismes;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Corbeille", mappedBy="users")
+     */
+    private $corbeilles;
+
     public function __construct()
     {
         $this->organismes = new ArrayCollection();
+        $this->corbeilles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -355,6 +361,34 @@ class User implements UserInterface, EntityInterface
         if ($this->organismes->contains($organisme)) {
             $this->organismes->removeElement($organisme);
             $organisme->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Corbeille[]
+     */
+    public function getCorbeilles(): Collection
+    {
+        return $this->corbeilles;
+    }
+
+    public function addCorbeille(Corbeille $corbeille): self
+    {
+        if (!$this->corbeilles->contains($corbeille)) {
+            $this->corbeilles[] = $corbeille;
+            $corbeille->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCorbeille(Corbeille $corbeille): self
+    {
+        if ($this->corbeilles->contains($corbeille)) {
+            $this->corbeilles->removeElement($corbeille);
+            $corbeille->removeUser($this);
         }
 
         return $this;

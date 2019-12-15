@@ -6,6 +6,20 @@ $(function () {
         paging: false,
         scrollX: false,
         ordering: true,
+        "order": [[1, 'asc']],
+        "columns": [
+            null,
+            null,
+            null,
+            {"orderable": false},
+            {"orderable": false},
+            {"orderable": false},
+            {"orderable": false},
+            {"orderable": false},
+            {"orderable": false},
+            {"orderable": false},
+            {"orderable": false}
+        ],
         "language": {
             buttons: {
                 copyTitle: 'Ajouté au presse-papiers',

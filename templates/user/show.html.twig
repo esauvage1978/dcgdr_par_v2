@@ -95,7 +95,7 @@
                             </tr>
                             <tr>
                                 <th>Description</th>
-                                <td colspan="2"><span class="text-muted">{{ user.content }}</span></td>
+                                <td colspan="2"><span class="text-muted">{{ user.content | raw }}</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -135,7 +135,18 @@
                     </div>
                 </div>
 
-
+                <div class="card  mt-4 " >
+                    <div class="card-footer">
+                        Corbeilles
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for corbeille in user.corbeilles %}
+                            {{ include('corbeille/_show_list_group_item.html.twig' , {'show_code_organisme': true, 'link' : true}) }}
+                        {% else %}
+                            <div class="list-group-item">En attente d'ajout</div>
+                        {% endfor %}
+                    </div>
+                </div>
 
             </div>
         </div>
