@@ -83,15 +83,15 @@
                             </tr>
                             <tr>
                                 <th>Dernière connexion</th>
-                                <td colspan="2"><span class="text-muted">{{ user.loginat?user.loginat|date("m/d/Y", "Europe/Paris") }}</span></td>
+                                <td colspan="2"><span class="text-muted">{{ user.loginat?user.loginat|date("d/m/Y", "Europe/Paris") }}</span></td>
                             </tr>
                             <tr>
                                 <th>Date de création </th>
-                                <td colspan="2"><span class="text-muted">{{ user.createdat?user.createdat|date("m/d/Y", "Europe/Paris")}}</span></td>
+                                <td colspan="2"><span class="text-muted">{{ user.createdat?user.createdat|date("d/m/Y", "Europe/Paris")}}</span></td>
                             </tr>
                             <tr>
                                 <th>Dernière modification</th>
-                                <td colspan="2"><span class="text-muted">{{ user.modifiedat?user.modifiedat|date("m/d/Y", "Europe/Paris") }}</span></td>
+                                <td colspan="2"><span class="text-muted">{{ user.modifiedat?user.modifiedat|date("d/m/Y", "Europe/Paris") }}</span></td>
                             </tr>
                             <tr>
                                 <th>Description</th>
@@ -122,6 +122,18 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-4 ">
+                <div class="card" >
+                    <div class="card-footer">
+                        Organismes
+                    </div>
+                    <div class="card-body">
+                        {% for organisme in user.organismes %}
+                            {{ include('organisme/_show_item.html.twig', {'show_code_organisme': true, 'link' : true}) }}
+                        {% else %}
+                            <div class="list-group-item">En attente d'ajout</div>
+                        {% endfor %}
+                    </div>
+                </div>
 
 
 

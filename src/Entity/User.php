@@ -72,7 +72,7 @@ class User implements UserInterface, EntityInterface
      */
     private $plainPasswordConfirmation;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $createdAt;
 
@@ -97,9 +97,15 @@ class User implements UserInterface, EntityInterface
      */
     private $phone;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Organisme", mappedBy="users")
+     * @ORM\OrderBy({"name" = "ASC"})
+     */
+    private $organismes;
+
     public function __construct()
     {
-
+        $this->organismes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -259,7 +265,7 @@ class User implements UserInterface, EntityInterface
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -322,6 +328,34 @@ class User implements UserInterface, EntityInterface
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Organisme[]
+     */
+    public function getOrganismes(): Collection
+    {
+        return $this->organismes;
+    }
+
+    public function addOrganisme(Organisme $organisme): self
+    {
+        if (!$this->organismes->contains($organisme)) {
+            $this->organismes[] = $organisme;
+            $organisme->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrganisme(Organisme $organisme): self
+    {
+        if ($this->organismes->contains($organisme)) {
+            $this->organismes->removeElement($organisme);
+            $organisme->removeUser($this);
+        }
 
         return $this;
     }
