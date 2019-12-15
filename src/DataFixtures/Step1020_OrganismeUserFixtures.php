@@ -40,8 +40,7 @@ class Step1020_OrganismeUserFixtures extends Fixture implements  FixtureGroupInt
         OrganismeRepository $organismeRepository,
         UserRepository $userRepository,
         EntityManagerInterface $entityManagerI
-    )
-    {
+    ) {
         $this->importData=$importData;
         $this->organismes=$organismeRepository->findAll();
         $this->users=$userRepository->findAll();
@@ -65,11 +64,11 @@ class Step1020_OrganismeUserFixtures extends Fixture implements  FixtureGroupInt
             ) {
                 $organisme->addUser($user);
 
-                $manager->persist($organisme);
+                $this->entityManagerInterface->persist($organisme);
             }
         }
 
-        $manager->flush();
+        $this->entityManagerInterface->flush();
     }
 
     public function getInstance(string $id, $entitys)
