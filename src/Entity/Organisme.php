@@ -49,9 +49,15 @@ class Organisme implements EntityInterface
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Corbeille", mappedBy="organisme", orphanRemoval=true)
+     */
+    private $corbeilles;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->corbeilles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,6 +158,37 @@ class Organisme implements EntityInterface
     {
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Corbeille[]
+     */
+    public function getCorbeilles(): Collection
+    {
+        return $this->corbeilles;
+    }
+
+    public function addCorbeille(Corbeille $corbeille): self
+    {
+        if (!$this->corbeilles->contains($corbeille)) {
+            $this->corbeilles[] = $corbeille;
+            $corbeille->setOrganisme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCorbeille(Corbeille $corbeille): self
+    {
+        if ($this->corbeilles->contains($corbeille)) {
+            $this->corbeilles->removeElement($corbeille);
+            // set the owning side to null (unless already changed)
+            if ($corbeille->getOrganisme() === $this) {
+                $corbeille->setOrganisme(null);
+            }
         }
 
         return $this;
