@@ -33,13 +33,19 @@
                     </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a href="{{path('documentation')}}" class="nav-link">
+                    <a href="{{ path('documentation') }}" class="nav-link">
                         <i class="nav-icon fas fa-file"></i>
                         <p>Documentation</p>
                     </a>
                 </li>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="nav-item">
 
-
+                        <a class="nav-link" href="{{ path('user_logout') }}">
+                            <i class="nav-icon fa fa-sign-out-alt"></i> <p>Déconnexion</p>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

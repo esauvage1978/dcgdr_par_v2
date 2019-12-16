@@ -17,8 +17,19 @@
             </div>
         </div>
     </div>
-
-    <!-- MESSAGE -->
+    {% if app.user.emailvalidated == false %}
+        <div class="alert alert-danger alert-dismissible mt-2">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-ban"></i> Adresse mail non vérifiée !</h5>
+            <p>
+                Attention votre adresse mail n'a pas encore été vérifiée.
+            </p>
+            <p>
+                <a href="{{ path('profil_sendmail_email_validated') }}">Cliquer ici</a> pour renvoyer le lien de
+                vérification.
+            </p>
+        </div>
+    {% endif %}
 
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-6 col-lg-7  ">
