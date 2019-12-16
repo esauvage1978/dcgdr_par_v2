@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\EntityInterface;
-use App\Entity\IEntity;
-use App\Manager\IManager;
 use App\Manager\ManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;

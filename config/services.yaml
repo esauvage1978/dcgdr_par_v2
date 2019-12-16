@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     directory_import : '%kernel.project_dir%/data/importFixtures/'
+    mailer.mail: 'emmanuel.sauvage@live.fr'
+    mailer.name: '[ DCGDR PAR ] Emmanuel SAUVAGE '
 
 services:
     # default configuration for services in *this* file
@@ -26,3 +28,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Listener\UserLoginListener:
+      public: true
+      tags:
+        - { name: 'kernel.event_listener', event: 'security.interactive_login' }

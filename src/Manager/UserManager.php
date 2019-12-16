@@ -77,10 +77,10 @@ class UserManager
             $user->setModifiedAt(new \DateTime());
         }
 
-        if (!$user->getActivateToken()) {
+        if (!$user->getEmailValidatedToken()) {
             $user
-                ->setActivate(false)
-                ->setActivateToken(md5(random_bytes(50)));
+                ->setEmailValidated(false)
+                ->setEmailValidatedToken(md5(random_bytes(50)));
         }
 
         if (!empty($user->getId())) {
@@ -142,10 +142,10 @@ class UserManager
         $this->manager->flush();
     }
 
-    public function active(User $user)
+    public function validateEmail(User $user)
     {
-        $user->setActivate(true);
-        $user->setActivateToken(date_format(new DateTime(), 'Y-m-d H:i:s'));
+        $user->setEmailValidated(true);
+        $user->setEmailValidatedToken(date_format(new DateTime(), 'Y-m-d H:i:s'));
         $user->setRoles(['ROLE_USER']);
 
         return $this;
