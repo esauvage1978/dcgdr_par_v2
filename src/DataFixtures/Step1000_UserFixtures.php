@@ -10,11 +10,10 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class Step1000_UserFixtures extends Fixture implements FixtureGroupInterface
 {
-    CONST FILENAME = 'dcgdr_utilisateur';
+    const FILENAME = 'dcgdr_utilisateur';
     /**
      * @var FixturesImportData
      */
@@ -43,25 +42,21 @@ class Step1000_UserFixtures extends Fixture implements FixtureGroupInterface
         $this->importData = $importData;
         $this->validator = $validator;
         $this->userManager = $userManager;
-        $this->entityManagerInterface=$entityManagerI;
+        $this->entityManagerInterface = $entityManagerI;
     }
 
     public function load(ObjectManager $manager)
     {
-        $data = $this->importData->importToArray(self::FILENAME . ".json");
+        $data = $this->importData->importToArray(self::FILENAME.'.json');
 
-        for ($i = 0; $i < \count($data); $i++) {
-
+        for ($i = 0; $i < \count($data); ++$i) {
             $instance = $this->initialise(new User(), $data[$i]);
 
             $this->checkAndPersist($instance);
-
         }
-
 
         $this->entityManagerInterface->flush();
     }
-
 
     private function checkAndPersist(User $instance)
     {
@@ -69,9 +64,10 @@ class Step1000_UserFixtures extends Fixture implements FixtureGroupInterface
             $metadata = $this->entityManagerInterface->getClassMetadata(User::class);
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $this->entityManagerInterface->persist($instance);
+
             return;
         }
-        var_dump('Validator : ' . $this->validator->getErrors($instance) . $instance->getName());
+        var_dump('Validator : '.$this->validator->getErrors($instance).$instance->getName());
     }
 
     private function initialise(User $instance, $data): User
@@ -93,15 +89,15 @@ class Step1000_UserFixtures extends Fixture implements FixtureGroupInterface
         $instance
             ->setId($data['n0_num'])
             ->setName($data['nom'])
-            ->setActivate($data['afficher'])
-            ->setActivateToken(md5(random_bytes(50)))
+            ->setEmailValidated($data['afficher'])
+            ->setEmailValidatedToken(md5(random_bytes(50)))
             ->setEnable($data['afficher'])
             ->setEmail(
                 filter_var($data['mail'], FILTER_VALIDATE_EMAIL) ?
                     $data['mail'] :
                     'achanger@live.fr')
             ->setRoles($roles)
-            ->setPlainPassword(($data['mdp'] === 'achanger' || $data['mdp'] === null || $data['mdp'] === '') ?
+            ->setPlainPassword(('achanger' === $data['mdp'] || null === $data['mdp'] || '' === $data['mdp']) ?
                 'AchangerMerci1' :
                 $data['mdp'])
             ->setCreatedAt(new \DateTime());

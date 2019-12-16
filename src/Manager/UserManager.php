@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Helper\ToolCollecion;
 use App\Repository\CorbeilleRepository;
 use App\Repository\OrganismeRepository;
+use App\Repository\UserRepository;
 use App\Validator\UserValidator;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,23 +39,30 @@ class UserManager
      */
     private $corbeilleRepository;
 
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
     public function __construct(
         EntityManagerInterface $manager,
         UserValidator $validator,
         UserPasswordEncoderInterface $passwordEncoder,
         OrganismeRepository $organismeRepository,
-    CorbeilleRepository $corbeilleRepository
+    CorbeilleRepository $corbeilleRepository,
+    UserRepository $userRepository
     ) {
         $this->manager = $manager;
         $this->validator = $validator;
         $this->passwordEncoder = $passwordEncoder;
         $this->organismeRepository = $organismeRepository;
         $this->corbeilleRepository = $corbeilleRepository;
+        $this->userRepository = $userRepository;
     }
 
-    public function save(User $user): bool
+    public function save(User $user,$oldUserMail=null): bool
     {
-        $this->initialise($user);
+        $this->initialise($user,$oldUserMail);
 
         if (!$this->validator->isValid($user)) {
             return false;
@@ -66,7 +74,7 @@ class UserManager
         return true;
     }
 
-    public function initialise(User $user)
+    public function initialise(User $user,$oldUserMail=null)
     {
         $this->encodePassword($user);
 
@@ -77,10 +85,12 @@ class UserManager
             $user->setModifiedAt(new \DateTime());
         }
 
-        if (!$user->getActivateToken()) {
+
+        if (!$user->getEmailValidatedToken() or
+            ($user->getEmail() !== $oldUserMail and null !== $oldUserMail)) {
             $user
-                ->setActivate(false)
-                ->setActivateToken(md5(random_bytes(50)));
+                ->setEmailValidated(false)
+                ->setEmailValidatedToken(md5(random_bytes(50)));
         }
 
         if (!empty($user->getId())) {
@@ -142,10 +152,10 @@ class UserManager
         $this->manager->flush();
     }
 
-    public function active(User $user)
+    public function validateEmail(User $user)
     {
-        $user->setActivate(true);
-        $user->setActivateToken(date_format(new DateTime(), 'Y-m-d H:i:s'));
+        $user->setEmailValidated(true);
+        $user->setEmailValidatedToken(date_format(new DateTime(), 'Y-m-d H:i:s'));
         $user->setRoles(['ROLE_USER']);
 
         return $this;

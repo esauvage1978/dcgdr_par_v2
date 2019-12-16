@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} Création de votre compte {% endblock %}
+
+{% block body_header %}
+    {{ include('share/_body_header_basic.html.twig',{'domaine':'Utilisateur','action':'Création d\'un compte'}) }}
+{% endblock %}
+ 
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-xs-12 col-sm-6  ">
+            <div class="card card-info">
+                <div class="card-header">
+                    Les informations de l'utilisateur
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+
+                    <div class="form-group row">
+                        {{ form_label(form.name,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
+                        <div class="col">
+                            {{ form_errors(form.name) }}
+                            {{ form_widget(form.name) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        {{ form_label(form.email,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
+                        <div class="col">
+                            {{ form_errors(form.email) }}
+                            {{ form_widget(form.email) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        {{ form_label(form.plainPassword,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
+                        <div class="col">
+                            {{ form_errors(form.plainPassword) }}
+                            {{ form_widget(form.plainPassword) }}
+                        </div>
+                    </div>
+
+                    <p class="text-center">
+                        <button name="registration" id="registration" class="btn btn-info mb-4">
+                            Créer un compte
+                        </button>
+                    </p>
+                    {{ form_end(form) }}
+
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12 d-flex justify-content-start">
+                    <h5>
+                        <a class="d-flex justify-content-center" href="{{ path('user_login') }}"
+                           title="Create an account">
+                            Déjà un compte ?
+                        </a>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

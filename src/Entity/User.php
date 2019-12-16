@@ -45,12 +45,12 @@ class User implements UserInterface, EntityInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private $activate;
+    private $emailValidated;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $activateToken;
+    private $emailValidatedToken;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
@@ -230,26 +230,26 @@ class User implements UserInterface, EntityInterface
         return $this;
     }
 
-    public function getActivate(): ?bool
+    public function getEmailValidated(): ?bool
     {
-        return $this->activate;
+        return $this->emailValidated;
     }
 
-    public function setActivate(bool $activate): self
+    public function setEmailValidated(bool $emailValidated): self
     {
-        $this->activate = $activate;
+        $this->emailValidated = $emailValidated;
 
         return $this;
     }
 
-    public function getActivateToken(): ?string
+    public function getEmailValidatedToken(): ?string
     {
-        return $this->activateToken;
+        return $this->emailValidatedToken;
     }
 
-    public function setActivateToken(?string $activateToken): self
+    public function setEmailValidatedToken(?string $emailValidatedToken): self
     {
-        $this->activateToken = $activateToken;
+        $this->emailValidatedToken = $emailValidatedToken;
 
         return $this;
     }

@@ -19,27 +19,45 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
-
-                {% if is_granted('ROLE_GESTIONNAIRE_LOCAL') %}
-                    <li class="nav-item">
-                        <a href="{{ path('admin_home') }}" class="nav-link
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {% if is_granted('ROLE_GESTIONNAIRE_LOCAL') %}
+                        <li class="nav-item">
+                            <a href="{{ path('admin_home') }}" class="nav-link
                                 {% if '/admin/' in app.request.uri %} active {% endif %}
                             ">
-                            <i class="nav-icon fa fa-cog"></i>
+                                <i class="nav-icon fa fa-cog"></i>
+                                <p>
+                                    Administration
+                                </p>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a href="{{ path('profil_home') }}" class="nav-link
+                            {{ '/profil/' in app.request.uri ? 'active' :'' }}
+                        ">
+                            <i class="nav-icon far fa-user"></i>
                             <p>
-                                Administration
+                                Votre compte
                             </p>
                         </a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a href="{{path('documentation')}}" class="nav-link">
+                    <a href="{{ path('documentation') }}" class="nav-link">
                         <i class="nav-icon fas fa-file"></i>
                         <p>Documentation</p>
                     </a>
                 </li>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="nav-item">
 
-
+                        <a class="nav-link" href="{{ path('user_logout') }}">
+                            <i class="nav-icon fa fa-sign-out-alt"></i>
+                            <p>Déconnexion</p>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

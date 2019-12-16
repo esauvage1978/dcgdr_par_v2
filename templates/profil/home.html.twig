@@ -1,0 +1,190 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} Votre compte {% endblock %}
+
+
+{% block body_header %}
+    {{ include ('profil/_profil_body_header.html.twig') }}
+{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="{{ col_primary }}">
+
+            <!-- Profile Image -->
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                    <div class="text-center">
+                        <img class="profile-user-img img-fluid img-circle"
+                             src="""
+                             alt="User profile picture">
+                    </div>
+
+                    <h3 class="profile-username text-center">{{ app.user.name }}</h3>
+
+                    <p class="text-muted text-center">{{ app.user.email }}</p>
+                </div>
+            </div>
+
+
+            {% if app.user.emailvalidated == false %}
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-ban"></i> Adresse mail non vérifiée !</h5>
+                    <p>
+                        Attention votre adresse mail n'a pas encore été vérifiée.
+                    </p>
+                    <p>
+                        <a href="{{ path('profil_sendmail_email_validated') }}">Cliquer ici</a> pour renvoyer le lien de
+                        vérification.
+                    </p>
+                </div>
+            {% endif %}
+
+            {{ form_start(form) }}
+            <div class="card card-primary ">
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        {{ form_label(form.name,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
+                        <div class="col">
+                            {{ form_errors(form.name) }}
+                            {{ form_widget(form.name) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.email,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
+                        <div class="col">
+                            {{ form_errors(form.email) }}
+                            {{ form_widget(form.email) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.phone,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
+                        <div class="col">
+                            {{ form_errors(form.phone) }}
+                            {{ form_widget(form.phone) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.content,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
+                        <div class="col">
+                            {{ form_errors(form.content) }}
+                            {{ form_widget(form.content) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col  d-flex justify-content-between align-items-center">
+
+                            <button class="btn btn-info " name="update" id="update"><i class="fas fa-pencil-alt"></i>
+                                Modifier
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+
+            <div class="row mt-5">
+                <div class="col-md-12 d-flex justify-content-center">
+
+                </div>
+            </div>
+
+        </div>
+        <div class="{{ col_secondary }} ">
+            <div class="card">
+                <div class="card-footer">
+                    Habilitations
+                </div>
+                <div class="list-group list-group-flush dropright">
+                    <div class="list-group-item list-group-item-action">
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            <span class="text-success"><i class="fas fa-check"></i> Administrateur</span>
+                        {% else %}
+                            <span class="text-danger"><i class="fas fa-times"></i> Administrateur</span>
+                        {% endif %}
+                    </div>
+                    <div class="list-group-item list-group-item-action">
+                        {% if 'ROLE_GESTIONNAIRE' in user.roles %}
+                            <span class="text-success"><i class="fas fa-check"></i> Gestionnaire</span>
+                        {% else %}
+                            <span class="text-danger"><i class="fas fa-times"></i> Gestionnaire</span>
+                        {% endif %}
+                    </div>
+                    <div class="list-group-item list-group-item-action">
+                        {% if 'ROLE_GESTIONNAIRE_LOCAL' in user.roles %}
+                            <span class="text-success"><i class="fas fa-check"></i> Gestionnaire Local</span>
+                        {% else %}
+                            <span class="text-danger"><i class="fas fa-times"></i> Gestionnaire Local</span>
+                        {% endif %}
+                    </div>
+                    <div class="list-group-item list-group-item-action">
+                        {% if 'ROLE_USER' in user.roles %}
+                            <span class="text-success"><i class="fas fa-check"></i> Utilisateur</span>
+                        {% else %}
+                            <span class="text-danger"><i class="fas fa-times"></i> Utilisateur</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-footer d-flex">
+                    Organismes
+                    {% if is_granted('ROLE_GESTIONNAIRE') %}
+                        <small class="ml-auto">
+                            <a href="{{ path('user_edit',{'id': user.id}) }}">modifier</a>
+                        </small>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    {% for organisme in user.organismes %}
+                        {{ include('organisme/_show_item.html.twig', {'show_code_organisme': true, 'link' : false}) }}
+                    {% else %}
+                        <div class="list-group-item">
+                            {% if is_granted('ROLE_GESTIONNAIRE') %}
+                                <a class="text-success" href="{{ path('organisme_new') }}">Créer un organisme</a>
+                            {% else %}
+                                pas d'information
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-footer  d-flex">
+                    Corbeilles
+                    {% if is_granted('ROLE_GESTIONNAIRE') %}
+                        <small class="ml-auto">
+                            <a href="{{ path('user_edit',{'id': user.id}) }}">modifier</a>
+                        </small>
+                    {% endif %}
+                </div>
+                <div class="list-group list-group-flush dropright">
+                    {% for corbeille in user.corbeilles %}
+                        {{ include('corbeille/_show_list_group_item.html.twig', {'show_code_organisme': true}) }}
+                    {% else %}
+                        <div class="list-group-item">
+                            {% if is_granted('ROLE_GESTIONNAIRE_LOCAL') %}
+                                <a class="text-success" href="{{ path('corbeille_new') }}">Créer une corbeille</a>
+                            {% else %}
+                                pas d'information
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+{% endblock %}
