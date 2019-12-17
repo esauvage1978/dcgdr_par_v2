@@ -18,6 +18,10 @@ security:
                     - App\Security\LoginFormAuthenticator
             logout:
                 path: user_logout
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
     role_hierarchy:
         ROLE_ADMIN:         [ROLE_USER, ROLE_GESTIONNAIRE, ROLE_GESTIONNAIRE_LOCAL]       # Un admin hérite des autres droits
         ROLE_GESTIONNAIRE:         [ROLE_USER, ROLE_GESTIONNAIRE_LOCAL]       # Un gestionnaire hérite des autres droits
