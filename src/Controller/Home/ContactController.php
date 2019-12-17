@@ -2,6 +2,7 @@
 
 namespace App\Controller\Home;
 
+use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,8 +18,10 @@ class ContactController extends AbstractController
      * @return Response
      * @IsGranted("ROLE_USER")
      */
-    public function contactAction(): Response
+    public function contactAction(UserRepository $userRepository): Response
     {
-        return $this->render('home/contact.html.twig', []);
+        return $this->render('home/contact.html.twig',
+            ['users' => $userRepository->findAllForContact()]
+            );
     }
 }

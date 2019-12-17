@@ -32,4 +32,20 @@ class UserRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+
+    /**
+     * @return User[] Returns an array of User objects
+     */
+    public function findAllForContact()
+    {
+        return $this->createQueryBuilder(self::USER)
+            ->andWhere(self::USER.'.roles like :val1')
+            ->orWhere(self::USER.'.roles like :val2')
+            ->setParameter('val1', '%ROLE_ADMIN%')
+            ->setParameter('val2', '%"ROLE_GESTIONNAIRE"%')
+            ->orderBy(self::USER.'.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }
