@@ -27,6 +27,51 @@
         <div class="card-body pb-0">
             <div class="row ">
                 <div class="card-deck">
+                    {% for user in users %}
+
+                        <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                            <div class="card bg-light">
+                                <div class="card-header border-bottom-0">
+                                    <a href="{{ path('user_show',{'id':user.id }) }}">
+                                        <b>{{ user.name }}</b>
+                                    </a>
+                                </div>
+                                <div class="card-body pt-0">
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <p class="text-muted text-sm">
+                                                {{ user.content }}
+                                            </p>
+                                            <p class="text-muted text-sm">
+                                                <i class="fas fa-envelope"></i>
+                                                {{ user.email }}
+                                            </p>
+                                            <p class="text-muted text-sm">
+                                                <i class="fas fa-phone"></i>
+                                                {{ user.phone }}
+                                            </p>
+                                        </div>
+                                        <div class="col-5 text-center">
+                                            <img src="{{ user.avatar.image }}" alt="" class="img-circle img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="text-right">
+                                        <a href="mailto::{{ user.email }}" class="btn btn-sm bg-teal">
+                                            <i class="fas fa-envelope"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        <div class="row">
+                            <div class="jumbotron"> Pas d'enregistrements</div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
