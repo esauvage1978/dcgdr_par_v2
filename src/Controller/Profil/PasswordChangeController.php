@@ -53,7 +53,7 @@ class PasswordChangeController extends AppControllerAbstract
                 $userManager->encodePassword($user);
 
                 $userManager->save($user);
-                
+
                 $this->addFlash(self::SUCCESS, self::MSG_MODIFY);
 
                 return $this->redirectToRoute('profil_home');
@@ -61,8 +61,7 @@ class PasswordChangeController extends AppControllerAbstract
 
             $this->addFlash(self::DANGER, 'L\'ancien mot de passe est incorrect.');
         }
-    }
 
-return $this->render(self::DOMAINE.'/passwordChange.html.twig', [self::FORM => $form->createView(),]);
-}
+        return $this->render(self::DOMAINE.'/passwordChange.html.twig', [self::FORM => $form->createView()]);
+    }
 }
