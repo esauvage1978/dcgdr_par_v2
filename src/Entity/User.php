@@ -108,6 +108,11 @@ class User implements UserInterface, EntityInterface
      */
     private $corbeilles;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Avatar", cascade={"persist", "remove"})
+     */
+    private $Avatar;
+
     public function __construct()
     {
         $this->organismes = new ArrayCollection();
@@ -394,4 +399,15 @@ class User implements UserInterface, EntityInterface
         return $this;
     }
 
+    public function getAvatar(): ?Avatar
+    {
+        return $this->Avatar;
+    }
+
+    public function setAvatar(?Avatar $Avatar): self
+    {
+        $this->Avatar = $Avatar;
+
+        return $this;
+    }
 }
