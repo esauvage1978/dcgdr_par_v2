@@ -12,8 +12,8 @@ namespace App\Controller\Profil;
 
 use App\Controller\AppControllerAbstract;
 use App\Form\Profil\PasswordChangeFormType;
-use App\Repository\UserRepository;
 use App\Manager\UserManager;
+use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,15 +26,10 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class PasswordChangeController extends AppControllerAbstract
 {
-    CONST DOMAINE='profil';
+    const DOMAINE = 'profil';
+
     /**
      * @Route("/password-change", name="profil_password_change")
-     *
-     * @param Request $request
-     * @param UserRepository $userRepository
-     * @param UserManager $userManager
-     * @param UserPasswordEncoderInterface $encoder
-     * @return Response
      */
     public function changePasswordAction(
         Request $request,
@@ -49,7 +44,6 @@ class PasswordChangeController extends AppControllerAbstract
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($userManager->checkPassword($user, $form->getData()['plainPasswordOld'])) {
-
                 $userManager->initialisePasswordChange(
                     $user,
                     $form->getData()['plainPassword'],
@@ -58,19 +52,17 @@ class PasswordChangeController extends AppControllerAbstract
 
                 $userManager->encodePassword($user);
 
-                if ($userManager->save($user)) {
-                    $this->addFlash(self::SUCCESS, self::MSG_MODIFY);
+                $userManager->save($user);
+                
+                $this->addFlash(self::SUCCESS, self::MSG_MODIFY);
 
-                    return $this->redirectToRoute('profil_home');
-                }
-                $this->addFlash(self::DANGER, $userManager->getErrors($user));
-            } else {
-                $this->addFlash(self::DANGER, 'L\'ancien mot de passe est incorrect.');
+                return $this->redirectToRoute('profil_home');
             }
-        }
 
-        return $this->render(self::DOMAINE . '/passwordChange.html.twig', [
-            self::FORM => $form->createView(),
-        ]);
+            $this->addFlash(self::DANGER, 'L\'ancien mot de passe est incorrect.');
+        }
     }
+
+return $this->render(self::DOMAINE.'/passwordChange.html.twig', [self::FORM => $form->createView(),]);
+}
 }
