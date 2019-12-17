@@ -11,6 +11,22 @@
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="image">
+                    <img src="{{ app.user.avatar.image }}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="{{ path('profil_home') }}" class="d-block">{{ app.user.name }}</a>
+                </div>
+            {% else %}
+                <div class="image">
+                    <img src="{{ absolute_url( asset('dist/img/avatar5.png')) }}" class="img-circle elevation-2"
+                         alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="{{ path('user_login') }}" class="d-block">Non connecté</a>
+                </div>
+            {% endif %}
         </div>
 
         <!-- Sidebar Menu -->
