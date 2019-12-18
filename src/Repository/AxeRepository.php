@@ -15,7 +15,7 @@ use Doctrine\DBAL\DBALException;
  */
 class AxeRepository extends ServiceEntityRepository
 {
-    const AXE = 'a';
+    const ALIAS = 'a';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -24,20 +24,21 @@ class AxeRepository extends ServiceEntityRepository
 
     public function findAllForAdmin()
     {
-        return $this->createQueryBuilder(self::AXE)
-            ->select(self::AXE, PoleRepository::POLE)
-            ->leftJoin(self::AXE.'.poles', PoleRepository::POLE)
-            ->orderBy(self::AXE.'.name', 'ASC')
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS, PoleRepository::ALIAS, ThematiqueRepository::ALIAS)
+            ->leftJoin(self::ALIAS.'.poles', PoleRepository::ALIAS)
+            ->leftJoin(PoleRepository::ALIAS.'.thematiques', ThematiqueRepository::ALIAS)
+            ->orderBy(self::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
     public function tauxRaz()
     {
-        $queryBuilder = $this->createQueryBuilder(self::AXE);
-        $queryBuilder->update(Axe::class, self::AXE)
-            ->set(self::AXE.'.taux1 ', 0)
-            ->set(self::AXE.'.taux2 ', 0);
+        $queryBuilder = $this->createQueryBuilder(self::ALIAS);
+        $queryBuilder->update(Axe::class, self::ALIAS)
+            ->set(self::ALIAS.'.taux1 ', 0)
+            ->set(self::ALIAS.'.taux2 ', 0);
 
         $query = $queryBuilder->getQuery();
 
@@ -51,14 +52,16 @@ class AxeRepository extends ServiceEntityRepository
         $table_source='axe';
         $table_distante='pole';
 
-        $sql = ' update '.$table_source.' '.self::AXE
+        $alias_distante=PoleRepository::ALIAS;
+
+        $sql = ' update '.$table_source.' '.self::ALIAS
             .' inner join ( '
             .' select '.$table_source.'_id, avg(taux1) as taux1, avg(taux2) as taux2, enable '
-            .' from '.$table_distante.' where enable=true group by '.$table_source.'_id ) '.PoleRepository::POLE.' '
-            .' on '.self::AXE.'.id='.PoleRepository::POLE.'.'.$table_source.'_id '
-            .' set '.self::AXE.'.taux1='.PoleRepository::POLE.'.taux1, '
-            .self::AXE.'.taux2='.PoleRepository::POLE.'.taux2 '
-            .' where '.self::AXE.'.enable=true; ';
+            .' from '.$table_distante.' where enable=true group by '.$table_source.'_id ) '.$alias_distante.' '
+            .' on '.self::ALIAS.'.id='.$alias_distante.'.'.$table_source.'_id '
+            .' set '.self::ALIAS.'.taux1='.$alias_distante.'.taux1, '
+            .self::ALIAS.'.taux2='.$alias_distante.'.taux2 '
+            .' where '.self::ALIAS.'.enable=true; ';
 
         try {
             $stmt = $this->getEntityManager()->getConnection()->prepare($sql);

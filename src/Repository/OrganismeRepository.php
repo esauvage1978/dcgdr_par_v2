@@ -14,7 +14,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class OrganismeRepository extends ServiceEntityRepository
 {
-    const ORGANISME='o';
+    const ALIAS='o';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -23,10 +23,10 @@ class OrganismeRepository extends ServiceEntityRepository
 
     public function findAllForAdmin()
     {
-        return $this->createQueryBuilder(self::ORGANISME)
-            ->select(UserRepository::USER, self::ORGANISME)
-            ->leftJoin(self::ORGANISME . '.users',UserRepository::USER)
-            ->orderBy(self::ORGANISME . '.name', 'ASC')
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(UserRepository::ALIAS, self::ALIAS)
+            ->leftJoin(self::ALIAS . '.users',UserRepository::ALIAS)
+            ->orderBy(self::ALIAS . '.name', 'ASC')
             ->getQuery()
             ->getResult()
             ;
@@ -34,12 +34,12 @@ class OrganismeRepository extends ServiceEntityRepository
 
     public function findAllForUser(string $userId)
     {
-        return $this->createQueryBuilder(self::ORGANISME)
-            ->select(self::ORGANISME)
-            ->leftJoin(self::ORGANISME . '.users' , UserRepository::USER )
-            ->where(UserRepository::USER . '.id = :user')
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS)
+            ->leftJoin(self::ALIAS . '.users' , UserRepository::ALIAS )
+            ->where(UserRepository::ALIAS . '.id = :user')
             ->setParameter('user', $userId)
-            ->orderBy(self::ORGANISME . '.name', 'ASC')
+            ->orderBy(self::ALIAS . '.name', 'ASC')
             ->getQuery()
             ->getResult();
     }
