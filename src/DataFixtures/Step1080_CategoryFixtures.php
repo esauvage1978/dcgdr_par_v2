@@ -77,8 +77,6 @@ class Step1080_CategoryFixtures extends Fixture implements FixtureGroupInterface
             $metadata = $this->entityManagerInterface->getClassMetadata(Category::class);
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $this->entityManagerInterface->persist($instance);
-        } else {
-            var_dump('Validator : ' . $this->validator->getErrors($instance));
         }
     }
 
