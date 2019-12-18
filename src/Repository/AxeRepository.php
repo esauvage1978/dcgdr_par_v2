@@ -25,13 +25,39 @@ class AxeRepository extends ServiceEntityRepository
     public function findAllForAdmin()
     {
         return $this->createQueryBuilder(self::ALIAS)
-            ->select(self::ALIAS, PoleRepository::ALIAS, ThematiqueRepository::ALIAS)
+            ->select(self::ALIAS, PoleRepository::ALIAS, ThematiqueRepository::ALIAS, CategoryRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.poles', PoleRepository::ALIAS)
             ->leftJoin(PoleRepository::ALIAS.'.thematiques', ThematiqueRepository::ALIAS)
+            ->leftJoin(ThematiqueRepository::ALIAS.'.categories', CategoryRepository::ALIAS)
             ->orderBy(self::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllFillCombobox(string $enable = 'all', string $archiving = 'all')
+    {
+        $builder = $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS.'.id, '.self::ALIAS.'.name');
+
+        if ('all' != $enable) {
+            $builder = $builder
+                ->Where(self::ALIAS.'.enable = :val1')
+                ->setParameter('val1', $enable);
+        }
+
+        if ('all' != $archiving) {
+            $builder = $builder
+                ->andWhere(self::ALIAS.'.archiving = :val2')
+                ->setParameter('val2', $archiving);
+        }
+
+        $builder = $builder->orderBy(self::ALIAS.'.name', 'ASC');
+
+        return $builder
+            ->getQuery()
+            ->getResult();
+    }
+
 
     public function tauxRaz()
     {
