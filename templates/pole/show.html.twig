@@ -73,7 +73,20 @@
                 </div>
             </div>
             <div class="{{ col_secondary }}">
-
+                <div class="card">
+                    <div class="card-footer">
+                        Thématiques
+                    </div>
+                    <div class="card-body">
+                        {% for thematique in pole.thematiques %}
+                            {{ include('thematique/_show_item.html.twig') }}
+                        {% else %}
+                            <div class="list-group-item">
+                                <a class="text-success" href="{{ path('thematique_new') }}">Créer une thématique</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
 

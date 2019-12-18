@@ -36,6 +36,7 @@
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Corbeille', 'domaine':'corbeille'} ) }}
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Plan d\'actions', 'domaine':'axe'} ) }}
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Pôle', 'domaine':'pole'} ) }}
+                            {{ include('admin/_entree_unitaire.html.twig',{'title':'Thématique', 'domaine':'thematique'} ) }}
                         {%  endif %}
                         </tbody>
                     </table>
@@ -51,6 +52,12 @@
                     <table class="table">
                         <tbody>
                         <td>
+                            <h5>
+                                <a class="btn btn-info" href="{{ path('command_calcul_taux') }}">
+                                    <i class="  fas fa-"></i>
+                                    Lance le calcul des taux
+                                </a>
+                            </h5>
                         </td>
                         </tbody>
                     </table>
