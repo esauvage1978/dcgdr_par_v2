@@ -87,7 +87,18 @@
         </div>
     </div>
     <div class="{{ col_secondary }}">
-
+        <div class="card">
+            <div class="card-footer">
+                Catégories
+            </div>
+            <div class="card-body">
+                {% for category in thematique.categories %}
+                    {{ include('category/_show_item.html.twig') }}
+                {% else %}
+                    <div class="list-group-item">En attente d'ajout</div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 

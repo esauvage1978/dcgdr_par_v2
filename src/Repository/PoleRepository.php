@@ -25,14 +25,39 @@ class PoleRepository extends ServiceEntityRepository
     public function findAllForAdmin()
     {
         return $this->createQueryBuilder(self::ALIAS)
-            ->select(self::ALIAS, AxeRepository::ALIAS, ThematiqueRepository::ALIAS)
+            ->select(self::ALIAS, AxeRepository::ALIAS, ThematiqueRepository::ALIAS, CategoryRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.axe', AxeRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.thematiques', ThematiqueRepository::ALIAS)
+            ->leftJoin(ThematiqueRepository::ALIAS.'.categories', CategoryRepository::ALIAS)
             ->orderBy(self::ALIAS.'.name', 'ASC')
             ->orderBy(AxeRepository::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllFillComboboxForAxe(string $axeId, string $enable = 'all')
+    {
+        $builder = $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS.'.id, ' .self::ALIAS . '.name')
+            ->join(self::ALIAS.'.axe', AxeRepository::ALIAS)
+            ->andWhere(AxeRepository::ALIAS.'.id = :val1')
+            ->setParameter('val1', $axeId);
+
+        if ('all' != $enable) {
+            $builder = $builder
+                ->andWhere(AxeRepository::ALIAS.'.enable = :val2')
+                ->andWhere(self::ALIAS.'.enable = :val2')
+                ->setParameter('val2', $enable);
+        }
+
+        $builder = $builder
+            ->orderBy(self::ALIAS.'.name', 'ASC');
+
+        return $builder
+            ->getQuery()
+            ->getResult();
+    }
+
 
     public function tauxRaz()
     {
