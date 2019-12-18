@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PoleRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ThematiqueRepository")
  */
-class Pole implements EntityInterface
+class Thematique implements EntityInterface
 {
     /**
      * @ORM\Id()
@@ -19,7 +19,7 @@ class Pole implements EntityInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 
@@ -44,22 +44,20 @@ class Pole implements EntityInterface
     private $taux2;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Axe", inversedBy="poles")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=5)
      */
-    private $axe;
+    private $ref;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Thematique", mappedBy="pole", orphanRemoval=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Pole", inversedBy="thematiques")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $thematiques;
-
+    private $pole;
 
     public function __construct()
     {
-        $this->setTaux1(0);
-        $this->setTaux2(0);
-        $this->thematiques = new ArrayCollection();
+        $this->setTaux1('0');
+        $this->setTaux2('0');
     }
 
     public function getId(): ?int
@@ -69,7 +67,7 @@ class Pole implements EntityInterface
 
     public function setId(int $id): self
     {
-        $this->id = $id;
+        $this->id=$id;
 
         return $this;
     }
@@ -134,47 +132,27 @@ class Pole implements EntityInterface
         return $this;
     }
 
-    public function getAxe(): ?Axe
+    public function getRef(): ?string
     {
-        return $this->axe;
+        return $this->ref;
     }
 
-    public function setAxe(?Axe $axe): self
+    public function setRef(string $ref): self
     {
-        $this->axe = $axe;
+        $this->ref = $ref;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Thematique[]
-     */
-    public function getThematiques(): Collection
+    public function getPole(): ?Pole
     {
-        return $this->thematiques;
+        return $this->pole;
     }
 
-    public function addThematique(Thematique $thematique): self
+    public function setPole(?Pole $pole): self
     {
-        if (!$this->thematiques->contains($thematique)) {
-            $this->thematiques[] = $thematique;
-            $thematique->setPole($this);
-        }
+        $this->pole = $pole;
 
         return $this;
     }
-
-    public function removeThematique(Thematique $thematique): self
-    {
-        if ($this->thematiques->contains($thematique)) {
-            $this->thematiques->removeElement($thematique);
-            // set the owning side to null (unless already changed)
-            if ($thematique->getPole() === $this) {
-                $thematique->setPole(null);
-            }
-        }
-
-        return $this;
-    }
-
 }

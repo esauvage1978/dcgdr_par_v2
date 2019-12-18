@@ -30,10 +30,16 @@
                                     </th>
                                     <th class="desktop text-center">Taux</th>
                                     <th class="desktop text-center">
-                                        <i class="fa fa-file-archive"  data-toggle="tooltip" data-placement="top" title="Archive"></i>
+                                        <i class="fa fa-file-archive" data-toggle="tooltip" data-placement="top"
+                                           title="Archive"></i>
                                     </th>
                                     <th class="desktop text-center">
-                                        <i class="fa fa-boxes"  data-toggle="tooltip" data-placement="top" title="Nombre de Pôles"></i>
+                                        <i class="fa fa-boxes" data-toggle="tooltip" data-placement="top"
+                                           title="Nombre de Pôles"></i>
+                                    </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-boxes" data-toggle="tooltip" data-placement="top"
+                                           title="Nombre de Thématiques"></i>
                                     </th>
                                     <th class="all text-center"></th>
                                 </tr>
@@ -53,13 +59,30 @@
                                             {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': axe.taux1, 'taux2': axe.taux2  }) }}
                                         </td>
                                         <td class="text-center">
-                                            <span class="text-{{ axe.archiving ? 'info' : 'light' }}" ><i class="fas fa-circle"></i></span>
+                                            <span class="text-{{ axe.archiving ? 'info' : 'light' }}"><i
+                                                        class="fas fa-circle"></i></span>
                                         </td>
                                         <td class="text-center">
                                             {% if   axe.poles.count==0 %}
-                                                <span class="text-light" ><i class="fas fa-circle"></i></span>
+                                                <span class="text-light"><i class="fas fa-circle"></i></span>
                                             {% else %}
-                                                <small class="badge bg-info">{{ axe.poles.count}}</small>
+                                                <small class="badge bg-info">{{ axe.poles.count }}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if   axe.poles.count==0 %}
+                                                <span class="text-light"><i class="fas fa-circle"></i></span>
+                                            {% else %}
+                                                {% set nbr_t=0 %}
+                                                {% for pole in axe.poles %}
+                                                    {% set nbr_t = nbr_t + pole.thematiques.count %}
+                                                {% endfor %}
+                                                {% if   nbr_t==0 %}
+                                                    <span class="text-light"><i class="fas fa-circle"></i></span>
+                                                {% else %}
+                                                    <small class="badge bg-info">{{ nbr_t }}</small>
+                                                {% endif %}
+
                                             {% endif %}
                                         </td>
                                         <td class=" d-flex  justify-content-end ">

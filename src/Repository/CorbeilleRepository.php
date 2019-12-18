@@ -14,7 +14,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CorbeilleRepository extends ServiceEntityRepository
 {
-    const CORBEILLE = 'c';
+    const ALIAS = 'c';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -23,23 +23,23 @@ class CorbeilleRepository extends ServiceEntityRepository
 
     public function findAllForAdmin()
     {
-        return $this->createQueryBuilder(self::CORBEILLE)
-            ->select(self::CORBEILLE, UserRepository::USER, OrganismeRepository::ORGANISME)
-            ->leftJoin(self::CORBEILLE.'.users', UserRepository::USER)
-            ->leftJoin(self::CORBEILLE.'.organisme', OrganismeRepository::ORGANISME)
-            ->orderBy(self::CORBEILLE.'.name', 'ASC')
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS, UserRepository::ALIAS, OrganismeRepository::ALIAS)
+            ->leftJoin(self::ALIAS.'.users', UserRepository::ALIAS)
+            ->leftJoin(self::ALIAS.'.organisme', OrganismeRepository::ALIAS)
+            ->orderBy(self::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
     public function findAllForUser(string $userId)
     {
-        return $this->createQueryBuilder(self::CORBEILLE)
-            ->select(self::CORBEILLE)
-            ->leftJoin(self::CORBEILLE . '.users' , UserRepository::USER )
-            ->where(UserRepository::USER . '.id = :user')
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS)
+            ->leftJoin(self::ALIAS . '.users' , UserRepository::ALIAS )
+            ->where(UserRepository::ALIAS . '.id = :user')
             ->setParameter('user', $userId)
-            ->orderBy(self::CORBEILLE . '.name', 'ASC')
+            ->orderBy(self::ALIAS . '.name', 'ASC')
             ->getQuery()
             ->getResult();
     }
