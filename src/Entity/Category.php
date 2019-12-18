@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ThematiqueRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
-class Thematique implements EntityInterface
+class Category implements EntityInterface
 {
     /**
      * @ORM\Id()
@@ -49,21 +49,15 @@ class Thematique implements EntityInterface
     private $ref;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Pole", inversedBy="thematiques")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Thematique", inversedBy="categories")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $pole;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="thematique", orphanRemoval=true)
-     */
-    private $categories;
+    private $thematique;
 
     public function __construct()
     {
-        $this->setTaux1('0');
-        $this->setTaux2('0');
-        $this->categories = new ArrayCollection();
+        $this->setTaux1(0);
+        $this->setTaux2(0);
     }
 
     public function getId(): ?int
@@ -73,7 +67,7 @@ class Thematique implements EntityInterface
 
     public function setId(int $id): self
     {
-        $this->id=$id;
+        $this->id = $id;
 
         return $this;
     }
@@ -150,51 +144,20 @@ class Thematique implements EntityInterface
         return $this;
     }
 
-    public function getPole(): ?Pole
-    {
-        return $this->pole;
-    }
-
-    public function setPole(?Pole $pole): self
-    {
-        $this->pole = $pole;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Category[]
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Category $category): self
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
-            $category->setThematique($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): self
-    {
-        if ($this->categories->contains($category)) {
-            $this->categories->removeElement($category);
-            // set the owning side to null (unless already changed)
-            if ($category->getThematique() === $this) {
-                $category->setThematique(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getFullName(): ?string
     {
         return $this->getRef().' - '.$this->getName();
+    }
+
+    public function getThematique(): ?Thematique
+    {
+        return $this->thematique;
+    }
+
+    public function setThematique(?Thematique $thematique): self
+    {
+        $this->thematique = $thematique;
+
+        return $this;
     }
 }
