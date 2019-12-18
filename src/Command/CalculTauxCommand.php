@@ -43,6 +43,10 @@ class CalculTauxCommand extends Command
     {
         $debut = microtime(true);
 
+        $axeRepo = new PoleRepository($this->managerRegistry);
+        $axeRepo->tauxRaz();
+        $axeRepo->tauxCalcul();
+
         $axeRepo = new AxeRepository($this->managerRegistry);
         $axeRepo->tauxRaz();
         $axeRepo->tauxCalcul();
