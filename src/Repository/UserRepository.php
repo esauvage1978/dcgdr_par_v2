@@ -14,7 +14,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
-    const USER = 'u';
+    const ALIAS = 'u';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -23,11 +23,11 @@ class UserRepository extends ServiceEntityRepository
 
     public function findAllForAdmin()
     {
-        return $this->createQueryBuilder(self::USER)
-            ->select(self::USER, OrganismeRepository::ORGANISME, CorbeilleRepository::CORBEILLE)
-            ->leftJoin(self::USER.'.organismes',OrganismeRepository::ORGANISME)
-            ->leftJoin(self::USER.'.corbeilles',CorbeilleRepository::CORBEILLE)
-            ->orderBy(self::USER . '.name', 'ASC')
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS, OrganismeRepository::ALIAS, CorbeilleRepository::ALIAS)
+            ->leftJoin(self::ALIAS.'.organismes',OrganismeRepository::ALIAS)
+            ->leftJoin(self::ALIAS.'.corbeilles',CorbeilleRepository::ALIAS)
+            ->orderBy(self::ALIAS . '.name', 'ASC')
             ->getQuery()
             ->getResult()
             ;
@@ -38,12 +38,12 @@ class UserRepository extends ServiceEntityRepository
      */
     public function findAllForContact()
     {
-        return $this->createQueryBuilder(self::USER)
-            ->andWhere(self::USER.'.roles like :val1')
-            ->orWhere(self::USER.'.roles like :val2')
+        return $this->createQueryBuilder(self::ALIAS)
+            ->andWhere(self::ALIAS.'.roles like :val1')
+            ->orWhere(self::ALIAS.'.roles like :val2')
             ->setParameter('val1', '%ROLE_ADMIN%')
             ->setParameter('val2', '%"ROLE_GESTIONNAIRE"%')
-            ->orderBy(self::USER.'.name', 'ASC')
+            ->orderBy(self::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult()
             ;

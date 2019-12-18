@@ -15,7 +15,7 @@ use Doctrine\DBAL\DBALException;
  */
 class PoleRepository extends ServiceEntityRepository
 {
-    const POLE='p';
+    const ALIAS='p';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -24,13 +24,52 @@ class PoleRepository extends ServiceEntityRepository
 
     public function findAllForAdmin()
     {
-        return $this->createQueryBuilder(self::POLE)
-            ->select(self::POLE, AxeRepository::AXE)
-            ->leftJoin(self::POLE.'.axe', AxeRepository::AXE)
-            ->orderBy(self::POLE.'.name', 'ASC')
-            ->orderBy(AxeRepository::AXE.'.name', 'ASC')
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS, AxeRepository::ALIAS, ThematiqueRepository::ALIAS)
+            ->leftJoin(self::ALIAS.'.axe', AxeRepository::ALIAS)
+            ->leftJoin(self::ALIAS.'.thematiques', ThematiqueRepository::ALIAS)
+            ->orderBy(self::ALIAS.'.name', 'ASC')
+            ->orderBy(AxeRepository::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
+    public function tauxRaz()
+    {
+        $queryBuilder = $this->createQueryBuilder(self::ALIAS);
+        $queryBuilder->update(Pole::class, self::ALIAS)
+            ->set(self::ALIAS.'.taux1 ', 0)
+            ->set(self::ALIAS.'.taux2 ', 0);
+
+        $query = $queryBuilder->getQuery();
+
+        $query->getDQL();
+
+        return $query->execute();
+    }
+
+    public function tauxCalcul()
+    {
+        $table_source='pole';
+        $table_distante='thematique';
+
+        $alias_distante=ThematiqueRepository::ALIAS;
+
+        $sql = ' update '.$table_source.' '.self::ALIAS
+            .' inner join ( '
+            .' select '.$table_source.'_id, avg(taux1) as taux1, avg(taux2) as taux2, enable '
+            .' from '.$table_distante.' where enable=true group by '.$table_source.'_id ) '.$alias_distante.' '
+            .' on '.self::ALIAS.'.id='.$alias_distante.'.'.$table_source.'_id '
+            .' set '.self::ALIAS.'.taux1='.$alias_distante.'.taux1, '
+            .self::ALIAS.'.taux2='.$alias_distante.'.taux2 '
+            .' where '.self::ALIAS.'.enable=true; ';
+
+        try {
+            $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+
+            return $stmt->execute([]);
+        } catch (DBALException $e) {
+            return 'Error'.$e->getMessage();
+        }
+    }
 }
