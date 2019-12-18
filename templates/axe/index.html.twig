@@ -41,6 +41,10 @@
                                         <i class="fa fa-boxes" data-toggle="tooltip" data-placement="top"
                                            title="Nombre de Thématiques"></i>
                                     </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-boxes" data-toggle="tooltip" data-placement="top"
+                                           title="Nombre de Catégories"></i>
+                                    </th>
                                     <th class="all text-center"></th>
                                 </tr>
                                 </thead>
@@ -81,6 +85,24 @@
                                                     <span class="text-light"><i class="fas fa-circle"></i></span>
                                                 {% else %}
                                                     <small class="badge bg-info">{{ nbr_t }}</small>
+                                                {% endif %}
+
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if   axe.poles.count==0 %}
+                                                <span class="text-light"><i class="fas fa-circle"></i></span>
+                                            {% else %}
+                                                {% set nbr_c=0 %}
+                                                {% for pole in axe.poles %}
+                                                    {% for thematique in pole.thematiques %}
+                                                        {% set nbr_c = nbr_c + thematique.categories.count %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                                {% if   nbr_c==0 %}
+                                                    <span class="text-light"><i class="fas fa-circle"></i></span>
+                                                {% else %}
+                                                    <small class="badge bg-info">{{ nbr_c }}</small>
                                                 {% endif %}
 
                                             {% endif %}

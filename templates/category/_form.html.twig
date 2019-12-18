@@ -1,0 +1,64 @@
+<div class="card-body">
+    <div class="form-group row">
+        <label for="cmb_axe" class="col-sm-3 col-form-label">
+            Plan d'actions
+        </label>
+        <div class="col">
+            <select name="cmb_axe" id="cmb_axe" class="form-control">
+
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="cmb_pole" class="col-sm-3 col-form-label">
+            Pôle
+        </label>
+        <div class="col">
+            <select name="cmb_pole" id="cmb_pole" class="form-control">
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="cmb_thematique" class="col-sm-3 col-form-label">
+            Thématique
+        </label>
+        <div class="col">
+            <select name="cmb_thematique" id="cmb_thematique" class="form-control">
+            </select>
+        </div>
+    </div>
+    <div class="d-none">
+        {{ form_widget(form.thematique) }}
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.name,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
+        <div class="col">
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.ref,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
+        <div class="col">
+            {{ form_errors(form.ref) }}
+            {{ form_widget(form.ref) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label" for="{{ form.enable.vars.id }}">
+            Afficher
+        </label>
+        <div class="col mt-1">
+            {{ form_row(form.enable) }}
+        </div>
+    </div>
+
+
+    {{ form_row(form.content) }}
+
+
+    <div class="d-none">
+        <button name="update" id="update" >{{ button_label|default('Save') }}</button>
+    </div>
+
+</div>

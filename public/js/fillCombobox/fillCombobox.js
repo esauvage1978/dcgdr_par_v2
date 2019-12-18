@@ -1,5 +1,5 @@
 
-function populate(selecteurSource, selecteurDestination, route, appelEnCascade, addReference, selectedId="") {
+function fillComboboxChained(selecteurSource, selecteurDestination, route, appelEnCascade, addReference, selectedId="") {
     var id = $(selecteurSource).val();
     if (id == null) return;
 
@@ -29,7 +29,7 @@ function populate(selecteurSource, selecteurDestination, route, appelEnCascade, 
     });
 }
 
-function populateNotAssociated(selecteur, route, appelEnCascade, selectedId="") {
+function fillCombobox(selecteur, route, appelEnCascade, selectedId="") {
 
     $(selecteur).empty();
     $.ajax({
@@ -55,22 +55,3 @@ function populateNotAssociated(selecteur, route, appelEnCascade, selectedId="") 
     });
 }
 
-function showListe(selecteurSource, route, selecteurDestination) {
-    var id = $(selecteurSource).val();
-    //$(selecteurCompletOverlay).removeClass('d-none');
-
-    $.ajax({
-        method: "POST",
-        url: route ,
-        data: {'id': id},
-        dataType: 'json',
-        success: function (json) {
-            var result='';
-            $.each(json, function (index, value) {
-                result += '<li  class=\"list-group-item\">' + value.ref + '-' + value.name +'</li>';
-            });
-            $(selecteurDestination).html(result);
-           // $(selecteurCompletOverlay).addClass('d-none');
-        }
-    });
-}
