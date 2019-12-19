@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Corbeille;
 use App\Entity\Organisme;
 use App\Entity\User;
@@ -104,6 +105,23 @@ abstract class AppTypeAbstract extends AbstractType
                 self::MULTIPLE => true,
                 self::ATTR => ['class' => 'select2'],
                 self::REQUIRED => false,
+                self::QUERY_BUILDER => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
+            ]);
+    }
+
+    public function buildFormCategory(FormBuilderInterface $builder, bool $addselect): FormBuilderInterface
+    {
+        return $builder
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                self::LABEL => 'Catégorie',
+                self::CHOICE_LABEL => 'fullname',
+                self::MULTIPLE => false,
+                self::ATTR => ['class' => $addselect ? 'select2' : ''],
+                self::REQUIRED => true,
                 self::QUERY_BUILDER => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
                         ->orderBy('c.name', 'ASC');
