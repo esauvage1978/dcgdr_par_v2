@@ -25,10 +25,42 @@ class AxeRepository extends ServiceEntityRepository
     public function findAllForAdmin()
     {
         return $this->createQueryBuilder(self::ALIAS)
-            ->select(self::ALIAS, PoleRepository::ALIAS, ThematiqueRepository::ALIAS, CategoryRepository::ALIAS)
+            ->select(
+                self::ALIAS,
+                PoleRepository::ALIAS,
+                ThematiqueRepository::ALIAS,
+                CategoryRepository::ALIAS,
+                ActionRepository::ALIAS
+            )
             ->leftJoin(self::ALIAS.'.poles', PoleRepository::ALIAS)
             ->leftJoin(PoleRepository::ALIAS.'.thematiques', ThematiqueRepository::ALIAS)
             ->leftJoin(ThematiqueRepository::ALIAS.'.categories', CategoryRepository::ALIAS)
+            ->leftJoin(CategoryRepository::ALIAS.'.actions', ActionRepository::ALIAS)
+            ->orderBy(self::ALIAS.'.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function findAllForHome()
+    {
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(
+                self::ALIAS,
+                PoleRepository::ALIAS,
+                ThematiqueRepository::ALIAS,
+                CategoryRepository::ALIAS,
+                ActionRepository::ALIAS
+                )
+            ->leftJoin(self::ALIAS.'.poles', PoleRepository::ALIAS)
+            ->leftJoin(PoleRepository::ALIAS.'.thematiques', ThematiqueRepository::ALIAS)
+            ->leftJoin(ThematiqueRepository::ALIAS.'.categories', CategoryRepository::ALIAS)
+            ->leftJoin(CategoryRepository::ALIAS.'.actions', ActionRepository::ALIAS)
+            ->where(self::ALIAS.'.enable=true')
+            ->andwhere(self::ALIAS.'.archiving=false')
+            ->andwhere(PoleRepository::ALIAS.'.enable=true')
+            ->andwhere(ThematiqueRepository::ALIAS.'.enable=true')
+            ->andwhere(CategoryRepository::ALIAS.'.enable=true')
             ->orderBy(self::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult();

@@ -25,10 +25,17 @@ class PoleRepository extends ServiceEntityRepository
     public function findAllForAdmin()
     {
         return $this->createQueryBuilder(self::ALIAS)
-            ->select(self::ALIAS, AxeRepository::ALIAS, ThematiqueRepository::ALIAS, CategoryRepository::ALIAS)
+            ->select(
+                self::ALIAS,
+                AxeRepository::ALIAS,
+                ThematiqueRepository::ALIAS,
+                CategoryRepository::ALIAS,
+                ActionRepository::ALIAS
+            )
             ->leftJoin(self::ALIAS.'.axe', AxeRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.thematiques', ThematiqueRepository::ALIAS)
             ->leftJoin(ThematiqueRepository::ALIAS.'.categories', CategoryRepository::ALIAS)
+            ->leftJoin(CategoryRepository::ALIAS.'.actions', ActionRepository::ALIAS)
             ->orderBy(self::ALIAS.'.name', 'ASC')
             ->orderBy(AxeRepository::ALIAS.'.name', 'ASC')
             ->getQuery()
