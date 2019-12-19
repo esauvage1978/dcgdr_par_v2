@@ -1,6 +1,5 @@
 function showListe(selecteurSource, route, selecteurDestination) {
     var id = $(selecteurSource).val();
-    //$(selecteurCompletOverlay).removeClass('d-none');
 
     $.ajax({
         method: "POST",
@@ -10,10 +9,9 @@ function showListe(selecteurSource, route, selecteurDestination) {
         success: function (json) {
             var result='';
             $.each(json, function (index, value) {
-                result += '<li  class=\"list-group-item\">' + value.ref + '-' + value.name +'</li>';
+                result += '<div class=\"card bg-light\"><div class=\"card-header text-muted border-bottom-0\">' + value.ref + '-' + value.name +'</div></div>';
             });
             $(selecteurDestination).html(result);
-            // $(selecteurCompletOverlay).addClass('d-none');
         }
     });
 }

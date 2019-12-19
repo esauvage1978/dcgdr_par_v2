@@ -95,7 +95,11 @@
             </div>
             <div class="{{ col_secondary }}">
 
-
+                        {% for action in category.actions %}
+                            {{ include('action/_view/_show_item.html.twig') }}
+                        {% else %}
+                            <div class="list-group-item">En attente d'ajout</div>
+                        {% endfor %}
             </div>
         </div>
 

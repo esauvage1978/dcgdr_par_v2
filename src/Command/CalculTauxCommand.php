@@ -43,6 +43,10 @@ class CalculTauxCommand extends Command
     {
         $debut = microtime(true);
 
+        $repo = new CategoryRepository($this->managerRegistry);
+        $repo->tauxRaz();
+        $repo->tauxCalcul();
+
         $repo = new ThematiqueRepository($this->managerRegistry);
         $repo->tauxRaz();
         $repo->tauxCalcul();

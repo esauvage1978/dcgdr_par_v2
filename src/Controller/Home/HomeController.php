@@ -2,6 +2,7 @@
 
 namespace App\Controller\Home;
 
+use App\Repository\AxeRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +18,9 @@ class HomeController extends AbstractController
      * @return Response
      * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
-    public function homeAction(): Response
+    public function homeAction(AxeRepository $axeRepository): Response
     {
-
-        return $this->render('home/home.html.twig', []);
+        return $this->render('home/home.html.twig', ['axes'=>$axeRepository->findAllForHome()]);
     }
 
 

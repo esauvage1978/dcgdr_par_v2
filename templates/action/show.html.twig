@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Détail d'une action{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h2 class="m-0 text-dark">Action </h2>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('action_index') }}">Liste</a></li>
+            <li class="breadcrumb-item active">Action {{ action.id }}</li>
+        </ol>
+    </div>
+
+
+{% endblock %}
+
+{% block sidebar_sommaire %}
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_name">
+            <i class="fa fa-bolt"></i> Info. générales
+        </a>
+    </li>
+
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_classement">
+            <i class="fa fa-stream"></i> Classement
+        </a>
+    </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_measure">
+            <i class="fa fa-balance-scale"></i> Mesure d'efficacité
+        </a>
+    </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_cadrage">
+            <i class="fas fa-crop-alt"></i> Cadrage
+        </a>
+    </li>
+    {% if action.content %}
+        <li class="nav-item ">
+            <a class="nav-link" href="#anchor_info_part">
+                <i class="fas fa-info-circle"></i> Info. complémentaires
+            </a>
+        </li>
+    {% endif %}
+
+
+{% endblock %}
+{% block sidebar_button %}
+
+    {% if is_granted('ROLE_GESTIONNAIRE') %}
+        {{ include('share/__btn_edit.html.twig',
+            {   'url':'action_edit',
+                'id':action.id,
+                'titre':''
+            }) }}
+    {% endif %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-start ">
+        {{ include('action/_show/_name.html.twig') }}
+        <div class="row col-12">
+            <div id="col1"
+                 class="col-sm-12  order-sm-second  col-md-12 order-sm-second col-lg-6 order-lg-second col-xl-2 order-xl-first">
+
+                {{ include('action/_show/_tuile.html.twig') }}
+                {{ include('action/_show/_date.html.twig') }}
+            </div>
+            <div id="col2"
+                 class="col-sm-12  order-sm-first  col-md-12 order-md-first col-lg-12  order-lg-first col-xl-7 order-xl-second  bg-white  p-5">
+                {{ include('action/_show/_classement.html.twig') }}
+                {{ include('action/_show/_measure.html.twig') }}
+                {{ include('action/_show/_cadrage.html.twig') }}
+                {{ include('action/_show/_info_part.html.twig') }}
+            </div>
+            <div id="col3" class="col-sm-12 col-md-12 col-lg-6 col-xl-3">
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
+{% endblock %}

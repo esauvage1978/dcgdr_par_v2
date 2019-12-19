@@ -1,0 +1,21 @@
+<h3 id="anchor_measure" class="text-purple pt-5">
+    <small><i class="fas fa-balance-scale"></i></small> Mesure d'efficacité
+</h3>
+<section  class="p-3 col-12 mt-4">
+        <div class="row">
+            <div class="col-md-12 col-lg-2">
+                <div class="info-box bg-light">
+                    <div class="info-box-content">
+                        <span class="info-box-text text-center text-muted">Score</span>
+                        <span class="info-box-number text-center  text-lg mb-0">
+                    {{ action.measureValue }}
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-10 bg-light">
+                {{ action.measureContent | raw }}
+
+            </div>
+        </div>
+</section>

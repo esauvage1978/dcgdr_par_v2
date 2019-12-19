@@ -1,0 +1,10 @@
+<h3 id="anchor_cadrage" class="text-purple pt-5">
+    <small><i class="fas fa-crop-alt"></i></small> Cadrage
+</h3>
+<section  class="mt-4 p-3 col-12 bg-light">
+        {% if action.cadrage %}
+            {{ action.cadrage | raw }}
+        {% else %}
+            en cours de rédaction
+        {% endif %}
+</section>

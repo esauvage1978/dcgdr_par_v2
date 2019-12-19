@@ -1,0 +1,43 @@
+<!-- classement -->
+<h3 id="anchor_classement" class="text-purple">
+    <small><i class="fas fa-stream"></i></small> Classement
+</h3>
+<article class="card-body bg-light mt-5">
+    <div class="row">
+
+        <div class="col-12 d-flex justify-content-between">
+
+            <a class="btn btn-link" href="{{ path('axe_show',{'id': action.category.thematique.pole.axe.id}) }}">
+                <i class="fas fa-long-arrow-alt-right"></i> {{ action.category.thematique.pole.axe.name }}
+            </a>
+            <div class="pt-2"><small class="text-muted ">Plan d'actions</small></div>
+        </div>
+
+        <div class="col-12  d-flex justify-content-between ">
+
+            <a class="btn btn-link" href="{{ path('pole_show',{'id': action.category.thematique.pole.id}) }}">
+                <i class="fas fa-long-arrow-alt-right"></i> {{ action.category.thematique.pole.name }}
+            </a>
+            <div class="pt-2"><small class="text-muted">Pôle</small></div>
+        </div>
+
+        <div class="col-12  d-flex justify-content-between">
+
+            <a class="btn btn-link " href="{{ path('thematique_show',{'id': action.category.thematique.id}) }}">
+                <i class="fas fa-long-arrow-alt-right"></i> {{ action.category.thematique.ref }}
+                - {{ action.category.thematique.name }}
+            </a>
+            <div class="pt-2"><small class="text-muted">thématique</small></div>
+        </div>
+
+        <div class="col-12   d-flex justify-content-between">
+
+            <a class="btn btn-link" href="{{ path('category_show',{'id': action.category.id}) }}">
+                <i class="fas fa-long-arrow-alt-right"></i> {{ action.category.ref }}
+                - {{ action.category.name }}
+            </a>
+            <div class="pt-2"><small class="text-muted">Catégorie</small></div>
+        </div>
+
+    </div>
+</article>
