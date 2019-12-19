@@ -3,8 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\Vecteur;
-use App\Validator\VecteurValidator;
 use App\Helper\FixturesImportData;
+use App\Validator\VecteurValidator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -31,7 +31,8 @@ class Step1120_VecteurFixtures extends Fixture implements FixtureGroupInterface
         FixturesImportData $fixturesImportData,
         VecteurValidator $validator,
         EntityManagerInterface $entityManagerI
-    ) {
+    )
+    {
         $this->fixturesImportData = $fixturesImportData;
         $this->validator = $validator;
         $this->entityManagerInterface = $entityManagerI;
@@ -39,12 +40,12 @@ class Step1120_VecteurFixtures extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager)
     {
-        $data = $this->fixturesImportData->importToArray(self::FILENAME.'.json');
+        $data = $this->fixturesImportData->importToArray(self::FILENAME . '.json');
 
         for ($i = 0; $i < \count($data); ++$i) {
             $instance = $this->initialise(new Vecteur(), $data[$i]);
 
-            $this->checkAndPersist( $instance);
+            $this->checkAndPersist($instance);
 
         }
 
@@ -52,15 +53,16 @@ class Step1120_VecteurFixtures extends Fixture implements FixtureGroupInterface
     }
 
 
-    private function checkAndPersist( Vecteur $instance)
+    private function checkAndPersist(Vecteur $instance)
     {
         if ($this->validator->isValid($instance)) {
             $metadata = $this->entityManagerInterface->getClassMetadata(Vecteur::class);
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $this->entityManagerInterface->persist($instance);
-        } else {
-            var_dump('Validator : '.$this->validator->getErrors($instance));
+            return;
         }
+        var_dump('Validator : ' . $this->validator->getErrors($instance));
+        
     }
 
     private function initialise(Vecteur $instance, $data): Vecteur
@@ -68,8 +70,7 @@ class Step1120_VecteurFixtures extends Fixture implements FixtureGroupInterface
         $instance
             ->setId($data['n0_num'])
             ->setName($data['nom'])
-            ->setEnable($data['afficher'])
-        ;
+            ->setEnable($data['afficher']);
 
         return $instance;
     }
