@@ -54,10 +54,16 @@ class Category implements EntityInterface
      */
     private $thematique;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="category", orphanRemoval=true)
+     */
+    private $actions;
+
     public function __construct()
     {
         $this->setTaux1(0);
         $this->setTaux2(0);
+        $this->actions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,6 +163,37 @@ class Category implements EntityInterface
     public function setThematique(?Thematique $thematique): self
     {
         $this->thematique = $thematique;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Action[]
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+
+    public function addAction(Action $action): self
+    {
+        if (!$this->actions->contains($action)) {
+            $this->actions[] = $action;
+            $action->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAction(Action $action): self
+    {
+        if ($this->actions->contains($action)) {
+            $this->actions->removeElement($action);
+            // set the owning side to null (unless already changed)
+            if ($action->getCategory() === $this) {
+                $action->setCategory(null);
+            }
+        }
 
         return $this;
     }
