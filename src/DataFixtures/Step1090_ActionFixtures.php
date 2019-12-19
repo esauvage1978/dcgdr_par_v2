@@ -77,9 +77,9 @@ class Step1090_ActionFixtures extends Fixture implements FixtureGroupInterface
             $metadata = $this->entityManagerInterface->getClassMetadata(Action::class);
             $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $this->entityManagerInterface->persist($instance);
-        } else {
-            var_dump('Validator : ' . $this->validator->getErrors($instance));
+            return;
         }
+        var_dump('Validator : ' . $this->validator->getErrors($instance));
     }
 
     private function initialise(Action $instance, $data): Action
