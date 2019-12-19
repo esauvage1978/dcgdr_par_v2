@@ -4,128 +4,221 @@ namespace App\Dto;
 
 class ActionSearchDto
 {
-    private $axe_id;
-    private $action_archiving;
-    private $axe_enable;
-    private $thematique_enable;
-    private $pole_enable;
-    private $category_enable;
-
-    public function __construct()
-    {
-        $this->axe_enable=true;
-        $this->pole_enable=true;
-        $this->thematique_enable=true;
-        $this->category_enable=true;
-        $this->action_archiving=false;
-    }
+    private $axeId;
+    private $actionArchiving;
+    private $axeEnable;
+    private $thematiqueEnable;
+    private $poleEnable;
+    private $categoryEnable;
+    private $search;
+    private $thematiqueRef;
+    private $categoryRef;
+    private $actionRef;
 
     /**
      * @return mixed
      */
     public function getAxeId()
     {
-        return $this->axe_id;
+        return $this->axeId;
     }
 
     /**
-     * @param mixed $axe_id
-     * @return actionSearchDto
+     * @param mixed $axeId
+     * @return ActionSearchDto
      */
-    public function setAxeId($axe_id)
+    public function setAxeId($axeId)
     {
-        $this->axe_id = $axe_id;
+        $this->axeId = $axeId;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getActionArchiving(): bool
+    {
+        return $this->actionArchiving;
+    }
+
+    /**
+     * @param bool $actionArchiving
+     * @return ActionSearchDto
+     */
+    public function setActionArchiving(bool $actionArchiving): ActionSearchDto
+    {
+        $this->actionArchiving = $actionArchiving;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAxeEnable(): bool
+    {
+        return $this->axeEnable;
+    }
+
+    /**
+     * @param bool $axeEnable
+     * @return ActionSearchDto
+     */
+    public function setAxeEnable(bool $axeEnable): ActionSearchDto
+    {
+        $this->axeEnable = $axeEnable;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getThematiqueEnable(): bool
+    {
+        return $this->thematiqueEnable;
+    }
+
+    /**
+     * @param bool $thematiqueEnable
+     * @return ActionSearchDto
+     */
+    public function setThematiqueEnable(bool $thematiqueEnable): ActionSearchDto
+    {
+        $this->thematiqueEnable = $thematiqueEnable;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPoleEnable(): bool
+    {
+        return $this->poleEnable;
+    }
+
+    /**
+     * @param bool $poleEnable
+     * @return ActionSearchDto
+     */
+    public function setPoleEnable(bool $poleEnable): ActionSearchDto
+    {
+        $this->poleEnable = $poleEnable;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCategoryEnable(): bool
+    {
+        return $this->categoryEnable;
+    }
+
+    /**
+     * @param bool $categoryEnable
+     * @return ActionSearchDto
+     */
+    public function setCategoryEnable(bool $categoryEnable): ActionSearchDto
+    {
+        $this->categoryEnable = $categoryEnable;
         return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getActionArchiving()
+    public function getSearch()
     {
-        return $this->action_archiving;
+        return $this->search;
     }
 
     /**
-     * @param mixed $action_archiving
-     * @return actionSearchDto
+     * @param mixed $search
+     * @return ActionSearchDto
      */
-    public function setActionArchiving($action_archiving)
+    public function setSearch($search)
     {
-        $this->action_archiving = $action_archiving;
+        $this->search = $search;
+
+        $this->SearchReference();
+        return $this;
+    }
+
+    private function SearchReference()
+    {
+        if (mb_substr_count($this->search,'-')==2) {
+            $temp=explode('-',$this->search);
+            $this->setThematiqueRef($temp[0]);
+            $this->setCategoryRef($temp[1]);
+            $this->setActionRef($temp[2]);
+            $this->search=null;
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThematiqueRef()
+    {
+        return $this->thematiqueRef;
+    }
+
+    /**
+     * @param mixed $thematiqueRef
+     * @return ActionSearchDto
+     */
+    public function setThematiqueRef($thematiqueRef)
+    {
+        $this->thematiqueRef = $thematiqueRef;
         return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getAxeEnable()
+    public function getCategoryRef()
     {
-        return $this->axe_enable;
+        return $this->categoryRef;
     }
 
     /**
-     * @param mixed $axe_enable
-     * @return actionSearchDto
+     * @param mixed $categoryRef
+     * @return ActionSearchDto
      */
-    public function setAxeEnable($axe_enable)
+    public function setCategoryRef($categoryRef)
     {
-        $this->axe_enable = $axe_enable;
+        $this->categoryRef = $categoryRef;
         return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getThematiqueEnable()
+    public function getActionRef()
     {
-        return $this->thematique_enable;
+        return $this->actionRef;
     }
 
     /**
-     * @param mixed $thematique_enable
-     * @return actionSearchDto
+     * @param mixed $actionRef
+     * @return ActionSearchDto
      */
-    public function setThematiqueEnable($thematique_enable)
+    public function setActionRef($actionRef)
     {
-        $this->thematique_enable = $thematique_enable;
+        $this->actionRef = $actionRef;
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPoleEnable()
-    {
-        return $this->pole_enable;
-    }
 
-    /**
-     * @param mixed $pole_enable
-     * @return actionSearchDto
-     */
-    public function setPoleEnable($pole_enable)
-    {
-        $this->pole_enable = $pole_enable;
-        return $this;
-    }
 
-    /**
-     * @return mixed
-     */
-    public function getCategoryEnable()
-    {
-        return $this->category_enable;
-    }
 
-    /**
-     * @param mixed $category_enable
-     * @return actionSearchDto
-     */
-    public function setCategoryEnable($category_enable)
+
+    public function __construct()
     {
-        $this->category_enable = $category_enable;
-        return $this;
+        $this->axeEnable=true;
+        $this->poleEnable=true;
+        $this->thematiqueEnable=true;
+        $this->categoryEnable=true;
+        $this->actionArchiving=false;
     }
 
 
