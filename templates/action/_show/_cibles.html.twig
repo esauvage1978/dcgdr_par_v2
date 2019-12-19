@@ -1,0 +1,12 @@
+<article class="bg-white {{ action.cibles.count==0?'d-none':'' }}">
+    <h5 class="text-purple p-1 pt-3 text-center ">
+        Cibles
+    </h5>
+    <div class="card-body">
+        {% for cible in action.cibles %}
+            <a href="{{ path('cible_show',{'id': cible.id}) }}" class="btn btn-info mt-1">
+                {{ cible.name }}
+            </a>
+        {% endfor %}
+    </div>
+</article>
