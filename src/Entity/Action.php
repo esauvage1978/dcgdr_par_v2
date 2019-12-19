@@ -95,6 +95,11 @@ class Action implements EntityInterface
      */
     private $cibles;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Vecteur", inversedBy="actions")
+     */
+    private $vecteurs;
+
     public function __construct()
     {
         $this->setTaux1('0');
@@ -102,6 +107,7 @@ class Action implements EntityInterface
         $this->setShowAll(true);
         $this->setExperimental(false);
         $this->cibles = new ArrayCollection();
+        $this->vecteurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -310,6 +316,32 @@ class Action implements EntityInterface
     {
         if ($this->cibles->contains($cible)) {
             $this->cibles->removeElement($cible);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Vecteur[]
+     */
+    public function getVecteurs(): Collection
+    {
+        return $this->vecteurs;
+    }
+
+    public function addVecteur(Vecteur $vecteur): self
+    {
+        if (!$this->vecteurs->contains($vecteur)) {
+            $this->vecteurs[] = $vecteur;
+        }
+
+        return $this;
+    }
+
+    public function removeVecteur(Vecteur $vecteur): self
+    {
+        if ($this->vecteurs->contains($vecteur)) {
+            $this->vecteurs->removeElement($vecteur);
         }
 
         return $this;
