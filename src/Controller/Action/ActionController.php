@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 class ActionController extends AppControllerAbstract
 {
     const ENTITYS = 'actions';
@@ -39,9 +38,9 @@ class ActionController extends AppControllerAbstract
         ActionRepository $repository,
         ActionSearchDto $actionSearchDto,
         string $id_axe
-): Response
-    {
+): Response {
         $actionSearchDto->setAxeId($id_axe);
+
         return $this->render(self::ENTITY.'/index.html.twig', [
             self::ENTITYS => $repository->findAllForDto($actionSearchDto),
         ]);
@@ -98,11 +97,8 @@ class ActionController extends AppControllerAbstract
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($manager->save($entity)) {
-                $this->addFlash(self::SUCCESS, self::MSG_MODIFY);
-            } else {
-                $this->addFlash(self::DANGER, self::MSG_ERROR.$manager->getErrors($entity));
-            }
+            $manager->save($entity);
+            $this->addFlash(self::SUCCESS, self::MSG_MODIFY);
         }
 
         return $this->render('action/edit.html.twig', [
