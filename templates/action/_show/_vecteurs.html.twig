@@ -1,0 +1,14 @@
+<article class="bg-white {{ action.vecteurs.count==0?'d-none':'' }}">
+    <h5 class="text-purple p-1 pt-3 text-center ">
+        Vecteurs
+    </h5>
+    <div class="card-body">
+        {% for vecteur in action.vecteurs %}
+            {% if vecteur.enable %}
+            <a href="{{ path('vecteur_show',{'id': vecteur.id}) }}" class="btn btn-info">
+                {{ vecteur.name }}
+            </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</article>
