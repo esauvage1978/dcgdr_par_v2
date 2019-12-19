@@ -90,12 +90,18 @@ class Action implements EntityInterface
      */
     private $category;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Cible", inversedBy="actions")
+     */
+    private $cibles;
+
     public function __construct()
     {
         $this->setTaux1('0');
         $this->setTaux2('0');
         $this->setShowAll(true);
         $this->setExperimental(false);
+        $this->cibles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -279,6 +285,32 @@ class Action implements EntityInterface
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Cible[]
+     */
+    public function getCibles(): Collection
+    {
+        return $this->cibles;
+    }
+
+    public function addCible(Cible $cible): self
+    {
+        if (!$this->cibles->contains($cible)) {
+            $this->cibles[] = $cible;
+        }
+
+        return $this;
+    }
+
+    public function removeCible(Cible $cible): self
+    {
+        if ($this->cibles->contains($cible)) {
+            $this->cibles->removeElement($cible);
+        }
 
         return $this;
     }

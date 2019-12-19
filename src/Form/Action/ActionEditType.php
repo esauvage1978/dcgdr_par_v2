@@ -3,6 +3,7 @@
 namespace App\Form\Action;
 
 use App\Entity\Action;
+use App\Entity\Cible;
 use App\Form\AppTypeAbstract;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -71,7 +72,18 @@ class ActionEditType extends AppTypeAbstract
                 [
                     self::LABEL => ' ',
                     self::REQUIRED => false,
-                ]);
+                ])
+            ->add('cibles', EntityType::class, [
+                'class' => Cible::class,
+                self::CHOICE_LABEL => 'name',
+                self::MULTIPLE => true,
+                self::ATTR => ['class' => 'select2'],
+                self::REQUIRED => false,
+                self::QUERY_BUILDER => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
