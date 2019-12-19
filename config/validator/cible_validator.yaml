@@ -1,0 +1,11 @@
+App\Entity\Cible:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+  properties:
+    name:
+      - NotBlank: ~
+      - Length:
+          min: 2
+          max: 30
+          minMessage: 'Le nom "{{ value }}" doit avoir plus de 2 caractères'
+          maxMessage: 'Le nom "{{ value }}" ne peut pas avoir plus de 30 caractères'
