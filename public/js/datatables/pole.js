@@ -13,6 +13,8 @@ $('#tableAdministration').DataTable({
         null,
         {"orderable": false},
         {"orderable": false},
+        {"orderable": false},
+        {"orderable": false},
         {"orderable": false}
     ],
     "language": {

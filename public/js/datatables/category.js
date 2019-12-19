@@ -1,10 +1,21 @@
 $('#tableAdministration').DataTable({
-    stateSave: false,
+    stateSave: true,
     responsive:true,
     scrollCollapse: true,
     paging: false,
     scrollX: false,
     ordering: true,
+    "order": [[4, 'asc']],
+    "columns": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        {"orderable": false},
+        {"orderable": false},
+        {"orderable": false}
+    ],
     "language": {
         buttons: {
             copyTitle: 'Ajouté au presse-papiers',

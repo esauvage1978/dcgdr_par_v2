@@ -7,14 +7,11 @@ $(function () {
             paging: false,
             scrollX: false,
             ordering: true,
-            "order": [[2, 'asc']],
+            "order": [[1, 'asc']],
             "columns": [
                 null,
                 null,
                 null,
-                null,
-                {"orderable": false},
-                {"orderable": false},
                 {"orderable": false},
                 {"orderable": false}
             ],
@@ -28,7 +25,7 @@ $(function () {
                     }
                 },
                 "sProcessing": "Traitement en cours...",
-                "sSearch": "Filtrer&nbsp;:",
+                "sSearch": "Rechercher&nbsp;:",
                 "sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
                 "sInfo": "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
                 "sInfoEmpty": "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",

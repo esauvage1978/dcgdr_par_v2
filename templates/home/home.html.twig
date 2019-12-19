@@ -32,11 +32,14 @@
     {% endif %}
 
     <div class="row justify-content-center">
-        <div class="col-sm-12 col-md-6 col-lg-7  ">
-            <div class="card card-outline card-info">
-                <div class="card-body">
-                </div>
-            </div>
+        <div class="col-sm-12 col-md-6 col-lg-7 row ">
+
+                    {% for axe in axes %}
+                        <div class="col-md-4 col-sm-6 col-12">
+                            {{ include('axe/_view/_box.html.twig',{'axe':axe }) }}
+                        </div>
+                    {% endfor %}
+
         </div>
         <div class="col-sm-12 col-md-6 col-lg-5  ">
             <div class="card">

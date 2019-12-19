@@ -1,0 +1,39 @@
+<a href="{{path('action_for_axe',{'id_axe':axe.id})}}">
+<div class="info-box bg-info">
+    <span class="info-box-icon"><i class="fa fa-bolt"></i></span>
+
+    <div class="info-box-content">
+        <span class="info-box-text">{{ axe.name }}</span>
+        <span class="info-box-number">
+            {{ include('share/_taux_label.html.twig', {'taux1': axe.taux1,'taux2': axe.taux2,'color':'' }) }}
+        </span>
+
+        <div class="progress">
+            <div class="progress-bar" style="width: {{ axe.taux1 }}%"></div>
+        </div>
+        <span class="progress-description">
+               {% if   axe.poles.count==0 %}
+                   Aucune action
+               {% else %}
+                   {% set nbr_a=0 %}
+                   {% for pole in axe.poles %}
+                       {% for thematique in pole.thematiques %}
+                           {% for category in thematique.categories %}
+                               {% set nbr_a = nbr_a + category.actions.count %}
+                           {% endfor %}
+                       {% endfor %}
+                   {% endfor %}
+                   {% if   nbr_a==0 %}
+                       Aucune action
+                   {% elseif   nbr_a==0 %}
+                       1 action
+                   {% else %}
+                       {{ nbr_a }} actions
+                   {% endif %}
+
+               {% endif %}
+                </span>
+    </div>
+    <!-- /.info-box-content -->
+</div>
+</a>

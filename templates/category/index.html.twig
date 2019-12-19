@@ -28,8 +28,11 @@
                                     <th class="desktop text-center">Code</th>
                                     <th class="all">Catégorie</th>
                                     <th class="desktop">Description</th>
-                                    <th class="desktop text-center">Actions</th>
                                     <th class="desktop text-center">Taux</th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-bolt" data-toggle="tooltip" data-placement="top"
+                                           title="Nombre d'actions'"></i>
+                                    </th>
                                     <th class="all text-center"></th>
                                 </tr>
                                 </thead>
@@ -66,6 +69,13 @@
                                         <td class="text-center">
                                             {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': category.taux1, 'taux2': category.taux2  }) }}
                                         </td>
+                                        <td class="text-center">
+                                            {% if   category.actions.count==0 %}
+                                                <span class="text-light"><i class="fas fa-circle"></i></span>
+                                            {% else %}
+                                                <small class="badge bg-info">{{ category.actions.count }}</small>
+                                            {% endif %}
+                                        </td>
                                         <td class=" d-flex  justify-content-end ">
 
                                             {{ include('share/__btn_show.html.twig',
@@ -86,7 +96,7 @@
                                     </tr>
                                 {% else %}
                                     <tr>
-                                        <td colspan="9">Aucun d'enregistrement</td>
+                                        <td colspan="8">Aucun d'enregistrement</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -114,5 +124,4 @@
     <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')) }}"></script>
     <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')) }}"></script>
     <script src="{{ absolute_url( asset('js/datatables/category.js')) }}"></script>
-
 {% endblock %}

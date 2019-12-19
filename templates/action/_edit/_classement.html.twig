@@ -1,0 +1,43 @@
+<!-- classement -->
+<h3 id="anchor_classement" class="text-purple pt-5">
+    <small><i class="fas fa-stream"></i></small> Classement
+</h3>
+<section class="p-3 col-12">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="cmb_axe">
+                Plan d'actions
+            </label>
+            <div class="col-sm-10">
+                <select name="cmb_axe" id="cmb_axe" class="form-control">
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="cmb_pole">
+                Pôle
+            </label>
+            <div class="col-sm-10">
+                <select name="cmb_pole" id="cmb_pole" class="form-control">
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="cmb_thematique">
+                Thématique
+            </label>
+            <div class="col-sm-10">
+                <select name="cmb_thematique" id="cmb_thematique" class="form-control">
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="cmb_category">
+                Catégorie
+            </label>
+            <div class="col-sm-10">
+                <select name="cmb_category" id="cmb_category" class="form-control">
+                </select>
+            </div>
+        </div>
+        <div class="d-none">{{ form_widget(form.category) }}</div>
+</section>

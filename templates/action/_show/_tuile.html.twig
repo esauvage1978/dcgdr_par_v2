@@ -1,0 +1,26 @@
+<section id="anchor_date" class="bg-white">
+    <div class="card-body">
+
+        <div class="info-box bg-light  ">
+            <div class="info-box-content">
+                <span class="info-box-text text-center text-muted">Taux</span>
+                <span class="info-box-number text-center  text-lg mb-0">
+                    {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': action.taux1,'taux2': action.taux2,'info':false }) }}
+                </span>
+            </div>
+        </div>
+
+        <div class="info-box bg-light">
+            <div class="info-box-content">
+                <span class="info-box-text text-center text-muted"><small>Expérimentation</small></span>
+                <span class="info-box-number text-center   mb-0">
+                        {% if action.experimental %}
+                            Oui
+                        {% else %}
+                            Non
+                        {% endif %}
+                     </span>
+            </div>
+        </div>
+    </div>
+</section>

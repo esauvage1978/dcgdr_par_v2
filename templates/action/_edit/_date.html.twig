@@ -1,0 +1,24 @@
+
+<section id="anchor_date" class="bg-white">
+    <h5 class="text-purple p-1  text-center ">
+        Date de déploiement
+    </h5>
+    <div class="card-body">
+        <div class="form-group row ">
+            <div class="col ">
+                <label for="{{ form.regionstartat.vars.id }}">
+                    Du
+                </label>
+                {{ form_widget(form.regionstartat) }}
+            </div>
+        </div>
+        <div class="form-group row ">
+            <div class="col ">
+                <label for="{{ form.regionendat.vars.id }}">
+                    Au
+                </label>
+                {{ form_widget(form.regionendat) }}
+            </div>
+        </div>
+    </div>
+</section>

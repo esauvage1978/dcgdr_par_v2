@@ -95,7 +95,7 @@
                 {% for category in thematique.categories %}
                     {{ include('category/_show_item.html.twig') }}
                 {% else %}
-                    <div class="list-group-item">En attente d'ajout</div>
+                    <a class="text-success" href="{{ path('category_new') }}">Créer une catégorie</a>
                 {% endfor %}
             </div>
         </div>

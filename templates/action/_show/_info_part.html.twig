@@ -1,0 +1,11 @@
+<!-- info particulières -->
+{% if action.content %}
+    <h3 id="anchor_info_part" class="text-purple pt-5">
+        <small><i class="fas fa-info-circle"></i></small> Informations complémentaires
+    </h3>
+    <section  class="mt-4 p-3 col-12 bg-light">
+        <div class="card-body">
+                {{ action.content | raw }}
+        </div>
+    </section>
+{% endif %}

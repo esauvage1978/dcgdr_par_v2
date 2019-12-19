@@ -1,0 +1,23 @@
+<h3 id="anchor_measure" class="text-purple pt-5 ">
+    <small><i class="fas fa-balance-scale"></i></small> Mesure d'efficacité
+</h3>
+<section class="p-3 col-12" >
+            <div class="form-group row ">
+                <label class=" col-form-label ml-1"
+                       for="{{ form.measureValue.vars.id }}">
+                    Score d'efficacité
+                </label>
+                <div class="col">
+                    {{ form_widget(form.measureValue) }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-12" for="{{ form.measureContent.vars.id }}">
+                    Argumentaire
+                </label>
+                <div class="col-12">
+                    {{ form_widget(form.measureContent) }}
+                </div>
+            </div>
+
+        </section>

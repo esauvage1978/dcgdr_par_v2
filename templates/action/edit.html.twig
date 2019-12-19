@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}
+    Action {{ action.category.thematique.ref }}-{{ action.category.ref }}-{{ action.ref }}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h3 class="m-0 text-dark">Action</h3>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('action_index') }}">Liste</a></li>
+            <li class="breadcrumb-item "><a href="{{ path('action_show',{'id':action.id}) }}">Consultation</a></li>
+            <li class="breadcrumb-item active">Action {{ action.id }}</li>
+        </ol>
+    </div>
+
+{% endblock %}
+
+{% block sidebar_sommaire %}
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_etat">
+            <i class="fa fa-route"></i> Etat du dossier
+        </a>
+    </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_name">
+            <i class="fa fa-bolt"></i> Info. générales
+        </a>
+    </li>
+
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_classement">
+            <i class="fa fa-stream"></i> Classement
+        </a>
+    </li>
+
+        <li class="nav-item ">
+            <a class="nav-link" href="#anchor_measure">
+                <i class="fa fa-balance-scale"></i> Mesure d'efficacité
+            </a>
+        </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_cadrage">
+            <i class="fas fa-crop-alt"></i> Cadrage
+        </a>
+    </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_info_part">
+            <i class="fas fa-info-circle"></i> Info. complémentaires
+        </a>
+    </li>
+{% endblock %}
+{% block sidebar_button %}
+
+    {{ include('share/__btn_show.html.twig',
+        {   'url':'action_show',
+            'id':action.id
+        }) }}
+    <span class="mb-3"></span>
+
+    {% if  is_granted('ROLE_GESTIONNAIRE') %}
+        {{ include('share/__btn_save_onclick.html.twig') }}
+        <span class="mb-3"></span>
+    {% endif %}
+
+    {% if is_granted('ROLE_GESTIONNAIRE') %}
+        <span class="btn btn-danger " onclick="$('#delete').click();">
+                             <i class="fas fa-trash"></i> Supprimer
+                            </span>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+    <section class="row justify-content-start">
+        {{ include('action/_show/_name.html.twig') }}
+        <div class="row col-12 ">
+            <div id="col1"
+                 class="col-sm-12  order-sm-second  col-md-12 order-sm-second col-lg-6 order-lg-second col-xl-2 order-xl-first ">
+                    {{ include('action/_edit/_reference.html.twig') }}
+                    {{ include('action/_edit/_experimentation.html.twig') }}
+                    {{ include('action/_edit/_date.html.twig') }}
+            </div>
+            <div id="col2"
+                 class=" col-sm-12  order-sm-first  col-md-12 order-md-first col-lg-12  order-lg-first col-xl-7 order-xl-second bg-white p-5">
+                    {{ include('action/_edit/_name.html.twig') }}
+                    {{ include('action/_edit/_classement.html.twig') }}
+                    {{ include('action/_edit/_measure.html.twig') }}
+                    {{ include('action/_edit/_cadrage.html.twig') }}
+                    {{ include('action/_edit/_info_part.html.twig') }}
+            </div>
+            <div id="col3" class="col-sm-12 col-md-12 col-lg-6 col-xl-3 ">
+            </div>
+
+        </div>
+
+        <div class="d-none">
+            {{ include('share/__btn_save.html.twig') }}
+            {{ form_rest(form) }}
+        </div>
+    </section>
+
+    {{ form_end(form) }}
+
+    <div class="d-none">
+        {{ include('share/_delete_form.html.twig',{'domaine': 'action','id':action.id}) }}
+    </div>
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/fillCombobox/fillCombobox.js')) }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            fillCombobox('#cmb_axe', "{{ path('ajax_fill_combobox_axes') }}", true, {{ action.category.thematique.pole.axe.id }});
+
+            $('#cmb_axe').change(function () {
+                fillComboboxChained('#cmb_axe', '#cmb_pole', "{{ path('ajax_fill_combobox_poles') }}", true, false, {{ action.category.thematique.pole.id }});
+            });
+
+            $('#cmb_pole').change(function () {
+                fillComboboxChained('#cmb_pole', '#cmb_thematique', "{{ path('ajax_fill_combobox_thematiques') }}", true, true, {{ action.category.thematique.id }});
+            });
+
+            $('#cmb_thematique').change(function () {
+                fillComboboxChained('#cmb_thematique', '#cmb_category', "{{ path('ajax_fill_combobox_categories') }}", true, true, {{ action.category.id }});
+            });
+
+            $('#cmb_category').change(function () {
+                $('#action_edit_category').val($('#cmb_category').val());
+            });
+
+
+        })
+    </script>
+{% endblock %}

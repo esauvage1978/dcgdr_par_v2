@@ -34,6 +34,10 @@
                                     <th class="desktop text-center">
                                         <i class="fa fa-boxes"  data-toggle="tooltip" data-placement="top" title="Nombre de catégories"></i>
                                     </th>
+                                    <th class="desktop text-center">
+                                        <i class="fa fa-bolt" data-toggle="tooltip" data-placement="top"
+                                           title="Nombre d'actions'"></i>
+                                    </th>
                                     <th class="all text-center"></th>
                                 </tr>
                                 </thead>
@@ -78,6 +82,24 @@
 
                                             {% endif %}
                                         </td>
+                                        <td class="text-center">
+                                            {% if   pole.thematiques.count==0 %}
+                                                <span class="text-light"><i class="fas fa-circle"></i></span>
+                                            {% else %}
+                                                {% set nbr_a=0 %}
+                                                {% for thematique in pole.thematiques %}
+                                                    {% for category in thematique.categories %}
+                                                        {% set nbr_a = nbr_a + category.actions.count %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                                {% if   nbr_a==0 %}
+                                                    <span class="text-light"><i class="fas fa-circle"></i></span>
+                                                {% else %}
+                                                    <small class="badge bg-info">{{ nbr_a }}</small>
+                                                {% endif %}
+
+                                            {% endif %}
+                                        </td>
                                         <td class=" d-flex  justify-content-end ">
 
                                             {{ include('share/__btn_show.html.twig',
@@ -98,7 +120,7 @@
                                     </tr>
                                 {% else %}
                                     <tr>
-                                        <td colspan="6">Aucun d'enregistrement</td>
+                                        <td colspan="9">Aucun d'enregistrement</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
