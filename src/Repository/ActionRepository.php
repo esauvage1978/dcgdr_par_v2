@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Dto\ActionSearchDto;
 use App\Entity\Action;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 
@@ -63,21 +64,21 @@ class ActionRepository extends ServiceEntityRepository
             ->orderBy(self::ALIAS.'.name', 'ASC');
     }
 
-
-
     public function findAllActionsforCategoryForViewSmallCard(string $categoryId)
     {
         return $this->createQueryBuilder(self::ALIAS)
-            ->select(self::ALIAS .'.ref, ' . self::ALIAS . '.name')
-            ->where(self::ALIAS . '.category = :cat')
+            ->select(self::ALIAS.'.ref, '.self::ALIAS.'.name')
+            ->where(self::ALIAS.'.category = :cat')
             ->setParameter('cat', $categoryId)
-            ->orderBy(self::ALIAS . '.ref', 'ASC')
+            ->orderBy(self::ALIAS.'.ref', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
     public function findAllForDto(ActionSearchDto $dto)
     {
+        $params = [];
+
         $builder = $this->createQueryBuilder(self::ALIAS)
             ->select(
                 self::ALIAS,
@@ -89,19 +90,50 @@ class ActionRepository extends ServiceEntityRepository
             ->leftjoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
             ->leftjoin(CategoryRepository::ALIAS.'.thematique', ThematiqueRepository::ALIAS)
             ->leftjoin(ThematiqueRepository::ALIAS.'.pole', PoleRepository::ALIAS)
-            ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS)
+            ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS);
+
+        $builder
+            ->where(AxeRepository::ALIAS.'.enable='.($dto->getAxeEnable() ? 'true' : 'false'))
+            ->andwhere(PoleRepository::ALIAS.'.enable='.($dto->getPoleEnable() ? 'true' : 'false'))
+            ->andwhere(ThematiqueRepository::ALIAS.'.enable='.($dto->getThematiqueEnable() ? 'true' : 'false'))
+            ->andwhere(CategoryRepository::ALIAS.'.enable='.($dto->getCategoryEnable() ? 'true' : 'false'))
+            ->andwhere(AxeRepository::ALIAS.'.archiving='.($dto->getActionArchiving() ? 'true' : 'false'));
+
+        if (!empty($dto->getAxeId())) {
+            $builder->where(AxeRepository::ALIAS.'.id = :axeid');
+
+             $params=$this->addParams($params,'axeid', $dto->getAxeId());
+        }
 
 
-            ->where(AxeRepository::ALIAS.'.enable=' . $dto->getAxeEnable() )
-            ->andwhere(PoleRepository::ALIAS.'.enable='. $dto->getAxeEnable() )
-            ->andwhere(ThematiqueRepository::ALIAS.'.enable='. $dto->getAxeEnable() )
-            ->andwhere(CategoryRepository::ALIAS.'.enable='. $dto->getAxeEnable() )
-            ->andwhere(self::ALIAS.'.enable='. $dto->getAxeEnable() );
-
-        if(!empty($dto->getAxeId())) {
+        if (!empty($dto->getActionRef())) {
+            if ('*' != $dto->getActionRef()) {
+                $builder->andwhere(self::ALIAS.'.ref = :actionref');
+                $params=$this->addParams($params,'actionref', $dto->getActionRef());
+            }
+            if ('*' != $dto->getCategoryRef()) {
+                $builder->andwhere(CategoryRepository::ALIAS.'.ref = :categoryref');
+                $params=$this->addParams($params,'categoryref', $dto->getCategoryRef());
+            }
+            if ('*' != $dto->getThematiqueRef()) {
+                $builder->andwhere(ThematiqueRepository::ALIAS.'.ref = :thematiqueref');
+                $params=$this->addParams($params,'thematiqueref', $dto->getThematiqueRef());
+            }
+        } elseif (!empty($dto->getSearch())) {
             $builder
-                ->where(AxeRepository::ALIAS . '.id = :axeid')
-                ->setParameter('axeid', $dto->getAxeId());
+                ->andwhere(self::ALIAS.'.name like :search')
+                ->orWhere(self::ALIAS.'.content like :search')
+                ->orWhere(self::ALIAS.'.cadrage like :search')
+                ->orWhere(CategoryRepository::ALIAS.'.name like :search')
+                ->orWhere(ThematiqueRepository::ALIAS.'.name like :search')
+                ->orWhere(PoleRepository::ALIAS.'.name like :search')
+                ->orWhere(AxeRepository::ALIAS.'.name like :search');
+
+            $params=$this->addParams($params,'search', '%'.$dto->getSearch().'%');
+        }
+
+        if (count( $params) >0) {
+            $builder->setParameters($params);
         }
 
         $builder
@@ -109,14 +141,22 @@ class ActionRepository extends ServiceEntityRepository
             ->orderBy(PoleRepository::ALIAS.'.name', 'ASC')
             ->orderBy(ThematiqueRepository::ALIAS.'.ref', 'ASC')
             ->orderBy(CategoryRepository::ALIAS.'.ref', 'ASC')
-            ->orderBy(self::ALIAS.'.ref ','ASC')
-            ->orderBy(self::ALIAS.'.name ','ASC');
+            ->orderBy(self::ALIAS.'.ref ', 'ASC')
+            ->orderBy(self::ALIAS.'.name ', 'ASC');
 
         return $builder
             ->getQuery()
             ->getResult();
-
-
     }
 
+    private function addParams($params, $key,$value): array
+    {
+        $onevalue=[ $key=>$value];
+        if(count($params)==0) {
+            return $onevalue;
+        } else {
+            $total=array_merge($onevalue, $params);
+            return $total;
+        }
+    }
 }
