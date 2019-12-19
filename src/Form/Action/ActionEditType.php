@@ -4,6 +4,7 @@ namespace App\Form\Action;
 
 use App\Entity\Action;
 use App\Entity\Cible;
+use App\Entity\Vecteur;
 use App\Form\AppTypeAbstract;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -82,6 +83,16 @@ class ActionEditType extends AppTypeAbstract
                 self::QUERY_BUILDER => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
                         ->orderBy('c.name', 'ASC');
+                },
+            ])            ->add('vecteurs', EntityType::class, [
+                'class' => Vecteur::class,
+                self::CHOICE_LABEL => 'name',
+                self::MULTIPLE => true,
+                self::ATTR => ['class' => 'select2'],
+                self::REQUIRED => false,
+                self::QUERY_BUILDER => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('v')
+                        ->orderBy('v.name', 'ASC');
                 },
             ]);
     }
