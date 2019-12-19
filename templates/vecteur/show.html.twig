@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} Cibles{% endblock %}
+{% block title %}{{ parent() }} Vecteurs{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
 {% endblock %}
 
 {% block body_header %}
-    {{ include('admin/_body_header.html.twig', {'domaine': 'Cibles' , 'id' : cible.id, 'index' : 'cible_index'}) }}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Vecteurs' , 'id' : vecteur.id, 'index' : 'vecteur_index'}) }}
 {% endblock %}
 
 {% block body %}
@@ -15,18 +15,21 @@
     <div class="row justify-content-center">
         <div class="{{ col_primary }}">
             <div class="card ">
+                <div class="card-footer">
+                    Les informations du vecteur
+                </div>
                 <div class="card-body">
                     <table class="table table-borderless">
                         <tbody>
                         <tr>
                             <th>Nom</th>
-                            <td colspan="2">{{ cible.name }}</td>
+                            <td colspan="2">{{ vecteur.name }}</td>
                         </tr>
 
                         <tr>
                             <th>Afficher</th>
                             <td class="text-center">
-                                {% if cible.enable %}
+                                {% if vecteur.enable %}
                                     <span class="text-success"><i class="fas fa-eye"></i></span>
                                 {% else %}
                                     <span class="text-danger"><i class="fas fa-eye-slash"></i></span>
@@ -39,20 +42,17 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col  d-flex justify-content-between align-items-center">
-                            {{ include('share/__btn_return_list.html.twig',
-                                {   'url':'cible_index'
-                                }) }}
+
+                            <a class="btn btn-secondary " href="{{ path('vecteur_index') }}">
+                                <i class="fas fa-folder"></i> Retour à la liste
+                            </a>
 
                             {% if is_granted('ROLE_GESTIONNAIRE') %}
-
-                                {{ include('share/__btn_edit.html.twig',
-                                    {   'url':'cible_edit',
-                                        'id':cible.id
-                                    }) }}
-
+                            <a class="btn btn-info " href="{{ path('vecteur_edit', {'id': vecteur.id}) }}">
+                                <i class="fas fa-pencil-alt"></i> Modifier
+                            </a>
                             {% endif %}
-
-                            {{ include('share/_delete_form.html.twig',{'domaine': 'cible','id':cible.id}) }}
+                            {{ include('share/_delete_form.html.twig',{'domaine': 'vecteur','id':vecteur.id}) }}
                         </div>
                     </div>
                 </div>
@@ -62,12 +62,13 @@
             <h3 class="text-purple">
                 <small><i class="fas fa-bolt"></i></small> Actions
             </h3>
-                    {% for action in cible.actions %}
-                        {{ include('action/_view/_show_item.html.twig') }}
-                    {% else %}
-                        <div class="list-group-item">En attente d'ajout</div>
-                    {% endfor %}
+            {% for action in vecteur.actions %}
+                {{ include('action/_view/_show_item.html.twig') }}
+            {% else %}
+                <div class="list-group-item">En attente d'ajout</div>
+            {% endfor %}
         </div>
+
 
     </div>
 {% endblock %}

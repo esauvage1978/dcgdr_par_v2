@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent() }} Cibles {% endblock %}
+{% block title %} {{ parent() }} Vecteurs {% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body_header %}
-    {{ include('admin/_body_header.html.twig', {'domaine': 'Cible' }) }}
+    {{ include('admin/_body_header.html.twig', {'domaine': 'Vecteur' }) }}
 {% endblock %}
 
 {% block body %}
@@ -33,37 +33,34 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for cible in cibles %}
+                                {% for vecteur in vecteurs %}
                                     <tr>
-                                        <td>{{ cible.id }}</td>
-                                        <td class="text-{{ cible.enable ? 'gray-dark' : 'danger text-bold' }}">
-                                            {{ cible.name }}
-
+                                        <td>{{ vecteur.id }}</td>
+                                        <td>
+                                        <span class="text-{{ vecteur.enable ? 'gray-dark' : 'danger text-bold' }}">
+                                            {{ vecteur.name }}
+                                        </span>
                                         </td>
                                         <td class="text-center">
-                                            {% if   cible.actions.count==0 %}
+                                            {% if   vecteur.actions.count==0 %}
                                                 <span class="text-light" ><i class="fas fa-circle"></i></span>
                                             {% else %}
-                                                <small class="badge bg-info">{{ cible.actions.count}}</small>
+                                                <small class="badge bg-info">{{ vecteur.actions.count}}</small>
                                             {% endif %}
                                         </td>
 
 
-                                        <td class=" d-flex  justify-content-end ">
+                                        <td class="d-flex justify-content-center align-items-center">
 
-                                            {{ include('share/__btn_show.html.twig',
-                                                {   'url':'cible_show',
-                                                    'id':cible.id,
-                                                    'mr':true,
-                                                    'sm':true,
-                                                }) }}
-
+                                            <a class="btn btn-primary btn-sm mr-1"
+                                               href="{{ path('vecteur_show', {'id': vecteur.id}) }}">
+                                                <i class="fas fa-folder"></i> Consulter
+                                            </a>
                                             {% if is_granted('ROLE_GESTIONNAIRE') %}
-                                                {{ include('share/__btn_edit.html.twig',
-                                                    {   'url':'cible_edit',
-                                                        'id':cible.id,
-                                                        'sm':true,
-                                                    }) }}
+                                                <a class="btn btn-info btn-sm"
+                                                   href="{{ path('vecteur_edit', {'id': vecteur.id}) }}">
+                                                    <i class="fas fa-pencil-alt"></i> Modifier
+                                                </a>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -80,8 +77,9 @@
                 </div>
                 {% if is_granted('ROLE_GESTIONNAIRE') %}
                     <div class="card-header">
-                        {{ include('share/__btn_new.html.twig',
-                            {'url':'cible_new'}) }}
+                        <a class="btn btn-success" href="{{ path('vecteur_new') }}">
+                            <i class="fas fa-plus"></i> Ajouter un élément
+                        </a>
                     </div>
                 {% endif %}
             </div>
@@ -96,5 +94,5 @@
     <script src="{{ absolute_url( asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')) }}"></script>
     <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')) }}"></script>
     <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')) }}"></script>
-    <script src="{{ absolute_url( asset('js/datatables/cible.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/datatables/vecteur.js')) }}"></script>
 {% endblock %}
