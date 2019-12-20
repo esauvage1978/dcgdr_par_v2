@@ -9,6 +9,7 @@ use App\Form\Action\ActionCreateType;
 use App\Form\Action\ActionEditType;
 use App\Manager\ActionManager;
 use App\Repository\ActionRepository;
+use App\Security\ActionVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,6 +79,8 @@ class ActionController extends AppControllerAbstract
      */
     public function showAction(Action $entity): Response
     {
+        $this->denyAccessUnlessGranted(ActionVoter::READ, $entity);
+
         return $this->render(self::ENTITY.'/show.html.twig', [
             self::ENTITY => $entity,
         ]);
@@ -92,6 +95,7 @@ class ActionController extends AppControllerAbstract
         Action $entity,
         ActionManager $manager): Response
     {
+        dump($entity);
         $form = $this->createForm(ActionEditType::class, $entity);
 
         $form->handleRequest($request);

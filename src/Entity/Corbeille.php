@@ -65,9 +65,15 @@ class Corbeille implements EntityInterface
      */
     private $users;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Action", mappedBy="readers")
+     */
+    private $actionReaders;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->actionReaders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -209,5 +215,33 @@ class Corbeille implements EntityInterface
         return (null !== $this->organisme) ?
             $this->getOrganisme()->getRef().' - '.$this->getName() :
             $this->getName();
+    }
+
+    /**
+     * @return Collection|Action[]
+     */
+    public function getActionReaders(): Collection
+    {
+        return $this->actionReaders;
+    }
+
+    public function addActionReader(Action $actionReader): self
+    {
+        if (!$this->actionReaders->contains($actionReader)) {
+            $this->actionReaders[] = $actionReader;
+            $actionReader->addReader($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionReader(Action $actionReader): self
+    {
+        if ($this->actionReaders->contains($actionReader)) {
+            $this->actionReaders->removeElement($actionReader);
+            $actionReader->removeReader($this);
+        }
+
+        return $this;
     }
 }
