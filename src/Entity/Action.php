@@ -100,6 +100,11 @@ class Action implements EntityInterface
      */
     private $vecteurs;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Corbeille", inversedBy="actionReaders")
+     */
+    private $readers;
+
     public function __construct()
     {
         $this->setTaux1('0');
@@ -108,6 +113,7 @@ class Action implements EntityInterface
         $this->setExperimental(false);
         $this->cibles = new ArrayCollection();
         $this->vecteurs = new ArrayCollection();
+        $this->readers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -342,6 +348,32 @@ class Action implements EntityInterface
     {
         if ($this->vecteurs->contains($vecteur)) {
             $this->vecteurs->removeElement($vecteur);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Corbeille[]
+     */
+    public function getReaders(): Collection
+    {
+        return $this->readers;
+    }
+
+    public function addReader(Corbeille $reader): self
+    {
+        if (!$this->readers->contains($reader)) {
+            $this->readers[] = $reader;
+        }
+
+        return $this;
+    }
+
+    public function removeReader(Corbeille $reader): self
+    {
+        if ($this->readers->contains($reader)) {
+            $this->readers->removeElement($reader);
         }
 
         return $this;
