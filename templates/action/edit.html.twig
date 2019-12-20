@@ -68,10 +68,8 @@
         }) }}
     <span class="mb-3"></span>
 
-    {% if  is_granted('ROLE_GESTIONNAIRE') %}
         {{ include('share/__btn_save_onclick.html.twig') }}
         <span class="mb-3"></span>
-    {% endif %}
 
     {% if is_granted('ROLE_GESTIONNAIRE') %}
         <span class="btn btn-danger " onclick="$('#delete').click();">
@@ -103,6 +101,8 @@
             <div id="col3" class="col-sm-12 col-md-12 col-lg-6 col-xl-3 ">
                 {{ include('action/_edit/_cibles.html.twig') }}
                 {{ include('action/_edit/_vecteurs.html.twig') }}
+                {{ include('action/_edit/_intervenant.html.twig') }}
+
             </div>
 
         </div>

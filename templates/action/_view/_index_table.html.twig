@@ -32,16 +32,18 @@
 
 
             <td class="text-center align-middle">
-                    {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': action.taux1, 'taux2': action.taux2  }) }}
+                {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': action.taux1, 'taux2': action.taux2  }) }}
             </td>
 
             <td class="d-flex flex-column bd-highlight">
 
-                {{ include('share/__btn_show.html.twig',
-                    {   'url':'action_show',
-                        'id':action.id,
-                        'sm':true
-                    }) }}
+                {% if action | actionCanRead %}
+                    {{ include('share/__btn_show.html.twig',
+                        {   'url':'action_show',
+                            'id':action.id,
+                            'sm':true
+                        }) }}
+                {% endif %}
 
                 {% if is_granted('ROLE_GESTIONNAIRE') %}
                     <span class="mb-2"></span>

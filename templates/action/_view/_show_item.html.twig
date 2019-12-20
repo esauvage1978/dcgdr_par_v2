@@ -1,8 +1,12 @@
 <div class="card bg-light">
     <div class="card-header text-muted border-bottom-0">
-        <a href="{{ path('action_show', {'id': action.id}) }}"  >
+        {% if action | actionCanRead %}
+            <a href="{{ path('action_show', {'id': action.id}) }}">
+                {{ action.fullname }}
+            </a>
+        {% else %}
             {{ action.fullname }}
-        </a>
+        {% endif %}
     </div>
     <div class="card-body pt-0">
 
