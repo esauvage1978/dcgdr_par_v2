@@ -40,7 +40,7 @@ class UserType extends AppTypeAbstract
                 'mapped' => true,
                 self::LABEL => 'form.roles',
             ])
-            ->add('activate', CheckboxType::class,
+            ->add('emailValidated', CheckboxType::class,
                 [
                     self::LABEL => ' ',
                     self::REQUIRED => false,
