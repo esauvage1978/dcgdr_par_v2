@@ -87,6 +87,12 @@ class ActionVoter extends Voter
             }
         }
 
+        foreach ($action->getValiders() as $corbeille) {
+            if (in_array($user, $corbeille->getUsers()->toArray())) {
+                return true;
+            }
+        }
+
         return false;
     }
 
