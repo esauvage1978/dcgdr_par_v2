@@ -149,5 +149,25 @@ abstract class AppTypeAbstract extends AbstractType
                 },
             ]);
     }
+    public function buildFormWriters(FormBuilderInterface $builder): FormBuilderInterface
+    {
+        return $builder
+            ->add('writers', EntityType::class, [
+                'class' => Corbeille::class,
+                self::CHOICE_LABEL => 'fullname',
+                self::MULTIPLE => true,
+                self::ATTR => ['class' => 'select2'],
+                self::REQUIRED => false,
+                self::QUERY_BUILDER => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->select('c', 'o')
+                        ->leftJoin('c.organisme', 'o')
+                        ->where('o.enable = true')
+                        ->andWhere('c.enable = true')
+                        ->andWhere('c.showWrite = true')
+                        ->orderBy('c.name', 'ASC');
+                },
+            ]);
+    }
 
 }

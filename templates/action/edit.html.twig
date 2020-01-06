@@ -67,8 +67,9 @@
             'id':action.id
         }) }}
     <span class="mb-3"></span>
-
+    {% if action | actionCanUpdate %}
         {{ include('share/__btn_save_onclick.html.twig') }}
+    {% endif %}
         <span class="mb-3"></span>
 
     {% if is_granted('ROLE_GESTIONNAIRE') %}
