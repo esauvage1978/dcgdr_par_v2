@@ -112,6 +112,12 @@ class Action implements EntityInterface
      */
     private $writers;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Corbeille", inversedBy="actionValiders")
+     * @ORM\JoinTable("actionvalider_corbeille")
+     */
+    private $validers;
+
     public function __construct()
     {
         $this->setTaux1('0');
@@ -122,6 +128,7 @@ class Action implements EntityInterface
         $this->vecteurs = new ArrayCollection();
         $this->readers = new ArrayCollection();
         $this->writers = new ArrayCollection();
+        $this->validers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -408,6 +415,32 @@ class Action implements EntityInterface
     {
         if ($this->writers->contains($writer)) {
             $this->writers->removeElement($writer);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Corbeille[]
+     */
+    public function getValiders(): Collection
+    {
+        return $this->validers;
+    }
+
+    public function addValider(Corbeille $valider): self
+    {
+        if (!$this->validers->contains($valider)) {
+            $this->validers[] = $valider;
+        }
+
+        return $this;
+    }
+
+    public function removeValider(Corbeille $valider): self
+    {
+        if ($this->validers->contains($valider)) {
+            $this->validers->removeElement($valider);
         }
 
         return $this;

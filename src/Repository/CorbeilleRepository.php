@@ -17,6 +17,7 @@ class CorbeilleRepository extends ServiceEntityRepository
     const ALIAS = 'c';
     const ALIAS_ACTION_READERS = 'car';
     const ALIAS_ACTION_WRITERS = 'caw';
+    const ALIAS_ACTION_VALIDERS = 'cav';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -31,12 +32,14 @@ class CorbeilleRepository extends ServiceEntityRepository
                 UserRepository::ALIAS,
                 OrganismeRepository::ALIAS,
                 CorbeilleRepository::ALIAS_ACTION_WRITERS,
-                CorbeilleRepository::ALIAS_ACTION_READERS
+                CorbeilleRepository::ALIAS_ACTION_READERS,
+                CorbeilleRepository::ALIAS_ACTION_VALIDERS
             )
             ->leftJoin(self::ALIAS.'.users', UserRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.organisme', OrganismeRepository::ALIAS)
             ->leftjoin(self::ALIAS.'.actionWriters', CorbeilleRepository::ALIAS_ACTION_WRITERS)
             ->leftjoin(self::ALIAS.'.actionReaders', CorbeilleRepository::ALIAS_ACTION_READERS)
+            ->leftjoin(self::ALIAS.'.actionValiders', CorbeilleRepository::ALIAS_ACTION_VALIDERS)
             ->orderBy(self::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult();

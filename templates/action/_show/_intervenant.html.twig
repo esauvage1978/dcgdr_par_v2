@@ -3,6 +3,20 @@
     <h5 class="text-purple p-1  text-center ">
         Intervenants
     </h5>
+    {% if action.validers.count >0 %}
+
+        <article class="card-body ">
+            <h6>Valideur</h6>
+            <div class="list-group list-group-flush  bg-light">
+
+                {% for corbeille in action.validers %}
+                    {{ include('corbeille/_show_list_group_item.html.twig' , {'show_code_organisme': true, 'link' : true}) }}
+                {% else %}
+                    <div class="list-group-item">En attente d'ajout</div>
+                {% endfor %}
+            </div>
+        </article>
+    {% endif %}
     {% if action.writers.count >0 %}
 
         <article class="card-body ">
@@ -17,27 +31,24 @@
             </div>
         </article>
     {% endif %}
-    {% if action.readers.count >0 %}
-        <article class="card-body ">
-            <h5 class="card-title  p-2  bg-light ">Consultant</h5>
-            <div class="list-group list-group-flush">
-                {% if action.showall %}
-                    <div class="list-group-item text-success">Consultable par tous</div>
-                {% else %}
-                    {% for corbeille in action.readers %}
-                        {{ include('corbeille/_show_list_group_item.html.twig' , {'show_code_organisme': true, 'link' : true}) }}
-                    {% else %}
-                        <div class="list-group-item">En attente d'ajout</div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </article>
-    {% elseif action.showall %}
+    {% if action.showall %}
         <article class="card-body ">
             <div class="mt-4 p-3 col-12 bg-light">
                 <span class="text-muted">
                     Consultable par les utilisateurs connectées
                 </span>
+            </div>
+        </article>
+    {% elseif action.readers.count >0 %}
+        <article class="card-body ">
+            <h5 class="card-title  p-2  bg-light ">Consultant</h5>
+            <div class="list-group list-group-flush">
+
+                {% for corbeille in action.readers %}
+                    {{ include('corbeille/_show_list_group_item.html.twig' , {'show_code_organisme': true, 'link' : true}) }}
+                {% else %}
+                    <div class="list-group-item">En attente d'ajout</div>
+                {% endfor %}
             </div>
         </article>
     {% endif %}
