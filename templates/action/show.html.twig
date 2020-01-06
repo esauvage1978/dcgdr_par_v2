@@ -54,7 +54,7 @@
 {% endblock %}
 {% block sidebar_button %}
 
-    {% if is_granted('ROLE_GESTIONNAIRE') %}
+    {% if action | actionCanUpdate %}
         {{ include('share/__btn_edit.html.twig',
             {   'url':'action_edit',
                 'id':action.id,

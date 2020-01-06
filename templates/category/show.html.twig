@@ -94,7 +94,9 @@
                 </div>
             </div>
             <div class="{{ col_secondary }}">
-
+                <h3 class="text-purple">
+                    <small><i class="fas fa-bolt"></i></small> Actions
+                </h3>
                         {% for action in category.actions %}
                             {{ include('action/_view/_show_item.html.twig') }}
                         {% else %}
