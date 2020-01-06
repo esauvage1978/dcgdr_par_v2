@@ -77,11 +77,18 @@ class Corbeille implements EntityInterface
      */
     private $actionWriters;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Action", mappedBy="validers")
+     * @ORM\JoinTable("actionvalider_corbeille")
+     */
+    private $actionValiders;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->actionReaders = new ArrayCollection();
         $this->actionWriters = new ArrayCollection();
+        $this->actionValiders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -276,6 +283,34 @@ class Corbeille implements EntityInterface
         if ($this->actionWriters->contains($actionWriter)) {
             $this->actionWriters->removeElement($actionWriter);
             $actionWriter->removeWriter($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Action[]
+     */
+    public function getActionValiders(): Collection
+    {
+        return $this->actionValiders;
+    }
+
+    public function addActionValider(Action $actionValider): self
+    {
+        if (!$this->actionValiders->contains($actionValider)) {
+            $this->actionValiders[] = $actionValider;
+            $actionValider->addValider($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionValider(Action $actionValider): self
+    {
+        if ($this->actionValiders->contains($actionValider)) {
+            $this->actionValiders->removeElement($actionValider);
+            $actionValider->removeValider($this);
         }
 
         return $this;
