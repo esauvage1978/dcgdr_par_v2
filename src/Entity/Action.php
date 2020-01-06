@@ -102,8 +102,15 @@ class Action implements EntityInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Corbeille", inversedBy="actionReaders")
+     * @ORM\JoinTable("actionreader_corbeille")
      */
     private $readers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Corbeille", inversedBy="actionWriters")
+     * @ORM\JoinTable("actionwriter_corbeille")
+     */
+    private $writers;
 
     public function __construct()
     {
@@ -114,6 +121,7 @@ class Action implements EntityInterface
         $this->cibles = new ArrayCollection();
         $this->vecteurs = new ArrayCollection();
         $this->readers = new ArrayCollection();
+        $this->writers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -374,6 +382,32 @@ class Action implements EntityInterface
     {
         if ($this->readers->contains($reader)) {
             $this->readers->removeElement($reader);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Corbeille[]
+     */
+    public function getWriters(): Collection
+    {
+        return $this->writers;
+    }
+
+    public function addWriter(Corbeille $writer): self
+    {
+        if (!$this->writers->contains($writer)) {
+            $this->writers[] = $writer;
+        }
+
+        return $this;
+    }
+
+    public function removeWriter(Corbeille $writer): self
+    {
+        if ($this->writers->contains($writer)) {
+            $this->writers->removeElement($writer);
         }
 
         return $this;

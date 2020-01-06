@@ -67,13 +67,21 @@ class Corbeille implements EntityInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Action", mappedBy="readers")
+     * @ORM\JoinTable("actionreader_corbeille")
      */
     private $actionReaders;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Action", mappedBy="writers")
+     * @ORM\JoinTable("actionwriter_corbeille")
+     */
+    private $actionWriters;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->actionReaders = new ArrayCollection();
+        $this->actionWriters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -240,6 +248,34 @@ class Corbeille implements EntityInterface
         if ($this->actionReaders->contains($actionReader)) {
             $this->actionReaders->removeElement($actionReader);
             $actionReader->removeReader($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Action[]
+     */
+    public function getActionWriters(): Collection
+    {
+        return $this->actionWriters;
+    }
+
+    public function addActionWriter(Action $actionWriter): self
+    {
+        if (!$this->actionWriters->contains($actionWriter)) {
+            $this->actionWriters[] = $actionWriter;
+            $actionWriter->addWriter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionWriter(Action $actionWriter): self
+    {
+        if ($this->actionWriters->contains($actionWriter)) {
+            $this->actionWriters->removeElement($actionWriter);
+            $actionWriter->removeWriter($this);
         }
 
         return $this;
