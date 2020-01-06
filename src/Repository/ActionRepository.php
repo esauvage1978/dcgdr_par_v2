@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Dto\ActionSearchDto;
 use App\Entity\Action;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 
@@ -85,12 +84,16 @@ class ActionRepository extends ServiceEntityRepository
                 CategoryRepository::ALIAS,
                 ThematiqueRepository::ALIAS,
                 PoleRepository::ALIAS,
-                AxeRepository::ALIAS
+                AxeRepository::ALIAS,
+                CorbeilleRepository::ALIAS_ACTION_WRITERS,
+                CorbeilleRepository::ALIAS_ACTION_READERS
             )
             ->leftjoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
             ->leftjoin(CategoryRepository::ALIAS.'.thematique', ThematiqueRepository::ALIAS)
             ->leftjoin(ThematiqueRepository::ALIAS.'.pole', PoleRepository::ALIAS)
-            ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS);
+            ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS)
+            ->leftjoin(self::ALIAS.'.writers', CorbeilleRepository::ALIAS_ACTION_WRITERS)
+            ->leftjoin(self::ALIAS.'.readers', CorbeilleRepository::ALIAS_ACTION_READERS);
 
         $builder
             ->where(AxeRepository::ALIAS.'.enable='.($dto->getAxeEnable() ? 'true' : 'false'))
@@ -102,22 +105,21 @@ class ActionRepository extends ServiceEntityRepository
         if (!empty($dto->getAxeId())) {
             $builder->where(AxeRepository::ALIAS.'.id = :axeid');
 
-             $params=$this->addParams($params,'axeid', $dto->getAxeId());
+            $params = $this->addParams($params, 'axeid', $dto->getAxeId());
         }
-
 
         if (!empty($dto->getActionRef())) {
             if ('*' != $dto->getActionRef()) {
                 $builder->andwhere(self::ALIAS.'.ref = :actionref');
-                $params=$this->addParams($params,'actionref', $dto->getActionRef());
+                $params = $this->addParams($params, 'actionref', $dto->getActionRef());
             }
             if ('*' != $dto->getCategoryRef()) {
                 $builder->andwhere(CategoryRepository::ALIAS.'.ref = :categoryref');
-                $params=$this->addParams($params,'categoryref', $dto->getCategoryRef());
+                $params = $this->addParams($params, 'categoryref', $dto->getCategoryRef());
             }
             if ('*' != $dto->getThematiqueRef()) {
                 $builder->andwhere(ThematiqueRepository::ALIAS.'.ref = :thematiqueref');
-                $params=$this->addParams($params,'thematiqueref', $dto->getThematiqueRef());
+                $params = $this->addParams($params, 'thematiqueref', $dto->getThematiqueRef());
             }
         } elseif (!empty($dto->getSearch())) {
             $builder
@@ -129,10 +131,10 @@ class ActionRepository extends ServiceEntityRepository
                 ->orWhere(PoleRepository::ALIAS.'.name like :search')
                 ->orWhere(AxeRepository::ALIAS.'.name like :search');
 
-            $params=$this->addParams($params,'search', '%'.$dto->getSearch().'%');
+            $params = $this->addParams($params, 'search', '%'.$dto->getSearch().'%');
         }
 
-        if (count( $params) >0) {
+        if (count($params) > 0) {
             $builder->setParameters($params);
         }
 
@@ -149,13 +151,14 @@ class ActionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    private function addParams($params, $key,$value): array
+    private function addParams($params, $key, $value): array
     {
-        $onevalue=[ $key=>$value];
-        if(count($params)==0) {
+        $onevalue = [$key => $value];
+        if (0 == count($params)) {
             return $onevalue;
         } else {
-            $total=array_merge($onevalue, $params);
+            $total = array_merge($onevalue, $params);
+
             return $total;
         }
     }

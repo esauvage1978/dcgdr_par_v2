@@ -95,7 +95,8 @@ class ActionController extends AppControllerAbstract
         Action $entity,
         ActionManager $manager): Response
     {
-        dump($entity);
+        $this->denyAccessUnlessGranted(ActionVoter::UPDATE, $entity);
+
         $form = $this->createForm(ActionEditType::class, $entity);
 
         $form->handleRequest($request);

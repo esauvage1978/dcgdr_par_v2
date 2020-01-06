@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Security;
 class ActionVoter extends Voter
 {
     const READ = 'read';
+    const UPDATE = 'read';
 
     private $security;
 
@@ -22,7 +23,7 @@ class ActionVoter extends Voter
     protected function supports(string $attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::READ])) {
+        if (!in_array($attribute, [self::READ,self::UPDATE])) {
             return false;
         }
 
@@ -48,6 +49,8 @@ class ActionVoter extends Voter
         switch ($attribute) {
             case self::READ:
                 return $this->canRead($action, $user);
+            case self::UPDATE:
+                return $this->canUpdate($action, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -64,6 +67,21 @@ class ActionVoter extends Voter
         }
 
         foreach ($action->getReaders() as $corbeille) {
+            if (in_array($user, $corbeille->getUsers()->toArray())) {
+                return true;
+            }
+        }
+
+        return $this->canUpdate($action,$user);
+    }
+
+    public function canUpdate(Action $action, User $user)
+    {
+        if ($this->security->isGranted('ROLE_GESTIONNAIRE')) {
+            return true;
+        }
+
+        foreach ($action->getWriters() as $corbeille) {
             if (in_array($user, $corbeille->getUsers()->toArray())) {
                 return true;
             }

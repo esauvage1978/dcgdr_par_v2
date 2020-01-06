@@ -23,8 +23,7 @@ class ActionEditType extends AppTypeAbstract
         $builder = $this->buildFormNameEnableContent($builder);
         $builder = $this->buildFormCategory($builder, false);
         $builder = $this->buildFormReaders($builder);
-
-
+        $builder = $this->buildFormWriters($builder);
         return $builder
             ->add('regionstartat', DateType::class, [
                 self::REQUIRED => false,

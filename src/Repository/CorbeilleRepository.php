@@ -15,6 +15,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 class CorbeilleRepository extends ServiceEntityRepository
 {
     const ALIAS = 'c';
+    const ALIAS_ACTION_READERS = 'car';
+    const ALIAS_ACTION_WRITERS = 'caw';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -24,9 +26,17 @@ class CorbeilleRepository extends ServiceEntityRepository
     public function findAllForAdmin()
     {
         return $this->createQueryBuilder(self::ALIAS)
-            ->select(self::ALIAS, UserRepository::ALIAS, OrganismeRepository::ALIAS)
+            ->select(
+                self::ALIAS,
+                UserRepository::ALIAS,
+                OrganismeRepository::ALIAS,
+                CorbeilleRepository::ALIAS_ACTION_WRITERS,
+                CorbeilleRepository::ALIAS_ACTION_READERS
+            )
             ->leftJoin(self::ALIAS.'.users', UserRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.organisme', OrganismeRepository::ALIAS)
+            ->leftjoin(self::ALIAS.'.actionWriters', CorbeilleRepository::ALIAS_ACTION_WRITERS)
+            ->leftjoin(self::ALIAS.'.actionReaders', CorbeilleRepository::ALIAS_ACTION_READERS)
             ->orderBy(self::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult();
