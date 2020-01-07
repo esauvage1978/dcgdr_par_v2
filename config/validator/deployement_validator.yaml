@@ -1,0 +1,23 @@
+App\Entity\Deployement:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        fields: [action, organisme]
+        errorPath: organisme
+        message: 'Un déploiement est déjà en cours pour cet organisme.'
+  properties:
+    taux1:
+      - NotBlank: ~
+      - LessThanOrEqual:
+          value: 100
+          message: 'le taux doit être inférieur à 100'
+      - GreaterThanOrEqual:
+          value: 0
+          message: 'le taux doit être supérieur à 0'
+    taux2:
+      - NotBlank: ~
+      - LessThanOrEqual:
+          value: 10000
+          message: 'le taux doit être inférieur à 1000'
+      - GreaterThanOrEqual:
+          value: 0
+          message: 'le taux doit être supérieur à 0'
