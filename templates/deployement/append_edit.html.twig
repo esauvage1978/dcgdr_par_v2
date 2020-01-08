@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Détail d'une action{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    <div class="col-xs-12 col-md-4">
+        <h1 class="m-0 text-dark">Déploiement </h1>
+    </div>
+    <div class="col-xs-12  col-md-8">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('action_index') }}">Liste</a></li>
+            <li class="breadcrumb-item "><a href="{{ path('action_show',{'id':deployement.action.id}) }}">
+                    Action {{ deployement.action.id }}</a></li>
+            <li class="breadcrumb-item active">Déploiement {{ deployement.id }}</li>
+        </ol>
+    </div>
+
+{% endblock %}
+
+{% block sidebar_sommaire %}
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_name">
+            <i class="fa fa-bolt"></i> Info. générales
+        </a>
+    </li>
+
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_classement">
+            <i class="fa fa-stream"></i> Classement
+        </a>
+    </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_cadrage">
+            <i class="fas fa-crop-alt"></i> Cadrage
+        </a>
+    </li>
+    {% if deployement.action.content %}
+        <li class="nav-item ">
+            <a class="nav-link" href="#anchor_info_par">
+                <i class="fas fa-info-circle"></i> Info. complémentaires
+            </a>
+        </li>
+    {% endif %}
+
+{% endblock %}
+{% block sidebar_button %}
+
+    <span class="mb-3"></span>
+    <a class="btn btn-secondary"
+       href="{{ path('action_show', {'id': deployement.action.id}) }}#anchor_organisme">
+        <i class="fas fa-eye"></i> Retour à l'action
+    </a>
+    <span class="mb-3"></span>
+    {{ include('share/__btn_show.html.twig',
+        {   'url':'deployement_append',
+            'id':deployement.id,
+            'titre': 'Consulter le déploiement'
+        }) }}
+    <span class="mb-3"></span>
+    {{ include('share/__btn_save_onclick.html.twig') }}
+
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div class="row justify-content-start ">
+        {{ include('deployement/_show/_name.html.twig') }}
+
+        <div class="row">
+            <div id="col1"
+                 class="col-sm-12  order-sm-second  col-md-12 order-sm-second col-lg-12 order-lg-second col-xl-3 order-xl-first">
+                {{ include('deployement/_show/_tuile.html.twig') }}
+                {{ include('deployement/_edit/_date.html.twig') }}
+            </div>
+            <div id="col2"
+                 class="col-sm-12  order-sm-first  col-md-12 order-md-first col-lg-12  order-lg-first col-xl-9 order-xl-second bg-white  p-5">
+                {{ include('action/_show/_classement.html.twig',{'action':deployement.action}) }}
+                {{ include('action/_show/_cadrage.html.twig',{'action':deployement.action}) }}
+                {{ include('action/_show/_info_part.html.twig',{'action':deployement.action}) }}
+            </div>
+        </div>
+
+    </div>
+    <div class="d-none">
+        {{ include('share/__btn_save.html.twig') }}
+        {{ form_rest(form) }}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
+{% endblock %}

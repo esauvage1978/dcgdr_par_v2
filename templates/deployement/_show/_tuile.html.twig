@@ -1,0 +1,12 @@
+<section class="bg-white">
+    <div class="card-body">
+        <div class="info-box bg-light">
+            <div class="info-box-content">
+                <span class="info-box-text text-center text-muted">Taux</span>
+                <span class="info-box-number text-center  text-lg mb-0">
+                    {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': deployement.taux1,'taux2': deployement.taux2,'info':false }) }}
+                </span>
+            </div>
+        </div>
+    </div>
+</section>

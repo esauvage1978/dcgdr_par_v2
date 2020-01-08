@@ -1,0 +1,17 @@
+{% if deployement.showAt %}
+    {% set difference = date("now").diff(date(deployement.showAt)) %}
+    {% set leftDays = difference.days %}
+    {% if date("now") > date(deployement.showAt) and leftDays > 0 %}
+       <span class="text-danger font-weight-bold"> -{{ leftDays }} jours </span>
+    {% elseif leftDays <8 %}
+        <span class="text-warning font-weight-bold"> {{ leftDays }} jours </span>
+    {% else %}
+        <span class="text-success"> {{ leftDays }} jours </span>
+    {% endif %}
+    <br/>
+    <small class="text-muted">
+        {{ deployement.showAt | date('d/m/Y') }}
+    </small>
+{% else %}
+    --/--/----
+{% endif %}

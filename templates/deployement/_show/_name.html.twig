@@ -1,0 +1,13 @@
+<div id="anchor_name" class="jumbotron col-12 text-center">
+    <h3>
+        <a href="{{ path('action_show',{'id':deployement.action.id}) }}">
+            <i class="fa fa-bolt"></i>
+            {{ deployement.action.category.thematique.ref }}
+            -{{ deployement.action.category.ref }}
+            -{{ deployement.action.ref }} - {{ deployement.action.name }}
+        </a>
+    </h3>
+    <h3 class="font-weight-bold">
+        <i class="fas fa-city"></i> {{ deployement.organisme.name }}
+    </h3>
+</div>

@@ -1,0 +1,31 @@
+<section id="anchor_date" class="bg-white">
+    <div class="card-body">
+        {% if deployement.endAt %}
+            <div class="info-box  bg-light ">
+                <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Fin du déploiement</span>
+                    <span class="info-box-number text-center  text-lg mb-0">
+                    {% if deployement.endAt %}
+                        {{ deployement.endAt | date('d/m/Y') }}
+                    {% else %}
+                        --/--/----
+                    {% endif %}
+                </span>
+                </div>
+            </div>
+        {% else %}
+            <div class="info-box bg-light ">
+                <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Jalon</span>
+                    <span class="info-box-number text-center  text-lg mb-0">
+                    {% if deployement.showAt %}
+                        {{ deployement.showAt | date('d/m/Y') }}
+                    {% else %}
+                        --/--/----
+                    {% endif %}
+                </span>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
