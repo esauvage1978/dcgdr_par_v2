@@ -54,10 +54,16 @@ class Organisme implements EntityInterface
      */
     private $corbeilles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Deployement", mappedBy="organisme", orphanRemoval=true)
+     */
+    private $deployements;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->corbeilles = new ArrayCollection();
+        $this->deployements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,6 +194,37 @@ class Organisme implements EntityInterface
             // set the owning side to null (unless already changed)
             if ($corbeille->getOrganisme() === $this) {
                 $corbeille->setOrganisme(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Deployement[]
+     */
+    public function getDeployements(): Collection
+    {
+        return $this->deployements;
+    }
+
+    public function addDeployement(Deployement $deployement): self
+    {
+        if (!$this->deployements->contains($deployement)) {
+            $this->deployements[] = $deployement;
+            $deployement->setOrganisme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeployement(Deployement $deployement): self
+    {
+        if ($this->deployements->contains($deployement)) {
+            $this->deployements->removeElement($deployement);
+            // set the owning side to null (unless already changed)
+            if ($deployement->getOrganisme() === $this) {
+                $deployement->setOrganisme(null);
             }
         }
 

@@ -6,6 +6,7 @@ use App\Dto\ActionSearchDto;
 use App\Entity\Action;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -160,6 +161,45 @@ class ActionRepository extends ServiceEntityRepository
             $total = array_merge($onevalue, $params);
 
             return $total;
+        }
+    }
+
+    public function tauxRaz()
+    {
+        $queryBuilder = $this->createQueryBuilder(self::ALIAS);
+        $queryBuilder->update(Action::class, self::ALIAS)
+            ->set(self::ALIAS.'.taux1 ', 0)
+            ->set(self::ALIAS.'.taux2 ', 0);
+
+        $query = $queryBuilder->getQuery();
+
+        $query->getDQL();
+
+        return $query->execute();
+    }
+
+    public function tauxCalcul()
+    {
+        $table_source = 'action';
+        $table_distante = 'deployement';
+
+        $alias_distante = DeployementRepository::ALIAS;
+
+        $sql = ' update '.$table_source.' '.self::ALIAS
+            .' inner join ( '
+            .' select '.$table_source.'_id, avg(taux1) as taux1, avg(taux2) as taux2, enable '
+            .' from '.$table_distante.' where enable=true group by '.$table_source.'_id ) '.$alias_distante.' '
+            .' on '.self::ALIAS.'.id='.$alias_distante.'.'.$table_source.'_id '
+            .' set '.self::ALIAS.'.taux1='.$alias_distante.'.taux1, '
+            .self::ALIAS.'.taux2='.$alias_distante.'.taux2 '
+            .' where '.self::ALIAS.'.enable=true; ';
+
+        try {
+            $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+
+            return $stmt->execute([]);
+        } catch (DBALException $e) {
+            return 'Error'.$e->getMessage();
         }
     }
 }

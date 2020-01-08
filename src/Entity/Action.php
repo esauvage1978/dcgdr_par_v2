@@ -118,6 +118,11 @@ class Action implements EntityInterface
      */
     private $validers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Deployement", mappedBy="action", orphanRemoval=true)
+     */
+    private $deployements;
+
     public function __construct()
     {
         $this->setTaux1('0');
@@ -129,6 +134,7 @@ class Action implements EntityInterface
         $this->readers = new ArrayCollection();
         $this->writers = new ArrayCollection();
         $this->validers = new ArrayCollection();
+        $this->deployements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -441,6 +447,37 @@ class Action implements EntityInterface
     {
         if ($this->validers->contains($valider)) {
             $this->validers->removeElement($valider);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Deployement[]
+     */
+    public function getDeployements(): Collection
+    {
+        return $this->deployements;
+    }
+
+    public function addDeployement(Deployement $deployement): self
+    {
+        if (!$this->deployements->contains($deployement)) {
+            $this->deployements[] = $deployement;
+            $deployement->setAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeployement(Deployement $deployement): self
+    {
+        if ($this->deployements->contains($deployement)) {
+            $this->deployements->removeElement($deployement);
+            // set the owning side to null (unless already changed)
+            if ($deployement->getAction() === $this) {
+                $deployement->setAction(null);
+            }
         }
 
         return $this;

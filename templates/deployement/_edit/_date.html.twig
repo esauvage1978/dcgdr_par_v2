@@ -1,0 +1,22 @@
+<section id="anchor_date" class="bg-white">
+    <div class="card-body">
+        <div class="form-group row ">
+            <div class="col " data-toggle="tooltip" data-html="true"
+                 title="A la date du <em>jalon</em> une notification par mail sera envoyé.<br/> Les jalons en retard sont affichés sur la page d'accueil">
+                <label for="{{ form.showat.vars.id }}">
+                    Jalon
+                </label>
+                {{ form_widget(form.showat) }}
+            </div>
+        </div>
+        <div class="form-group row ">
+            <div class="col " data-toggle="tooltip" data-html="true"
+                 title="Une date de fin de déploiement bloque la saisie des données">
+                <label for="{{ form.endat.vars.id }}">
+                    Fin du déploiement
+                </label>
+                {{ form_widget(form.endat) }}
+            </div>
+        </div>
+    </div>
+</section>

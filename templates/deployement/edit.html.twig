@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Détail d'une action{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    <div class="col-xs-12 col-md-4">
+        <h1 class="m-0 text-dark">Détail de l'action </h1>
+    </div>
+    <div class="col-xs-12  col-md-8">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+            <li class="breadcrumb-item ">
+                <a href="{{ path('action_edit',{'id':deployement.action.id}) }}#anchor_organisme">
+                    Action
+                </a>
+            </li>
+            <li class="breadcrumb-item active">Déploiement {{ deployement.id }}</li>
+        </ol>
+    </div>
+
+{% endblock %}
+
+    {% block body %}
+
+        <div class="d-none">
+            {{ include('share/_delete_form.html.twig',{'domaine': 'deployement','id':deployement.id}) }}
+        </div>
+        {{ form_start(form) }}
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-12 col-lg-6  ">
+                <div class="card ">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">
+                                Organisme
+                            </label>
+                            <div class="col mt-1">
+                                {{ deployement.organisme.name }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="{{ form.showat.vars.id }}">
+                                Jalon
+                            </label>
+                            <div >
+                                {{ form_widget(form.showat) }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="{{ form.endat.vars.id }}">
+                                Date de fin
+                            </label>
+                            <div >
+                                {{ form_widget(form.endat) }}
+                            </div>
+                        </div>
+
+                        <div class="d-none">
+                            <button name="update" id="update">{{ button_label|default('Save') }}</button>
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col  d-flex justify-content-between align-items-center">
+
+                                <a  class="btn btn-secondary"
+                                    href="{{ path('action_edit',{'id':deployement.action.id}) }}#anchor_organisme">
+                                    <i class="fas fa-step-backward"></i>
+                                    Action
+                                </a>
+
+                                <a class="btn btn-secondary "
+                                   href="{{ path('deployements_for_action', {'id': deployement.action.id}) }}">
+                                    <i class="fas fa-step-backward"></i> Liste des organismes
+                                </a>
+
+                                {% if deployement | deployementCanUpdate %}
+                                    {{ include('share/__btn_save.html.twig') }}
+                                {% endif %}
+
+                                {% if deployement | deployementCanDelete %}
+                                    <span class="btn btn-danger " onclick="$('#delete').click();">
+                                        <i class="fas fa-trash"></i> Supprimer
+                                    </span>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-4 ">
+
+            </div>
+
+        </div>
+        <div class="d-none">
+            {{ form_rest(form) }}
+        </div>
+        {{ form_end(form) }}
+    {% endblock %}
+
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
+{% endblock %}
