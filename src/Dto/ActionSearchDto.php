@@ -36,7 +36,7 @@ class ActionSearchDto
     /**
      * @return bool
      */
-    public function getActionArchiving(): bool
+    public function isActionArchiving(): bool
     {
         return $this->actionArchiving;
     }
@@ -54,7 +54,7 @@ class ActionSearchDto
     /**
      * @return bool
      */
-    public function getAxeEnable(): bool
+    public function isAxeEnable(): bool
     {
         return $this->axeEnable;
     }
@@ -72,7 +72,7 @@ class ActionSearchDto
     /**
      * @return bool
      */
-    public function getThematiqueEnable(): bool
+    public function isThematiqueEnable(): bool
     {
         return $this->thematiqueEnable;
     }
@@ -90,7 +90,7 @@ class ActionSearchDto
     /**
      * @return bool
      */
-    public function getPoleEnable(): bool
+    public function isPoleEnable(): bool
     {
         return $this->poleEnable;
     }
@@ -108,7 +108,7 @@ class ActionSearchDto
     /**
      * @return bool
      */
-    public function getCategoryEnable(): bool
+    public function isCategoryEnable(): bool
     {
         return $this->categoryEnable;
     }

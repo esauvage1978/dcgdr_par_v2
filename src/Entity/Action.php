@@ -123,6 +123,11 @@ class Action implements EntityInterface
      */
     private $deployements;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Indicator", mappedBy="action", orphanRemoval=true)
+     */
+    private $indicators;
+
     public function __construct()
     {
         $this->setTaux1('0');
@@ -135,6 +140,7 @@ class Action implements EntityInterface
         $this->writers = new ArrayCollection();
         $this->validers = new ArrayCollection();
         $this->deployements = new ArrayCollection();
+        $this->indicators = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -477,6 +483,37 @@ class Action implements EntityInterface
             // set the owning side to null (unless already changed)
             if ($deployement->getAction() === $this) {
                 $deployement->setAction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Indicator[]
+     */
+    public function getIndicators(): Collection
+    {
+        return $this->indicators;
+    }
+
+    public function addIndicator(Indicator $indicator): self
+    {
+        if (!$this->indicators->contains($indicator)) {
+            $this->indicators[] = $indicator;
+            $indicator->setAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicator(Indicator $indicator): self
+    {
+        if ($this->indicators->contains($indicator)) {
+            $this->indicators->removeElement($indicator);
+            // set the owning side to null (unless already changed)
+            if ($indicator->getAction() === $this) {
+                $indicator->setAction(null);
             }
         }
 

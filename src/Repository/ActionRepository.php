@@ -75,10 +75,8 @@ class ActionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findAllForDto(ActionSearchDto $dto)
+    private function findAllForDto_initialise(ActionSearchDto $dto): QueryBuilder
     {
-        $params = [];
-
         $builder = $this->createQueryBuilder(self::ALIAS)
             ->select(
                 self::ALIAS,
@@ -97,11 +95,33 @@ class ActionRepository extends ServiceEntityRepository
             ->leftjoin(self::ALIAS.'.readers', CorbeilleRepository::ALIAS_ACTION_READERS);
 
         $builder
-            ->where(AxeRepository::ALIAS.'.enable='.($dto->getAxeEnable() ? 'true' : 'false'))
-            ->andwhere(PoleRepository::ALIAS.'.enable='.($dto->getPoleEnable() ? 'true' : 'false'))
-            ->andwhere(ThematiqueRepository::ALIAS.'.enable='.($dto->getThematiqueEnable() ? 'true' : 'false'))
-            ->andwhere(CategoryRepository::ALIAS.'.enable='.($dto->getCategoryEnable() ? 'true' : 'false'))
-            ->andwhere(AxeRepository::ALIAS.'.archiving='.($dto->getActionArchiving() ? 'true' : 'false'));
+            ->where(AxeRepository::ALIAS.'.enable='.($dto->isAxeEnable() ? 'true' : 'false'))
+            ->andwhere(PoleRepository::ALIAS.'.enable='.($dto->isPoleEnable() ? 'true' : 'false'))
+            ->andwhere(ThematiqueRepository::ALIAS.'.enable='.($dto->isThematiqueEnable() ? 'true' : 'false'))
+            ->andwhere(CategoryRepository::ALIAS.'.enable='.($dto->isCategoryEnable() ? 'true' : 'false'))
+            ->andwhere(AxeRepository::ALIAS.'.archiving='.($dto->isActionArchiving() ? 'true' : 'false'));
+
+        return $builder;
+    }
+
+    private function findAllForDto_orderBy(QueryBuilder $builder): QueryBuilder
+    {
+        $builder
+            ->orderBy(AxeRepository::ALIAS.'.name', 'ASC')
+            ->orderBy(PoleRepository::ALIAS.'.name', 'ASC')
+            ->orderBy(ThematiqueRepository::ALIAS.'.ref', 'ASC')
+            ->orderBy(CategoryRepository::ALIAS.'.ref', 'ASC')
+            ->orderBy(self::ALIAS.'.ref ', 'ASC')
+            ->orderBy(self::ALIAS.'.name ', 'ASC');
+
+        return $builder;
+    }
+
+    public function findAllForDto(ActionSearchDto $dto)
+    {
+        $params = [];
+
+        $builder = $this->findAllForDto_initialise($dto);
 
         if (!empty($dto->getAxeId())) {
             $builder->where(AxeRepository::ALIAS.'.id = :axeid');
@@ -139,13 +159,7 @@ class ActionRepository extends ServiceEntityRepository
             $builder->setParameters($params);
         }
 
-        $builder
-            ->orderBy(AxeRepository::ALIAS.'.name', 'ASC')
-            ->orderBy(PoleRepository::ALIAS.'.name', 'ASC')
-            ->orderBy(ThematiqueRepository::ALIAS.'.ref', 'ASC')
-            ->orderBy(CategoryRepository::ALIAS.'.ref', 'ASC')
-            ->orderBy(self::ALIAS.'.ref ', 'ASC')
-            ->orderBy(self::ALIAS.'.name ', 'ASC');
+        $builder = $this->findAllForDto_orderBy($builder);
 
         return $builder
             ->getQuery()
