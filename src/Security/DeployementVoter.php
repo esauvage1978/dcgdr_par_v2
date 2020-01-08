@@ -70,7 +70,7 @@ class DeployementVoter extends Voter
                 return $this->canAppendRead($deploiement, $user);
             case self::APPEND_UPDATE:
                 return $this->canAppendUpdate($deploiement, $user);
-            case self::APPEND_DELETE:
+            case self::DELETE:
                 return $this->canAppendUpdate($deploiement, $user);
         }
 
