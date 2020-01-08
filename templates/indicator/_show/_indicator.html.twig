@@ -1,0 +1,41 @@
+<article id="anchor_indicateur_{{ indicator.id }}" class=" mt-4 ml-4">
+    <div class="card-header">
+        <h4 class="card-title text-purple">
+            {{ indicator.name }}
+
+        </h4>
+        <small class="float-right">
+            {{ indicator.indicatorType | indicatorGetNameOfIndicator }}
+            {% if indicator | indicatorCanUpdate %}
+                {{ include('share/__btn_edit.html.twig',
+                    {   'url':'indicator_edit',
+                        'id':indicator.id,
+                        'sm':true
+                    }) }}
+            {% endif %}
+        </small>
+    </div>
+    <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 col-lg-2">
+                    <div class="info-box bg-light">
+                        <div class="info-box-content">
+                            <span class="info-box-text text-center text-muted">Taux</span>
+                            <span class="info-box-number text-center  text-lg mb-0">
+                    {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': indicator.taux1,'taux2': indicator.taux2,'info':false }) }}
+                    </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-10">
+                    <div class="col-12 bg-light p-2">
+                        {{ indicator.content | raw }}
+                    </div>
+
+                </div>
+            </div>
+
+
+
+    </div>
+</article>

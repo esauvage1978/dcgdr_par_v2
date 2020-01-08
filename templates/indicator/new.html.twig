@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Indicateur{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h1 class="m-0 text-dark">Indicateurs de l'action {{ action.id }}</h1>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+            <li class="breadcrumb-item "><a href="{{ path('action_edit',{'id':action.id}) }}#anchor_indicator">Action</a></li>
+            <li class="breadcrumb-item active">Création</li>
+        </ol>
+    </div>
+{% endblock %}
+
+
+{% block body %}
+
+    {{ form_start(form) }}
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-12 col-lg-8  ">
+            <div class="card ">
+
+                {{ include('indicator/_form.html.twig') }}
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col  d-flex justify-content-between align-items-center">
+
+                            <a class="btn btn-secondary " href="{{ path('action_edit', {'id': indicator.action.id}) }}#anchor_indicateur">
+                                <i class="fas fa-step-backward"></i> Retour à l'action
+                            </a>
+
+                            {{ include('share/__btn_save.html.twig') }}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+{% endblock %}

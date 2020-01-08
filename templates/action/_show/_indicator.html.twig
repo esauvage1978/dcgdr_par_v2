@@ -1,0 +1,23 @@
+<!-- indicateurs -->
+<h3 id="anchor_indicateur" class="text-purple">
+    <small><i class="fas fa-chart-line"></i></small> Indicateurs
+</h3>
+<section class="col-12">
+    {% set nbr=action.indicators | sumEnable %}
+    {% if nbr==0 %}
+        <article class="card-body">
+            <div class="mt-4 p-3 col-12 bg-light">
+                <span class="text-muted">
+                    Aucun indicateur actif
+                </span>
+            </div>
+        </article>
+
+    {% else %}
+        {% for indicator in action.indicators %}
+            {% if indicator.enable %}
+                {{ include('indicator/_show/_indicator.html.twig') }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</section>

@@ -1,0 +1,77 @@
+<div class="card-body">
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">
+            Action
+        </label>
+        <div class="col mt-1">
+            {{ indicator.action.name }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label" for="{{ form.indicatortype.vars.id }}">
+            Type d'indicateur
+        </label>
+        <div class="col mt-1">
+            {{ form_widget(form.indicatortype) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label" for="{{ form.name.vars.id }}">
+            Libellé de l'indicateur
+        </label>
+        <div class="col">
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label" for="{{ form.enable.vars.id }}">
+            Afficher
+        </label>
+        <div class="col mt-1">
+            {{ form_row(form.enable) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group row">
+
+                <label class="col-sm-6 col-form-label" for="{{ form.goal.vars.id }}">
+                    Objectif
+                </label>
+                <div class="col-2 mt-1">
+                    {{ form_widget(form.goal) }}
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <label class="col-sm-6 col-form-label" for="{{ form.value.vars.id }}">
+                    Valeur initiale
+                </label>
+                <div class="col-2 mt-1">
+                    {{ form_widget(form.value) }}
+                </div>
+
+            </div>
+        </div>
+        <div class="col mt-1">
+            <div class="alert alert-info ">
+                <h5><i class="icon fas fa-info"></i> Attention</h5>
+                <small>
+                    L'objectif n'est utilisable que pour le type quantitatif
+                    <br/>
+                    L'objectif et la valeur initiale ne seront ajoutés qu'à la première initialisation du déploiement
+                </small>
+            </div>
+
+        </div>
+    </div>
+
+
+    {{ form_row(form.content) }}
+
+    <div class="d-none">
+        <button name="update" id="update">{{ button_label|default('Save') }}</button>
+    </div>
+</div>
