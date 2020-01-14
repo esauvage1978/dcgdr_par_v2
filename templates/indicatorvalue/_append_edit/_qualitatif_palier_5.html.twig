@@ -1,4 +1,4 @@
-{% set id='binaire_oui_' %}
+{% set id='qualitatif_palier_5_' %}
 
 <div class="info-box  bg-light ">
     <div class="info-box-content form-group">
@@ -7,17 +7,14 @@
         </label>
 
         <SELECT name="{{ id }}{{ loop.index0 }}" id="{{ id }}{{ loop.index0 }}" class="form-control text-center">
-            <option {{ indicatorvalue.value=='' ?'selected' : '' }} value="">
-                -- Choisir --
-            </option>
-            <option {{ indicatorvalue.value=='oui' ?'selected' : '' }} value="oui">
-                Oui
-            </option>
-            <option {{ indicatorvalue.value=='non' ?'selected' : '' }} value="non">
-                Non
-            </option>
+            {% for i in 0..20 %}
+                {% set value= i*5 %}
+                <option {{ indicatorvalue.value==value ?'selected' : '' }} value="{{ value }}">
+                    {{ value }} %
+                </option>
+            {% endfor %}
         </SELECT>
-        <small>Atteinte du score si Oui</small>
+
         <script type="text/javascript">
             $(function () {
                 $('#{{ id }}{{ loop.index0 }}').change(function () {
