@@ -23,6 +23,11 @@ class DeployementAppendType extends AppTypeAbstract
                 self::REQUIRED => false,
                 'widget' => 'single_text',
             ])
+            ->add('indicatorvalues', CollectionType::class, [
+                'entry_type' => IndicatorValueType::class,
+                'allow_add' => false,
+                'allow_delete' => false,
+            ])
             ;
     }
 

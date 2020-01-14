@@ -14,37 +14,49 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class IndicatorRepository extends ServiceEntityRepository
 {
+    const ALIAS = 'i';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Indicator::class);
     }
 
-    // /**
-    //  * @return Indicator[] Returns an array of Indicator objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function tauxRaz()
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $queryBuilder = $this->createQueryBuilder(self::ALIAS);
+        $queryBuilder->update(Indicator::class, self::ALIAS)
+            ->set(self::ALIAS.'.taux1 ', 0)
+            ->set(self::ALIAS.'.taux2 ', 0);
 
-    /*
-    public function findOneBySomeField($value): ?Indicator
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $query = $queryBuilder->getQuery();
+
+        $query->getDQL();
+
+        return $query->execute();
     }
-    */
+
+    public function tauxCalcul()
+    {
+        $table_source = 'indicator';
+        $table_distante = 'indicator_value';
+
+        $alias_distante = IndicatorValueRepository::ALIAS;
+
+        $sql = ' update '.$table_source.' '.self::ALIAS
+            .' inner join ( '
+            .' select '.$table_source.'_id, avg(taux1) as taux1, avg(taux2) as taux2, enable '
+            .' from '.$table_distante.' where enable=true group by '.$table_source.'_id ) '.$alias_distante.' '
+            .' on '.self::ALIAS.'.id='.$alias_distante.'.'.$table_source.'_id '
+            .' set '.self::ALIAS.'.taux1='.$alias_distante.'.taux1, '
+            .self::ALIAS.'.taux2='.$alias_distante.'.taux2  '
+            .' where '.self::ALIAS.'.enable=true; ';
+
+        try {
+            $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+
+            return $stmt->execute([]);
+        } catch (DBALException $e) {
+            return 'Error'.$e->getMessage();
+        }
+    }
 }

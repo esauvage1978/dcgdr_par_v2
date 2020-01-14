@@ -23,6 +23,14 @@
                         <td class="text-center align-middle col-2">
                             {{ include('share/_taux_progress_bar_label.html.twig' , {'taux1': deployement.taux1,'taux2': deployement.taux2} ) }}
                         </td>
+                        <td class="text-center align-middle">
+                            {% set nbr= deployement | organismeIndicateurDeployed %}
+                            {% if  nbr==0 %}
+                                <span class="text-light" ><i class="fas fa-circle"></i></span>
+                            {% else %}
+                                <small class="badge bg-info"><i class="fas fa-chart-line"></i> {{ nbr }}</small>
+                            {% endif %}
+                        </td>
 
                         <td class="text-right align-middle">
                             {% if deployement | deployementCanAppendUpdate %}

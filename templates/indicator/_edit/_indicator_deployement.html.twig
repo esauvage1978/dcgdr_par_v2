@@ -1,0 +1,15 @@
+{% set color='card-warning' %}
+{% for indicatorValue in deployement.indicatorValues %}
+    {% if indicator == indicatorValue.indicator and  indicatorValue.enable==true %}
+        {% set color='card-success' %}
+    {% endif %}
+{% endfor %}
+
+<div id="{{indicator.id}}_{{ deployement.id }}" class="card {{ color }} indicatorvalue" style="cursor:pointer;">
+    <div id="head_{{indicator.id}}_{{ deployement.id }}" class="card-header">
+        <h3 class="card-title">{{ indicator.name }}</h3>
+    </div>
+    <div id="overlay_{{indicator.id}}_{{ deployement.id }}" class="overlay d-none">
+        <i class="fas fa-2x fa-sync-alt"></i>
+    </div>
+</div>

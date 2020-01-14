@@ -1,0 +1,10 @@
+<a href="{{ path(url) }}/{{ filtre }}">
+    <div id="{{ domaine }}" class="card indicatorvalue bg-{{ color | default('info') }}">
+        <div id="head_{{ domaine }}" class="card-header">
+            <h3 class="card-title">{{ titre }}</h3>
+            <span id="badge_{{ domaine }}" class="float-right badge badge-secondary">
+                <i id="overlay_{{ domaine }}" class=" d-none fas  fa-sync-alt"></i>
+            </span>
+        </div>
+    </div>
+</a>

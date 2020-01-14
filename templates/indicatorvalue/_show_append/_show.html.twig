@@ -1,0 +1,31 @@
+<div class=" mt-4 ml-4">
+    <div class="card-header">
+        <h4 class="card-title text-purple">
+            {{ indicatorvalue.indicator.name }}
+        </h4>
+    </div>
+    <div class="card-body">
+        {% if indicatorvalue.indicator.content and indicatorvalue.indicator.content != '<br>' %}
+            <div class="row mt-2 mb-3">
+                <div class="col-12 bg-light p-5">
+                    {{ indicatorvalue.indicator.content | raw }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="row mt-2">
+            <div class="col-md-12 col-lg-2">
+                <div class="info-box bg-light">
+                    <div class="info-box-content">
+                        <span class="info-box-text text-center text-muted">Taux</span>
+                        <span class="info-box-number text-center  text-lg mb-0">
+                    {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': indicatorvalue.taux1,'taux2': indicatorvalue.taux2,'info':false }) }}
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-10">
+                {{ include('indicatorvalue/_show_append/_' ~ indicatorvalue.indicator.indicatortype ~ '.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>

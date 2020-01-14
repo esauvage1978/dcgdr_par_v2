@@ -2,10 +2,14 @@
     <div class="card-header">
         <h4 class="card-title text-purple">
             {{ indicator.name }}
-
+            <span class="ml-2 badge bg-info"><i
+                        class="fas fa-city"></i> {{ indicator.indicatorValues | sumEnable }}</span>
         </h4>
+
         <small class="float-right">
-            {{ indicator.indicatorType | indicatorGetNameOfIndicator }}
+            <span class="mr-2">
+                {{ indicator.indicatorType | indicatorGetNameOfIndicator }}
+            </span>
             {% if indicator | indicatorCanUpdate %}
                 {{ include('share/__btn_edit.html.twig',
                     {   'url':'indicator_edit',
@@ -16,25 +20,50 @@
         </small>
     </div>
     <div class="card-body">
-            <div class="row">
-                <div class="col-md-12 col-lg-2">
-                    <div class="info-box bg-light">
-                        <div class="info-box-content">
-                            <span class="info-box-text text-center text-muted">Taux</span>
-                            <span class="info-box-number text-center  text-lg mb-0">
+        <div class="row">
+            <div class="col-md-12 col-lg-2">
+                <div class="info-box bg-light">
+                    <div class="info-box-content">
+                        <span class="info-box-text text-center text-muted">Taux</span>
+                        <span class="info-box-number text-center  text-lg mb-0">
                     {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': indicator.taux1,'taux2': indicator.taux2,'info':false }) }}
                     </span>
-                        </div>
                     </div>
-                </div>
-                <div class="col-md-12 col-lg-10">
-                    <div class="col-12 bg-light p-2">
-                        {{ indicator.content | raw }}
-                    </div>
-
                 </div>
             </div>
+            <div class="col-md-12 col-lg-10">
 
+                {% if indicator.content and indicator.content != '<br>' %}
+                    <div class="row mt-2 mb-3">
+                        <div class="col-12 bg-light p-5">
+                            {{ indicator.content | raw }}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row">
+                    {% set nbr= indicator | organismeDeployed %}
+
+                    {% if nbr==0 %}
+                        <article class="card-body">
+                            <div class="mt-4 p-3 col-12 bg-light">
+                            <span class="text-muted">
+                                Aucun déploiement pour cette indicateur
+                            </span>
+                            </div>
+                        </article>
+                    {% else %}
+                        <table class="table table-striped table-condensed "
+                               style="width:100%">
+                            {% for indicatorValue in indicator.indicatorValues %}
+                                {% if indicatorValue.enable==true and indicatorValue.Indicator.enable %}
+                                    {{ include('indicatorvalue/_show/_tr.html.twig') }}
+                                {% endif %}
+                            {% endfor %}
+                            </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
 
     </div>

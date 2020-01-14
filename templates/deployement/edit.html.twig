@@ -100,7 +100,18 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-4 ">
-
+                <div class="card ">
+                    <div class="card-footer">
+                        Les indicateurs
+                    </div>
+                    <div class="card-body select2-primary">
+                        {% for indicator in deployement.action.indicators %}
+                            {{ include('indicator/_edit/_indicator_deployement.html.twig',{'indicator':indicator, 'deployement':deployement}) }}
+                        {% else %}
+                            <div class="list-group-item">En attente d'ajout</div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -114,4 +125,15 @@
 
 {% block javascripts %}
     <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/indicatorvalue.js')) }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.indicatorvalue').click(function () {
+                var selecteur=$(this).attr("id");
+                var route="{{ path('ajax_create_deployement') }}";
+
+                create_deployement(selecteur,route);
+            });
+        });
+    </script>
 {% endblock %}
