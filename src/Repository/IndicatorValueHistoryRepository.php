@@ -14,9 +14,25 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class IndicatorValueHistoryRepository extends ServiceEntityRepository
 {
+    const ALIAS = 'ivh';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, IndicatorValueHistory::class);
     }
 
+    public function getLastEntry(string $indicatorValueId)
+    {
+        $builder = $this->createQueryBuilder(self::ALIAS)
+            ->select(
+                self::ALIAS
+            )
+            ->leftjoin(self::ALIAS.'.indicatorValue', IndicatorValueRepository::ALIAS)
+            ->where(IndicatorValueRepository::ALIAS.'.id = :id')
+            ->setParameter('id', $indicatorValueId)
+            ->orderBy(self::ALIAS.'.id', 'desc')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
 }

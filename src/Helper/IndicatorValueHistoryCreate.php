@@ -5,8 +5,8 @@ namespace App\Helper;
 use App\Entity\IndicatorValue;
 use App\Entity\IndicatorValueHistory;
 use App\Entity\User;
-use App\Repository\IndicatorValueHistoryRepository;
 use App\Manager\IndicatorValueHistoryManager;
+use App\Repository\IndicatorValueHistoryRepository;
 use Symfony\Component\Security\Core\Security;
 
 class IndicatorValueHistoryCreate
@@ -43,14 +43,7 @@ class IndicatorValueHistoryCreate
         /** @var User $user */
         $user = $this->securityContext->getToken()->getUser();
 
-        if (null == $this->repository->findOneBy(
-            [
-                'user' => $user,
-                'goal' => $indicatorValue->getGoal(),
-                'value' => $indicatorValue->getValue(),
-                'content' => $indicatorValue->getContent(),
-            ]
-            )) {
+        if (!$this->entryPresente($indicatorValue, $user)) {
             $ivh = new IndicatorValueHistory();
 
             $ivh
@@ -65,5 +58,25 @@ class IndicatorValueHistoryCreate
 
             $this->manager->save($ivh);
         }
+    }
+
+    private function entryPresente(IndicatorValue $indicatorValue, User $user)
+    {
+        $ivh = $this->repository->getLastEntry($indicatorValue->getId());
+
+        if (empty($ivh)) {
+            return false;
+        }
+
+        if (
+            $ivh->getUser()->getId() == $user->getId() &&
+            $ivh->getGoal() == $indicatorValue->getGoal() &&
+            $ivh->getValue() == $indicatorValue->getValue() &&
+            $ivh->getContent() == $indicatorValue->getContent() &&
+            $ivh->getIndicatorValue()->getId() == $indicatorValue->getId()
+        ) {
+            return true;
+        }
+        return false;
     }
 }

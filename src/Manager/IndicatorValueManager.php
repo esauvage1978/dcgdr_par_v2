@@ -107,7 +107,7 @@ class IndicatorValueManager extends ManagerAbstract
                 $indicatorValue->getValue(),
                 $taux1
             );
-        } elseif ('binaire_oui' === $indicatorValue->getIndicator()->getIndicatortype()) {
+        } elseif (IndicatorData::BINAIRE_OUI === $indicatorValue->getIndicator()->getIndicatortype()) {
             $taux = $this->calculTauxBinaire(
                 $indicatorValue->getValue(),
                 ['oui']
