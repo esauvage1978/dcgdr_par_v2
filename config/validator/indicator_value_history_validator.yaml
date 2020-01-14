@@ -1,0 +1,18 @@
+App\Entity\IndicatorValueHistory:
+  properties:
+    taux1:
+      - NotBlank: ~
+      - LessThanOrEqual:
+          value: 100
+          message: 'le taux doit être inférieur à 100'
+      - GreaterThanOrEqual:
+          value: 0
+          message: 'le taux doit être supérieur à 0'
+    taux2:
+      - NotBlank: ~
+      - LessThanOrEqual:
+          value: 10000
+          message: 'le taux doit être inférieur à 1000'
+      - GreaterThanOrEqual:
+          value: 0
+          message: 'le taux doit être supérieur à 0'

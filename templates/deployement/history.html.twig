@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Détail d'une action{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    <div class="col-xs-12 col-md-4">
+        <h1 class="m-0 text-dark">Historique des saisies </h1>
+    </div>
+    <div class="col-xs-12  col-md-8">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('action_index') }}">Liste</a></li>
+            <li class="breadcrumb-item "><a
+                        href="{{ path('action_show',{'id':deployement.action.id}) }}">Action {{ deployement.action.id }}</a>
+            </li>
+            <li class="breadcrumb-item "><a
+                        href="{{ path('deployement_append',{'id':deployement.id}) }}">Déploiement {{ deployement.id }}</a>
+            </li>
+            <li class="breadcrumb-item ">Historique</li>
+        </ol>
+    </div>
+
+{% endblock %}
+
+{% block sidebar_sommaire %}
+    {% for indicatorValue in deployement.indicatorValues %}
+        {% if indicatorValue.enable %}
+            <li class="nav-item">
+                <small>
+                    <a class="nav-link" href="#anchor_indicateur_{{ indicatorValue.id }}">
+                        {{ indicatorValue.indicator.name }}
+                    </a>
+                </small>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+{% block sidebar_button %}
+    <a class="btn btn-secondary "
+       href="{{ path('action_show', {'id': deployement.action.id}) }}">
+        <i class="fas fa-eye"></i> Retour à l'action
+    </a>
+    <span class="mb-3"></span>
+    {{ include('share/__btn_show.html.twig',
+        {   'url':'deployement_append',
+            'id':deployement.id,
+            'titre':'Consulter le déploiement'
+        }) }}
+    <span class="mb-3"></span>
+    {{ include('share/__btn_edit.html.twig',
+        {   'url':'deployement_append_edit',
+            'id':deployement.id,
+            'titre':'Editer le déploiement'
+        }) }}
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="row justify-content-center">
+        {{ include('deployement/_show/_name.html.twig') }}
+
+        <div class="col-sm-12">
+            {% for indicatorvalue in deployement.indicatorvalues %}
+                <span id="anchor_indicateur_{{ indicatorvalue.id }}"></span>
+                {% if indicatorvalue.enable %}
+                    {{ include('indicatorvalue/_history.html.twig',{'iv':indicatorvalue}) }}
+                {% endif %}
+            {% else %}
+                <div class="callout callout-info  mt-2 ml-4">
+                    Aucun indicateur déclaré
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
+{% endblock %}

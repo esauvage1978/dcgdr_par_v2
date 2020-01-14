@@ -86,7 +86,11 @@
         }) }}
     <span class="mb-3"></span>
     {{ include('share/__btn_save_onclick.html.twig') }}
-
+    <span class="mb-3"></span>
+    {{ include('share/__btn_history.html.twig',
+        {   'url':'deployement_history',
+            'id':deployement.id
+        }) }}
 {% endblock %}
 
 {% block body %}
