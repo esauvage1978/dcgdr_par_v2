@@ -6,6 +6,7 @@ class IndicatorData
 {
     const QUALITATIF='qualitatif';
     const QUANTITATIF='quantitatif';
+    const BINAIRE='binaire';
 
     public static function getNameOfIndicator(string $state)
     {
@@ -16,6 +17,9 @@ class IndicatorData
                 break;
             case self::QUANTITATIF:
                 $stateName = 'Indicateur quantitatif';
+                break;
+            case self::BINAIRE:
+                $stateName = 'Indicateur binaire';
                 break;
         }
 
@@ -31,6 +35,9 @@ class IndicatorData
                 break;
             case self::QUANTITATIF:
                 $stateName = 'Indicateur quantitatif : ce type d\'indicateur permet la sur performance des organismes';
+                break;
+            case self::BINAIRE:
+                $stateName = 'Indicateur binaire : Oui/Non, le taux sera de 100% si un choix est effectué';
                 break;
         }
 

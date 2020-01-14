@@ -55,7 +55,20 @@
                 </div>
             </div>
         </div>
-
+        <div class="col-sm-12 col-md-12 col-lg-4 ">
+            <div class="card" >
+                <div class="card-footer">
+                    Déploiement de l'indicateur
+                </div>
+                <div class="card-body">
+                    {% for deployement in indicator.action.deployements %}
+                        {{ include('deployement/_edit/_indicator_deployement.html.twig',{'indicator':indicator, 'deployement':deployement}) }}
+                    {% else %}
+                        <div class="list-group-item">En attente d'ajout</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
     {{ form_rest(form) }}
     {{ form_end(form) }}
@@ -67,5 +80,25 @@
 
 
 {% block javascripts %}
+    <script src="{{ absolute_url( asset('js/indicator/indicatorUpdate.js')) }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            changeTemplate();
+            $('#indicator_indicatortype').change(function () {
+                changeTemplate();
+            });
+        });
+    </script>
 
+    <script src="{{ absolute_url( asset('js/indicatorvalue.js')) }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.indicatorvalue').click(function () {
+                var selecteur=$(this).attr("id");
+                var route="{{ path('ajax_create_deployement') }}";
+
+                create_deployement(selecteur,route);
+            });
+        });
+    </script>
 {% endblock %}

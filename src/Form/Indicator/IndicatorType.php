@@ -25,6 +25,7 @@ class IndicatorType extends AppTypeAbstract
             ])
             ->add('indicatortype',ChoiceType::class,
                 ['choices' => [
+                    IndicatorData::getFullNameOfIndicator(IndicatorData::BINAIRE) => IndicatorData::BINAIRE,
                     IndicatorData::getFullNameOfIndicator(IndicatorData::QUALITATIF) => IndicatorData::QUALITATIF,
                     IndicatorData::getFullNameOfIndicator(IndicatorData::QUANTITATIF) => IndicatorData::QUANTITATIF,
                 ]])
