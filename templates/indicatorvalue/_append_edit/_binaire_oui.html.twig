@@ -1,0 +1,29 @@
+{% set id='qualitatif_' %}
+
+<div class="info-box  bg-light ">
+    <div class="info-box-content form-group">
+        <label for="{{ id }}{{ loop.index0 }}" class="info-box-text text-center text-muted">
+            Résultat
+        </label>
+
+        <SELECT name="{{ id }}{{ loop.index0 }}" id="{{ id }}{{ loop.index0 }}" class="form-control text-center">
+            <option {{ indicatorvalue.value=='' ?'selected' : '' }} value="">
+                -- Choisir --
+            </option>
+            <option {{ indicatorvalue.value=='oui' ?'selected' : '' }} value="oui">
+                Oui
+            </option>
+            <option {{ indicatorvalue.value=='non' ?'selected' : '' }} value="non">
+                Non
+            </option>
+        </SELECT>
+        <small>Atteinte du score si Oui</small>
+        <script type="text/javascript">
+            $(function () {
+                $('#{{ id }}{{ loop.index0 }}').change(function () {
+                    $('#{{ formIV.value.vars.id }}').val($('#{{ id }}{{ loop.index0 }}').val());
+                });
+            })
+        </script>
+    </div>
+</div>
