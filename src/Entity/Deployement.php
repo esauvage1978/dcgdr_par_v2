@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,10 +50,16 @@ class Deployement implements EntityInterface
      */
     private $endAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\IndicatorValue", mappedBy="deployement", orphanRemoval=true)
+     */
+    private $indicatorValues;
+
     public function __construct()
     {
         $this->setTaux1('0');
         $this->setTaux2('0');
+        $this->indicatorValues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,5 +144,41 @@ class Deployement implements EntityInterface
         $this->endAt = $endAt;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|IndicatorValue[]
+     */
+    public function getIndicatorValues(): Collection
+    {
+        return $this->indicatorValues;
+    }
+
+    public function addIndicatorValue(IndicatorValue $indicatorValue): self
+    {
+        if (!$this->indicatorValues->contains($indicatorValue)) {
+            $this->indicatorValues[] = $indicatorValue;
+            $indicatorValue->setDeployement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicatorValue(IndicatorValue $indicatorValue): self
+    {
+        if ($this->indicatorValues->contains($indicatorValue)) {
+            $this->indicatorValues->removeElement($indicatorValue);
+            // set the owning side to null (unless already changed)
+            if ($indicatorValue->getDeployement() === $this) {
+                $indicatorValue->setDeployement(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isEnded(): bool
+    {
+        return empty($this->getEndAt());
     }
 }

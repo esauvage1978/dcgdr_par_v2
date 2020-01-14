@@ -59,7 +59,12 @@
                                                     </span>
                                                 </td>
                                                 <td class="text-center">
+                                                    {% set nbr= deployement | organismeIndicateurDeployed %}
+                                                    {% if  nbr==0 %}
                                                         <span class="text-light" ><i class="fas fa-circle"></i></span>
+                                                    {% else %}
+                                                        <small class="badge bg-info">{{ nbr }}</small>
+                                                    {% endif %}
                                                 </td>
                                                 <td class="text-center">
                                                     {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': deployement.taux1, 'taux2': deployement.taux2  }) }}

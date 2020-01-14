@@ -195,9 +195,9 @@ class ActionRepository extends ServiceEntityRepository
     public function tauxCalcul()
     {
         $table_source = 'action';
-        $table_distante = 'deployement';
+        $table_distante = 'indicator';
 
-        $alias_distante = DeployementRepository::ALIAS;
+        $alias_distante = IndicatorRepository::ALIAS;
 
         $sql = ' update '.$table_source.' '.self::ALIAS
             .' inner join ( '

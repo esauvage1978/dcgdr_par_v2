@@ -33,3 +33,13 @@ services:
       public: true
       tags:
         - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
+    App\Listener\IndicatorValueListener:
+        tags:
+            name: doctrine.orm.entity_listener
+            event: prePersist
+            entity: App\Entity\IndicatorValue
+
+    App\Listener\IndicatorListener:
+        tags:
+            - { name: doctrine.orm.entity_listener }

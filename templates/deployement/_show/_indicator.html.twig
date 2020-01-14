@@ -1,0 +1,25 @@
+<!-- indicateurs -->
+<h3 id="anchor_indicateur" class="text-purple">
+    <small><i class="fas fa-chart-line"></i></small> Indicateurs
+</h3>
+<section class="col-12">
+    {% set nbr= deployement | organismeIndicateurDeployed %}
+
+    {% if nbr==0 %}
+        <article class="card-body">
+            <div class="mt-4 p-3 col-12 bg-light">
+                    <span class="text-muted">
+                        Aucun indicateur actif
+                    </span>
+            </div>
+        </article>
+
+    {% else %}
+        {% for indicatorvalue in deployement.indicatorvalues %}
+            <span id="anchor_indicateur_{{ indicatorvalue.id }}"></span>
+            {% if indicatorvalue.enable and indicatorvalue.indicator.enable %}
+                {{ include('indicatorvalue/_show_append/_show.html.twig',{'indicatorvalue':indicatorvalue}) }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</section>

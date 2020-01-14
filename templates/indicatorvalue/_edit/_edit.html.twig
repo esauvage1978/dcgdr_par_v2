@@ -1,0 +1,34 @@
+{% if indicatorvalue.enable %}
+    {% set formIV = form.indicatorvalues[loop.index0] %}
+    <div id="anchor_indicateur_{{ indicatorvalue.id }}" class="  mt-4 ml-4">
+        <div class="card-header">
+            <h4 class="card-title text-purple">
+                {{ indicatorvalue.indicator.name }}
+            </h4>
+            <small class="float-right">
+                {{ indicatorvalue.indicator.indicatorType | indicatorGetNameOfIndicator }}
+            </small>
+        </div>
+        <div class="card-body">
+            {% if indicatorvalue.indicator.content and indicatorvalue.indicator.content != '<br>' %}
+                <div class="row mt-2 mb-3">
+                    <div class="col-12 bg-light p-5">
+                        {{ indicatorvalue.indicator.content | raw }}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row mt-2">
+                <div class="d-none">
+                    {{ form_widget(formIV.value) }}
+                    {{ form_widget(formIV.goal) }}
+                </div>
+                <div class="col-md-2">
+                    {{ include('indicatorvalue/_edit/_' ~ indicatorvalue.indicator.indicatortype ~ '.html.twig') }}
+                </div>
+                <div class="col-md-10">
+                    {{ form_widget(formIV.content) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

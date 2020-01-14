@@ -1,9 +1,10 @@
-<!-- indicateurs -->
+<script src="{{ absolute_url( asset('plugins/jquery/jquery.min.js')) }}"></script>
 <h3 id="anchor_indicateur" class="text-purple">
     <small><i class="fas fa-chart-line"></i></small> Indicateurs
 </h3>
 <section class="col-12">
-    {% set nbr=action.indicators | sumEnable %}
+    {% set nbr= deployement | organismeIndicateurDeployed %}
+
     {% if nbr==0 %}
         <article class="card-body">
             <div class="mt-4 p-3 col-12 bg-light">
@@ -12,10 +13,11 @@
                 </span>
             </div>
         </article>
+
     {% else %}
-        {% for indicator in action.indicators %}
-            {% if indicator.enable %}
-                {{ include('indicator/_show/_indicator.html.twig') }}
+        {% for indicatorvalue in deployement.indicatorvalues %}
+            {% if indicatorvalue.enable and indicatorvalue.indicator.enable %}
+                {{ include('indicatorvalue/_edit/_edit.html.twig') }}
             {% endif %}
         {% endfor %}
     {% endif %}

@@ -52,6 +52,23 @@
             </a>
         </li>
     {% endif %}
+    <li class="nav-item "><a class="nav-link" href="#anchor_indicateur">
+            <i class="fas fa-chart-line"></i> Indicateurs
+        </a>
+        <ul>
+            {% for indicatorValue in deployement.indicatorValues %}
+                {% if indicatorValue.enable and indicatorValue.Indicator.enable %}
+                    <li>
+                        <small>
+                            <a href="#anchor_indicateur_{{ indicatorValue.id }}">
+                                {{ indicatorValue.indicator.name }}
+                            </a>
+                        </small>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </li>
 
 {% endblock %}
 {% block sidebar_button %}
@@ -74,7 +91,7 @@
 
 {% block body %}
     {{ form_start(form) }}
-    <div class="row justify-content-start ">
+    <div class="row justify-content-start pb-5">
         {{ include('deployement/_show/_name.html.twig') }}
 
         <div class="row">
@@ -90,7 +107,13 @@
                 {{ include('action/_show/_info_part.html.twig',{'action':deployement.action}) }}
             </div>
         </div>
-
+        <div class="col-12 bg-white  p-5 mt-5">
+            {% if deployement.ended %}
+                {{ include('deployement/_edit/_indicator.html.twig') }}
+            {% else %}
+                {{ include('deployement/_show/_indicator.html.twig') }}
+            {% endif %}
+        </div>
     </div>
     <div class="d-none">
         {{ include('share/__btn_save.html.twig') }}
