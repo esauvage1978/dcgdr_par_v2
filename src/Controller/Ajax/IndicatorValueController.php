@@ -24,15 +24,15 @@ class IndicatorValueController extends AppControllerAbstract
     public function AjaxCreateDeployement(
         Request $request,
         IndicatorValueManager $manager,
-        IndicatorValueRepository $indicatorValuerepository,
-        IndicatorRepository $indicatorRepository,
-        DeployementRepository $deployementrepository): Response
+        IndicatorValueRepository $indicatorValueRepo,
+        IndicatorRepository $indicatorRepo,
+        DeployementRepository $deployementRepo): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $indicator = $indicatorRepository->findOneBy(['id' => $request->request->get('indicator_id')]);
-            $deployement = $deployementrepository->findOneBy(['id' => $request->request->get('deployement_id')]);
+            $indicator = $indicatorRepo->findOneBy(['id' => $request->request->get('indicator_id')]);
+            $deployement = $deployementRepo->findOneBy(['id' => $request->request->get('deployement_id')]);
 
-            $indicatorValue = $indicatorValuerepository->findOneBy(
+            $indicatorValue = $indicatorValueRepo->findOneBy(
                 [
                     'deployement' => $deployement,
                     'indicator' => $indicator,

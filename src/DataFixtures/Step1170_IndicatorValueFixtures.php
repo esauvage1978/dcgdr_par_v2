@@ -6,16 +6,16 @@ use App\Entity\Deployement;
 use App\Entity\Indicator;
 use App\Entity\IndicatorValue;
 use App\Helper\FixturesImportData;
+use App\Manager\IndicatorValueManager;
 use App\Repository\DeployementRepository;
 use App\Repository\IndicatorRepository;
-use App\Manager\IndicatorValueManager;
 use App\Validator\IndicatorValueValidator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 
-class Step1170_IndicatorValueFixtures extends Fixture implements  FixtureGroupInterface
+class Step1170_IndicatorValueFixtures extends Fixture implements FixtureGroupInterface
 {
     const FILENAME = 'dcgdr_deploiement_indicateur';
     /**
@@ -50,15 +50,15 @@ class Step1170_IndicatorValueFixtures extends Fixture implements  FixtureGroupIn
         FixturesImportData $fixturesImportData,
         IndicatorValueValidator $validator,
         IndicatorValueManager $manager,
-        IndicatorRepository $indicatorRepository,
-        DeployementRepository $deployementRepository,
+        IndicatorRepository $indicatorRepo,
+        DeployementRepository $deployementRep,
         EntityManagerInterface $entityManagerI
     ) {
         $this->fixturesImportData = $fixturesImportData;
         $this->validator = $validator;
         $this->manager = $manager;
-        $this->indicators = $indicatorRepository->findAll();
-        $this->deployements = $deployementRepository->findAll();
+        $this->indicators = $indicatorRepo->findAll();
+        $this->deployements = $deployementRep->findAll();
         $this->entityManagerInterface = $entityManagerI;
     }
 
@@ -79,13 +79,12 @@ class Step1170_IndicatorValueFixtures extends Fixture implements  FixtureGroupIn
             $instance = $this->initialise(new IndicatorValue(), $data[$i]);
 
             if (null !== $instance) {
-                $this->checkAndPersist( $instance);
+                $this->checkAndPersist($instance);
             }
         }
 
         $this->entityManagerInterface->flush();
     }
-
 
     private function checkAndPersist(IndicatorValue $instance)
     {
@@ -104,7 +103,6 @@ class Step1170_IndicatorValueFixtures extends Fixture implements  FixtureGroupIn
         $deployement = $this->getInstance($data['id_deploiement'], $this->deployements);
         /** @var Indicator $indicator */
         $indicator = $this->getInstance($data['id_indicateur_maquette'], $this->indicators);
-
 
         if (is_a($deployement, Deployement::class)
             &&
@@ -155,8 +153,6 @@ class Step1170_IndicatorValueFixtures extends Fixture implements  FixtureGroupIn
 
         return new \DateTime(str_replace('/', '-', $date));
     }
-
-
 
     public static function getGroups(): array
     {
