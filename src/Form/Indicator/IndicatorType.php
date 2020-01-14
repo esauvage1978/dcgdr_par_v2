@@ -27,6 +27,7 @@ class IndicatorType extends AppTypeAbstract
                 ['choices' => [
                     IndicatorData::getFullNameOfIndicator(IndicatorData::BINAIRE) => IndicatorData::BINAIRE,
                     IndicatorData::getFullNameOfIndicator(IndicatorData::BINAIRE_OUI) => IndicatorData::BINAIRE_OUI,
+                    IndicatorData::getFullNameOfIndicator(IndicatorData::BINAIRE_NON) => IndicatorData::BINAIRE_NON,
                     IndicatorData::getFullNameOfIndicator(IndicatorData::QUALITATIF) => IndicatorData::QUALITATIF,
                     IndicatorData::getFullNameOfIndicator(IndicatorData::QUANTITATIF) => IndicatorData::QUANTITATIF,
                 ]])
