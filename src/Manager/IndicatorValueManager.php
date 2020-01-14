@@ -94,10 +94,10 @@ class IndicatorValueManager extends ManagerAbstract
         $taux = 0;
 
         $calculTauxUnitaire = [
-            'qualitatif',
+            IndicatorData::QUALITATIF,
             'qualitatif_seuil_5',
             'qualitatif_seuil_25',
-            'quantitatif',
+            IndicatorData::QUANTITATIF,
             'quantitatif_goal',
         ];
 
@@ -117,7 +117,7 @@ class IndicatorValueManager extends ManagerAbstract
                 $indicatorValue->getValue(),
                 ['non']
             );
-        } elseif ('binaire' === $indicatorValue->getIndicator()->getIndicatortype()) {
+        } elseif (IndicatorData::BINAIRE === $indicatorValue->getIndicator()->getIndicatortype()) {
             $taux = $this->calculTauxBinaire(
                 $indicatorValue->getValue(),
                 ['non', 'oui']
