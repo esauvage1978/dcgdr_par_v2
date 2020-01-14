@@ -23,7 +23,7 @@
                     {{ form_widget(formIV.goal) }}
                 </div>
                 <div class="col-md-2">
-                    {{ include('indicatorvalue/_edit/_' ~ indicatorvalue.indicator.indicatortype ~ '.html.twig') }}
+                    {{ include('indicatorvalue/_append_edit/_' ~ indicatorvalue.indicator.indicatortype ~ '.html.twig') }}
                 </div>
                 <div class="col-md-10">
                     {{ form_widget(formIV.content) }}

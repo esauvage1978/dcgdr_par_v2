@@ -2,8 +2,6 @@
     <div class="card-header">
         <h4 class="card-title text-purple">
             {{ indicator.name }}
-            <span class="ml-2 badge bg-info"><i
-                        class="fas fa-city"></i> {{ indicator.indicatorValues | sumEnable }}</span>
         </h4>
 
         <small class="float-right">
@@ -26,7 +24,16 @@
                     <div class="info-box-content">
                         <span class="info-box-text text-center text-muted">Taux</span>
                         <span class="info-box-number text-center  text-lg mb-0">
-                    {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': indicator.taux1,'taux2': indicator.taux2,'info':false }) }}
+                        {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': indicator.taux1,'taux2': indicator.taux2,'info':false }) }}
+                    </span>
+                    </div>
+                </div>
+
+                <div class="info-box bg-light">
+                    <div class="info-box-content">
+                        <span class="info-box-text text-center text-muted">Organisme</span>
+                        <span class="info-box-number text-center  text-lg mb-0">
+                        {{ indicator.indicatorValues | sumEnable }}
                     </span>
                     </div>
                 </div>
@@ -34,7 +41,7 @@
             <div class="col-md-12 col-lg-10">
 
                 {% if indicator.content and indicator.content != '<br>' %}
-                    <div class="row mt-2 mb-3">
+                    <div class="row mb-3">
                         <div class="col-12 bg-light p-5">
                             {{ indicator.content | raw }}
                         </div>
@@ -45,10 +52,8 @@
 
                     {% if nbr==0 %}
                         <article class="card-body">
-                            <div class="mt-4 p-3 col-12 bg-light">
-                            <span class="text-muted">
-                                Aucun déploiement pour cette indicateur
-                            </span>
+                            <div class="p-3 col-12  bg-danger">
+                                Aucun déploiement pour cet indicateur
                             </div>
                         </article>
                     {% else %}
