@@ -59,13 +59,16 @@ class DeployementRepository extends ServiceEntityRepository
     {
         $table_source = 'deployement';
         $table_distante = 'indicator_value';
+        $table_distante2 = 'indicator';
 
         $alias_distante = IndicatorValueRepository::ALIAS;
+        $alias_distante2 = IndicatorRepository::ALIAS;
 
         $sql = ' update '.$table_source.' '.self::ALIAS
             .' inner join ( '
-            .' select '.$table_source.'_id, avg(taux1) as taux1, avg(taux2) as taux2, enable '
-            .' from '.$table_distante.' where enable=true group by '.$table_source.'_id ) '.$alias_distante.' '
+            .' select '.$table_source.'_id, avg('.$alias_distante.'.taux1) as taux1, avg('.$alias_distante.'.taux2) as taux2, '.$alias_distante.'.enable '
+            .' from '.$table_distante.'  '.$alias_distante.' inner join '.$table_distante2.' '.$alias_distante2.' on '.$alias_distante2.'.id='.$alias_distante.'.indicator_id '
+            .' where '.$alias_distante.'.enable=true AND '.$alias_distante2.'.enable=true group by '.$table_source.'_id ) '.$alias_distante.' '
             .' on '.self::ALIAS.'.id='.$alias_distante.'.'.$table_source.'_id '
             .' set '.self::ALIAS.'.taux1='.$alias_distante.'.taux1, '
             .self::ALIAS.'.taux2='.$alias_distante.'.taux2 ; ';
@@ -78,6 +81,4 @@ class DeployementRepository extends ServiceEntityRepository
             return 'Error'.$e->getMessage();
         }
     }
-
-
 }

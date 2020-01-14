@@ -8,6 +8,7 @@ class IndicatorData
     const QUANTITATIF='quantitatif';
     const BINAIRE='binaire';
     const BINAIRE_OUI='binaire_oui';
+    const BINAIRE_NON='binaire_non';
 
     public static function getNameOfIndicator(string $state)
     {
@@ -24,6 +25,9 @@ class IndicatorData
                 break;
             case self::BINAIRE_OUI:
                 $stateName = 'Indicateur binaire (oui)';
+                break;
+            case self::BINAIRE_NON:
+                $stateName = 'Indicateur binaire (non)';
                 break;
         }
 
@@ -45,6 +49,9 @@ class IndicatorData
                 break;
             case self::BINAIRE_OUI:
                 $stateName = 'Indicateur binaire (oui) : Oui/Non, le taux sera de 100% si le choix "oui" est effectué';
+                break;
+            case self::BINAIRE_NON:
+                $stateName = 'Indicateur binaire (non) : Oui/Non, le taux sera de 100% si le choix "non" est effectué';
                 break;
         }
 
