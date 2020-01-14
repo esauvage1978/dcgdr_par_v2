@@ -113,10 +113,16 @@ class User implements UserInterface, EntityInterface
      */
     private $Avatar;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\IndicatorValueHistory", mappedBy="user")
+     */
+    private $indicatorValueHistories;
+
     public function __construct()
     {
         $this->organismes = new ArrayCollection();
         $this->corbeilles = new ArrayCollection();
+        $this->indicatorValueHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -407,6 +413,37 @@ class User implements UserInterface, EntityInterface
     public function setAvatar(?Avatar $Avatar): self
     {
         $this->Avatar = $Avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|IndicatorValueHistory[]
+     */
+    public function getIndicatorValueHistories(): Collection
+    {
+        return $this->indicatorValueHistories;
+    }
+
+    public function addIndicatorValueHistory(IndicatorValueHistory $indicatorValueHistory): self
+    {
+        if (!$this->indicatorValueHistories->contains($indicatorValueHistory)) {
+            $this->indicatorValueHistories[] = $indicatorValueHistory;
+            $indicatorValueHistory->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicatorValueHistory(IndicatorValueHistory $indicatorValueHistory): self
+    {
+        if ($this->indicatorValueHistories->contains($indicatorValueHistory)) {
+            $this->indicatorValueHistories->removeElement($indicatorValueHistory);
+            // set the owning side to null (unless already changed)
+            if ($indicatorValueHistory->getUser() === $this) {
+                $indicatorValueHistory->setUser(null);
+            }
+        }
 
         return $this;
     }

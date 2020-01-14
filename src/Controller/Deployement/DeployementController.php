@@ -165,4 +165,21 @@ class DeployementController extends AppControllerAbstract
             'action' => $entity->getAction(),
         ]);
     }
+
+    /**
+     * @Route("/{id}/history", name="deployement_history", methods={"GET"})
+     *
+     * @param Request     $request
+     * @param Deployement $entity
+     *
+     * @return Response
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function historyShowAction(Request $request, Deployement $entity): Response
+    {
+        return $this->render(self::ENTITY.'/history.html.twig', [
+            self::ENTITY => $entity,
+        ]);
+    }
 }

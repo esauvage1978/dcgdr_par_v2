@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -59,10 +61,16 @@ class IndicatorValue implements EntityInterface
      */
     private $enable;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\IndicatorValueHistory", mappedBy="indicatorValue")
+     */
+    private $indicatorValueHistories;
+
     public function __construct()
     {
         $this->setTaux1('0');
         $this->setTaux2('0');
+        $this->indicatorValueHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,6 +177,37 @@ class IndicatorValue implements EntityInterface
     public function setEnable(bool $enable): self
     {
         $this->enable = $enable;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|IndicatorValueHistory[]
+     */
+    public function getIndicatorValueHistories(): Collection
+    {
+        return $this->indicatorValueHistories;
+    }
+
+    public function addIndicatorValueHistory(IndicatorValueHistory $indicatorValueHistory): self
+    {
+        if (!$this->indicatorValueHistories->contains($indicatorValueHistory)) {
+            $this->indicatorValueHistories[] = $indicatorValueHistory;
+            $indicatorValueHistory->setIndicatorValue($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicatorValueHistory(IndicatorValueHistory $indicatorValueHistory): self
+    {
+        if ($this->indicatorValueHistories->contains($indicatorValueHistory)) {
+            $this->indicatorValueHistories->removeElement($indicatorValueHistory);
+            // set the owning side to null (unless already changed)
+            if ($indicatorValueHistory->getIndicatorValue() === $this) {
+                $indicatorValueHistory->setIndicatorValue(null);
+            }
+        }
 
         return $this;
     }
