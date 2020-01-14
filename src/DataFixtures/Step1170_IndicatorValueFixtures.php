@@ -6,6 +6,7 @@ use App\Entity\Deployement;
 use App\Entity\Indicator;
 use App\Entity\IndicatorValue;
 use App\Helper\FixturesImportData;
+use App\Indicator\IndicatorData;
 use App\Manager\IndicatorValueManager;
 use App\Repository\DeployementRepository;
 use App\Repository\IndicatorRepository;
@@ -116,7 +117,7 @@ class Step1170_IndicatorValueFixtures extends Fixture implements FixtureGroupInt
                 ->setEnable(true)
                 ->setContent($data['description']);
 
-            if ('qualitatif' == $indicator->getIndicatorType()) {
+            if (IndicatorData::QUALITATIF == $indicator->getIndicatorType()) {
                 $instance
                     ->setGoal(100)
                     ->setValue(null === $data['taux1'] ? '0' : $data['taux1']);

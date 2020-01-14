@@ -59,4 +59,13 @@
 
 
 {% block javascripts %}
+    <script src="{{ absolute_url( asset('js/indicator/indicatorUpdate.js')) }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            changeTemplate();
+            $('#indicator_indicatortype').change(function () {
+                changeTemplate();
+            });
+        });
+    </script>
 {% endblock %}

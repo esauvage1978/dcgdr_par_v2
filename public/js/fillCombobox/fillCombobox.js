@@ -1,6 +1,6 @@
 
 function fillComboboxChained(selecteurSource, selecteurDestination, route, appelEnCascade, addReference, selectedId="") {
-    var id = $(selecteurSource).val();
+        var id = $(selecteurSource).val();
     if (id == null) return;
 
     $(selecteurDestination).empty();

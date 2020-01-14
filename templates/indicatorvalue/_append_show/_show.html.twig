@@ -3,6 +3,9 @@
         <h4 class="card-title text-purple">
             {{ indicatorvalue.indicator.name }}
         </h4>
+        <small class="float-right">
+            {{ indicatorvalue.indicator.indicatorType | indicatorGetNameOfIndicator }}
+        </small>
     </div>
     <div class="card-body">
         {% if indicatorvalue.indicator.content and indicatorvalue.indicator.content != '<br>' %}
@@ -24,7 +27,7 @@
                 </div>
             </div>
             <div class="col-md-12 col-lg-10">
-                {{ include('indicatorvalue/_show_append/_' ~ indicatorvalue.indicator.indicatortype ~ '.html.twig') }}
+                {{ include('indicatorvalue/_append_show/_' ~ indicatorvalue.indicator.indicatortype ~ '.html.twig') }}
             </div>
         </div>
     </div>

@@ -17,7 +17,7 @@
     {% else %}
         {% for indicatorvalue in deployement.indicatorvalues %}
             {% if indicatorvalue.enable and indicatorvalue.indicator.enable %}
-                {{ include('indicatorvalue/_edit/_edit.html.twig') }}
+                {{ include('indicatorvalue/_append_edit/_edit.html.twig') }}
             {% endif %}
         {% endfor %}
     {% endif %}

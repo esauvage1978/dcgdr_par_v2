@@ -18,7 +18,7 @@
         {% for indicatorvalue in deployement.indicatorvalues %}
             <span id="anchor_indicateur_{{ indicatorvalue.id }}"></span>
             {% if indicatorvalue.enable and indicatorvalue.indicator.enable %}
-                {{ include('indicatorvalue/_show_append/_show.html.twig',{'indicatorvalue':indicatorvalue}) }}
+                {{ include('indicatorvalue/_append_show/_show.html.twig',{'indicatorvalue':indicatorvalue}) }}
             {% endif %}
         {% endfor %}
     {% endif %}
