@@ -8,6 +8,7 @@ class IndicatorData
     const QUALITATIF_PALIER_5 = 'qualitatif_palier_5';
     const QUALITATIF_PALIER_25 = 'qualitatif_palier_25';
     const QUANTITATIF = 'quantitatif';
+    const QUANTITATIF_GOAL = 'quantitatif_goal';
     const BINAIRE = 'binaire';
     const BINAIRE_OUI = 'binaire_oui';
     const BINAIRE_NON = 'binaire_non';
@@ -27,6 +28,9 @@ class IndicatorData
                 break;
             case self::QUANTITATIF:
                 $stateName = 'Indicateur quantitatif';
+                break;
+            case self::QUANTITATIF_GOAL:
+                $stateName = 'Indicateur quantitatif (objectif figé)';
                 break;
             case self::BINAIRE:
                 $stateName = 'Indicateur binaire';
@@ -57,6 +61,9 @@ class IndicatorData
                 break;
             case self::QUANTITATIF:
                 $stateName = 'Indicateur quantitatif : ce type d\'indicateur permet la sur performance des organismes';
+                break;
+            case self::QUANTITATIF_GOAL:
+                $stateName = 'Indicateur quantitatif : L\'objectif est verrouilé. Ce type d\'indicateur permet la sur performance des organismes';
                 break;
             case self::BINAIRE:
                 $stateName = 'Indicateur binaire : Oui/Non, le taux sera de 100% si un choix est effectué';

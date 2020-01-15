@@ -64,8 +64,14 @@
                     {% for deployement in indicator.action.deployements %}
                         {{ include('deployement/_edit/_indicator_deployement.html.twig',{'indicator':indicator, 'deployement':deployement}) }}
                     {% else %}
-                        <div class="list-group-item">En attente d'ajout</div>
+                        <div class="list-group-item">En attente d'ajout d'organisme</div>
                     {% endfor %}
+                </div>
+                <div class="card-footer text-center p-5">
+                    <a class="btn btn-info "
+                       href="{{ path('deployements_for_action', {'id': indicator.action.id}) }}">
+                        <i class="fas fa-warehouse"></i> Sélection des organismes
+                    </a>
                 </div>
             </div>
         </div>

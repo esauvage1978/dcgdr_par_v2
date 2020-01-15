@@ -1,0 +1,38 @@
+{%  set id='quantitatif_goal_' %}
+<div class="info-box  bg-light ">
+    <div class="info-box-content form-group">
+        <label for="{{id}}_value_{{ loop.index0 }}" class="info-box-text text-center text-muted">
+            Résultat
+        </label>
+
+        <input type="text" name="{{id}}_value_{{ loop.index0 }}" id="{{id}}_value_{{ loop.index0 }}" class="form-control text-center"
+               value="{{ indicatorvalue.value }}"
+        />
+
+
+    </div>
+
+</div>
+<div class="info-box  bg-light ">
+
+    <div class="info-box-content ">
+        <label  class="info-box-text text-center text-muted">
+            Objectif
+        </label>
+
+        <label  class="info-box-number  text-center">
+               {{ indicatorvalue.goal }}
+        </label>
+        <small>L'objectif est vérrouillé</small>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#{{id}}_value_{{ loop.index0 }}').change(function () {
+            $('#{{ formIV.value.vars.id }}').val($('#{{id}}_value_{{ loop.index0 }}').val());
+        });
+    })
+</script>
