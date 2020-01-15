@@ -108,4 +108,15 @@ class IndicatorController extends AppControllerAbstract
 
         return $this->redirectToRoute('action_edit', ['id' => $idAction]);
     }
+
+    /**
+     * @Route("/contributif", name="indicator_contributif", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function indexIndicatorContributifAction(IndicatorRepository $repository): Response
+    {
+        return $this->render('indicator/index_contributif.html.twig', [
+            self::ENTITYS => $repository->findAllIndicatorContributif(),
+        ]);
+    }
 }

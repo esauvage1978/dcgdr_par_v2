@@ -21,4 +21,17 @@ class IndicatorValueRepository extends ServiceEntityRepository
         parent::__construct($registry, IndicatorValue::class);
     }
 
+    public function initialiseTaux(string $indicatorId, bool $taux1, $taux)
+    {
+        $queryBuilder = $this->createQueryBuilder(self::ALIAS);
+        $queryBuilder->update(IndicatorValue::class, self::ALIAS)
+            ->set(self::ALIAS.($taux1 ? '.taux1 ' : '.taux2 '), $taux)
+            ->where(self::ALIAS.'.indicator = :id')
+            ->setParameter('id', $indicatorId);
+        $query = $queryBuilder->getQuery();
+
+        $query->getDQL();
+
+        return $query->execute();
+    }
 }

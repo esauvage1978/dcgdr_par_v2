@@ -33,6 +33,7 @@ class IndicatorType extends AppTypeAbstract
                     IndicatorData::getFullNameOfIndicator(IndicatorData::QUALITATIF_PALIER_25) => IndicatorData::QUALITATIF_PALIER_25,
                     IndicatorData::getFullNameOfIndicator(IndicatorData::QUANTITATIF) => IndicatorData::QUANTITATIF,
                     IndicatorData::getFullNameOfIndicator(IndicatorData::QUANTITATIF_GOAL) => IndicatorData::QUANTITATIF_GOAL,
+                    IndicatorData::getFullNameOfIndicator(IndicatorData::CONTRIBUTIF) => IndicatorData::CONTRIBUTIF,
                 ]])
             ;
     }
