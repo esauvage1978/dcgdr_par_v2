@@ -5,7 +5,8 @@
 {% block stylesheets %}
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
-    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
 
     <!-- iCheck for checkboxes and radio inputs -->
     <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
@@ -51,7 +52,7 @@
                             <label class="col-sm-3 col-form-label" for="{{ form.showat.vars.id }}">
                                 Jalon
                             </label>
-                            <div >
+                            <div>
                                 {{ form_widget(form.showat) }}
                             </div>
                         </div>
@@ -59,7 +60,7 @@
                             <label class="col-sm-3 col-form-label" for="{{ form.endat.vars.id }}">
                                 Date de fin
                             </label>
-                            <div >
+                            <div>
                                 {{ form_widget(form.endat) }}
                             </div>
                         </div>
@@ -73,8 +74,8 @@
                         <div class="row">
                             <div class="col  d-flex justify-content-between align-items-center">
 
-                                <a  class="btn btn-secondary"
-                                    href="{{ path('action_edit',{'id':deployement.action.id}) }}#anchor_organisme">
+                                <a class="btn btn-secondary"
+                                   href="{{ path('action_edit',{'id':deployement.action.id}) }}#anchor_organisme">
                                     <i class="fas fa-step-backward"></i>
                                     Action
                                 </a>
@@ -108,8 +109,17 @@
                         {% for indicator in deployement.action.indicators %}
                             {{ include('indicator/_edit/_indicator_deployement.html.twig',{'indicator':indicator, 'deployement':deployement}) }}
                         {% else %}
-                            <div class="list-group-item">En attente d'ajout</div>
+                            <div class="list-group-item">
+                                Aucun indicateur pour le moment
+
+                            </div>
                         {% endfor %}
+                    </div>
+                    <div class="card-footer text-center p-5">
+                        <a class="btn btn-success"
+                           href="{{ path('indicator_new',{'id':deployement.action.id}) }}">
+                            <i class="fas fa-plus"></i> Ajouter un indicateur
+                        </a>
                     </div>
                 </div>
             </div>
@@ -129,10 +139,10 @@
     <script type="text/javascript">
         $(function () {
             $('.indicatorvalue').click(function () {
-                var selecteur=$(this).attr("id");
-                var route="{{ path('ajax_create_deployement') }}";
+                var selecteur = $(this).attr("id");
+                var route = "{{ path('ajax_create_deployement') }}";
 
-                create_deployement(selecteur,route);
+                create_deployement(selecteur, route);
             });
         });
     </script>
