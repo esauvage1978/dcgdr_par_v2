@@ -1,0 +1,26 @@
+{% set id='qualitatif_palier_25_' %}
+
+<div class="info-box  bg-light ">
+    <div class="info-box-content form-group">
+        <label for="{{ id }}{{ loop.index0 }}" class="info-box-text text-center text-muted">
+            Résultat
+        </label>
+
+        <SELECT name="{{ id }}{{ loop.index0 }}" id="{{ id }}{{ loop.index0 }}" class="form-control text-center">
+            {% for i in 0..4 %}
+                {% set value= i*25 %}
+                <option {{ indicatorvalue.value==value ?'selected' : '' }} value="{{ value }}">
+                    {{ value }} %
+                </option>
+            {% endfor %}
+        </SELECT>
+
+        <script type="text/javascript">
+            $(function () {
+                $('#{{ id }}{{ loop.index0 }}').change(function () {
+                    $('#{{ formIV.value.vars.id }}').val($('#{{ id }}{{ loop.index0 }}').val());
+                });
+            })
+        </script>
+    </div>
+</div>

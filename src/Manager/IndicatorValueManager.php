@@ -81,6 +81,7 @@ class IndicatorValueManager extends ManagerAbstract
             IndicatorData::QUANTITATIF,
             IndicatorData::QUALITATIF,
             IndicatorData::QUALITATIF_PALIER_5,
+            IndicatorData::QUALITATIF_PALIER_25,
         ];
 
         if (in_array($indicator->getIndicatortype(), $keepValue)) {
@@ -97,7 +98,7 @@ class IndicatorValueManager extends ManagerAbstract
         $calculTauxUnitaire = [
             IndicatorData::QUALITATIF,
             IndicatorData::QUALITATIF_PALIER_5,
-            'qualitatif_seuil_25',
+            IndicatorData::QUALITATIF_PALIER_25,
             IndicatorData::QUANTITATIF,
             'quantitatif_goal',
         ];
