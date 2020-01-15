@@ -7,19 +7,27 @@ use App\Entity\EntityInterface;
 use App\Entity\Indicator;
 use App\Entity\IndicatorValue;
 use App\Indicator\IndicatorData;
+use App\Repository\IndicatorValueRepository;
 use App\Validator\IndicatorValueValidator;
 use Doctrine\ORM\EntityManagerInterface;
 
 class IndicatorValueManager extends ManagerAbstract
 {
     /**
+     * @var IndicatorValueRepository
+     */
+    private $repo;
+
+    /**
      * IndicatorValueManager constructor.
      */
     public function __construct(
         EntityManagerInterface $manager,
-        IndicatorValueValidator $validator
+        IndicatorValueValidator $validator,
+        IndicatorValueRepository $repo
     ) {
         parent::__construct($manager, $validator);
+        $this->repo = $repo;
     }
 
     public function save(EntityInterface $entity): bool
@@ -34,7 +42,10 @@ class IndicatorValueManager extends ManagerAbstract
         return true;
     }
 
-    public function initialiseEntity(Indicator $indicator, Deployement $deployement, IndicatorValue $indicatorValue = null): IndicatorValue
+    public function initialiseEntity(
+        Indicator $indicator,
+        Deployement $deployement,
+        IndicatorValue $indicatorValue = null): IndicatorValue
     {
         if (null === $indicatorValue) {
             $indicatorValue = new IndicatorValue();
@@ -67,6 +78,7 @@ class IndicatorValueManager extends ManagerAbstract
         $keepGoal = [
             IndicatorData::QUANTITATIF,
             IndicatorData::QUANTITATIF_GOAL,
+            IndicatorData::CONTRIBUTIF,
         ];
 
         if (in_array($indicator->getIndicatortype(), $keepGoal)) {
@@ -84,6 +96,7 @@ class IndicatorValueManager extends ManagerAbstract
             IndicatorData::QUALITATIF,
             IndicatorData::QUALITATIF_PALIER_5,
             IndicatorData::QUALITATIF_PALIER_25,
+            IndicatorData::CONTRIBUTIF,
         ];
 
         if (in_array($indicator->getIndicatortype(), $keepValue)) {
@@ -102,33 +115,64 @@ class IndicatorValueManager extends ManagerAbstract
             IndicatorData::QUALITATIF_PALIER_5,
             IndicatorData::QUALITATIF_PALIER_25,
             IndicatorData::QUANTITATIF,
-            IndicatorData::QUANTITATIF_GOAL,
         ];
 
         if (in_array($indicatorValue->getIndicator()->getIndicatortype(), $calculTauxUnitaire)) {
-            $taux = $this->calculTauxUnitaire(
+            return $this->calculTauxUnitaire(
                 $indicatorValue->getGoal(),
                 $indicatorValue->getValue(),
                 $taux1
             );
-        } elseif (IndicatorData::BINAIRE_OUI === $indicatorValue->getIndicator()->getIndicatortype()) {
-            $taux = $this->calculTauxBinaire(
-                $indicatorValue->getValue(),
-                ['oui']
-            );
-        } elseif (IndicatorData::BINAIRE_NON === $indicatorValue->getIndicator()->getIndicatortype()) {
-            $taux = $this->calculTauxBinaire(
-                $indicatorValue->getValue(),
-                ['non']
-            );
-        } elseif (IndicatorData::BINAIRE === $indicatorValue->getIndicator()->getIndicatortype()) {
-            $taux = $this->calculTauxBinaire(
-                $indicatorValue->getValue(),
-                ['non', 'oui']
-            );
+        }
+
+        switch ($indicatorValue->getIndicator()->getIndicatortype()) {
+            case IndicatorData::CONTRIBUTIF:
+                $taux = $this->calculTauxUnitaire(
+                    $indicatorValue->getIndicator()->getGoal(),
+                    $this->getSumValue($indicatorValue->getIndicator()),
+                    $taux1
+                );
+                $this->repo->initialiseTaux($indicatorValue->getIndicator()->getId(), $taux1, $taux);
+                break;
+            case IndicatorData::QUANTITATIF_GOAL:
+                $taux = $this->calculTauxUnitaire(
+                    $indicatorValue->getIndicator()->getGoal(),
+                    $indicatorValue->getValue(),
+                    $taux1
+                );
+                break;
+            case IndicatorData::BINAIRE_OUI:
+                $taux = $this->calculTauxBinaire(
+                    $indicatorValue->getValue(),
+                    ['oui']
+                );
+                break;
+            case IndicatorData::BINAIRE_NON:
+                $taux = $this->calculTauxBinaire(
+                    $indicatorValue->getValue(),
+                    ['non']
+                );
+                break;
+
+            case IndicatorData::BINAIRE:
+                $taux = $this->calculTauxBinaire(
+                    $indicatorValue->getValue(),
+                    ['non', 'oui']
+                );
+                break;
         }
 
         return $taux;
+    }
+
+    private function getSumValue(Indicator $indicator)
+    {
+        $cumul = 0;
+        foreach ($indicator->getIndicatorValues() as $indicatorValue) {
+            $cumul += $indicatorValue->getValue();
+        }
+
+        return $cumul;
     }
 
     private function calculTauxUnitaire($total, $nombre, $limiteA100 = true)

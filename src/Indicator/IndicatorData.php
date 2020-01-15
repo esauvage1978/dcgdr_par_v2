@@ -9,6 +9,7 @@ class IndicatorData
     const QUALITATIF_PALIER_25 = 'qualitatif_palier_25';
     const QUANTITATIF = 'quantitatif';
     const QUANTITATIF_GOAL = 'quantitatif_goal';
+    const CONTRIBUTIF = 'contributif';
     const BINAIRE = 'binaire';
     const BINAIRE_OUI = 'binaire_oui';
     const BINAIRE_NON = 'binaire_non';
@@ -17,6 +18,9 @@ class IndicatorData
     {
         $stateName = '';
         switch ($state) {
+            case self::CONTRIBUTIF:
+                $stateName = 'Indicateur contributif régional';
+                break;
             case self::QUALITATIF:
                 $stateName = 'Indicateur qualitatif (palier 10)';
                 break;
@@ -50,6 +54,9 @@ class IndicatorData
     {
         $stateName = '';
         switch ($state) {
+            case self::CONTRIBUTIF:
+                $stateName = 'Indicateur contributif régional : Les organismes contribuent collectivement à l\'atteinte de l\'objectif' ;
+                break;
             case self::QUALITATIF:
                 $stateName = 'Indicateur qualitatif : de 0% à 100% avec des paliers de 10';
                 break;
@@ -63,7 +70,7 @@ class IndicatorData
                 $stateName = 'Indicateur quantitatif : ce type d\'indicateur permet la sur performance des organismes';
                 break;
             case self::QUANTITATIF_GOAL:
-                $stateName = 'Indicateur quantitatif : L\'objectif est verrouilé. Ce type d\'indicateur permet la sur performance des organismes';
+                $stateName = 'Indicateur quantitatif : L\'objectif est verrouillé. Ce type d\'indicateur permet la sur performance des organismes';
                 break;
             case self::BINAIRE:
                 $stateName = 'Indicateur binaire : Oui/Non, le taux sera de 100% si un choix est effectué';

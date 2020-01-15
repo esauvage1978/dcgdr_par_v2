@@ -27,6 +27,14 @@ function changeTemplate()
                 $('#indicator_value').val('0');
             }
             break;
+        case 'contributif':
+            $('#row_goal').removeClass('d-none');
+            $("#indicator_goal").prop('required',true);
+            $('#row_alert_goal').removeClass('d-none');
+            if ($('#indicator_value').val()=="") {
+                $('#indicator_value').val('0');
+            }
+            break;
         case 'qualitatif':
             $('#row_value').removeClass('d-none');
             $('#row_alert_value').removeClass('d-none');

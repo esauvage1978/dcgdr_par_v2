@@ -23,7 +23,7 @@ class IndicatorListener
             $indicator->setGoal(100);
         }
         if (null === $indicator->getValue()) {
-            $indicator->setGoal(0);
+            $indicator->setValue(0);
         }
     }
 }
