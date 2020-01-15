@@ -24,5 +24,9 @@ alert(indType);
             $('#row_value').removeClass('d-none');
             $('#row_alert_value').removeClass('d-none');
             break;
-    };
+        case 'qualitatif_palier_25':
+            $('#row_value').removeClass('d-none');
+            $('#row_alert_value').removeClass('d-none');
+            break;
+    }
 }

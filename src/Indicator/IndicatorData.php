@@ -4,12 +4,13 @@ namespace App\Indicator;
 
 class IndicatorData
 {
-    const QUALITATIF='qualitatif';
-    const QUALITATIF_PALIER_5='qualitatif_palier_5';
-    const QUANTITATIF='quantitatif';
-    const BINAIRE='binaire';
-    const BINAIRE_OUI='binaire_oui';
-    const BINAIRE_NON='binaire_non';
+    const QUALITATIF = 'qualitatif';
+    const QUALITATIF_PALIER_5 = 'qualitatif_palier_5';
+    const QUALITATIF_PALIER_25 = 'qualitatif_palier_25';
+    const QUANTITATIF = 'quantitatif';
+    const BINAIRE = 'binaire';
+    const BINAIRE_OUI = 'binaire_oui';
+    const BINAIRE_NON = 'binaire_non';
 
     public static function getNameOfIndicator(string $state)
     {
@@ -20,6 +21,9 @@ class IndicatorData
                 break;
             case self::QUALITATIF_PALIER_5:
                 $stateName = 'Indicateur qualitatif (palier 5)';
+                break;
+            case self::QUALITATIF_PALIER_25:
+                $stateName = 'Indicateur qualitatif (palier 25)';
                 break;
             case self::QUANTITATIF:
                 $stateName = 'Indicateur quantitatif';
@@ -43,10 +47,13 @@ class IndicatorData
         $stateName = '';
         switch ($state) {
             case self::QUALITATIF:
-            $stateName = 'Indicateur qualitatif : de 0% à 100% avec des paliers de 10';
-            break;
+                $stateName = 'Indicateur qualitatif : de 0% à 100% avec des paliers de 10';
+                break;
             case self::QUALITATIF_PALIER_5:
                 $stateName = 'Indicateur qualitatif : de 0% à 100% avec des paliers de 5';
+                break;
+            case self::QUALITATIF_PALIER_25:
+                $stateName = 'Indicateur qualitatif : de 0% à 100% avec des paliers de 25';
                 break;
             case self::QUANTITATIF:
                 $stateName = 'Indicateur quantitatif : ce type d\'indicateur permet la sur performance des organismes';
