@@ -15,5 +15,18 @@
             </div>
         </article>
     {% endif %}
+    {% if deployement.readers.count >0 %}
+        <article class="card-body ">
+            <h6>Consultant</h6>
+            <div class="list-group list-group-flush  bg-light">
+
+                {% for corbeille in deployement.readers %}
+                    {{ include('corbeille/_show_list_group_item.html.twig' , {'show_code_organisme': true, 'link' : true}) }}
+                {% else %}
+                    <div class="list-group-item">En attente d'ajout</div>
+                {% endfor %}
+            </div>
+        </article>
+    {% endif %}
 </section>
 

@@ -55,6 +55,17 @@ class CorbeilleController extends AppControllerAbstract
     }
 
     /**
+     * @Route("/use/{id}", name="corbeille_show_use", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function showUseAction(Corbeille $entity): Response
+    {
+        return $this->render(self::ENTITY.'/showuse.html.twig', [
+            self::ENTITY => $entity,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/edit", name="corbeille_edit", methods={"GET","POST"})
      * @IsGranted("ROLE_GESTIONNAIRE_LOCAL")
      */

@@ -89,6 +89,13 @@ class Corbeille implements EntityInterface
      */
     private $deployementWriters;
 
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Deployement", mappedBy="readers")
+     * @ORM\JoinTable("deployementreader_corbeille")
+     */
+    private $deployementReaders;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -96,6 +103,7 @@ class Corbeille implements EntityInterface
         $this->actionWriters = new ArrayCollection();
         $this->actionValiders = new ArrayCollection();
         $this->deployementWriters = new ArrayCollection();
+        $this->deployementReaders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -350,4 +358,32 @@ class Corbeille implements EntityInterface
 
         return $this;
     }
+    /**
+     * @return Collection|Deployement[]
+     */
+    public function getDeployementReaders(): Collection
+    {
+        return $this->deployementReaders;
+    }
+
+    public function addDeployementReader(Deployement $deployementReader): self
+    {
+        if (!$this->deployementReaders->contains($deployementReader)) {
+            $this->deployementReaders[] = $deployementReader;
+            $deployementReader->addReader($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeployementReader(Deployement $deployementReader): self
+    {
+        if ($this->deployementReaders->contains($deployementReader)) {
+            $this->deployementReaders->removeElement($deployementReader);
+            $deployementReader->removeReader($this);
+        }
+
+        return $this;
+    }
+
 }
