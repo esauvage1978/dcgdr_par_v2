@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Command\CalculTauxCommand;
+use App\Command\NotificatorCommand;
+use App\Helper\DeployementJalonNotificator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +35,25 @@ class AdminController extends AbstractController
     public function calculTauxAction(CalculTauxCommand $calculTauxCommand)
     {
         $this->addFlash('success', $calculTauxCommand->calcul());
+
+        return $this->redirectToRoute('admin_home');
+    }
+
+    /**
+     * @Route("/command/notificator", name="deployement_jalon_notificator", methods={"GET"})
+     *
+     * @return Response
+     *
+     * @param DeployementJalonNotificator $deployementJalonNotificator
+     * @IsGranted("ROLE_GESTIONNAIRE")
+     */
+    public function deployementJalonNotificatorAction(DeployementJalonNotificator $deployementJalonNotificator)
+    {
+        $debut = microtime(true);
+        $deployementJalonNotificator->notifyJalonToday();
+        $fin = microtime(true);
+
+        $this->addFlash('success', 'Traitement effectué en  '. (int)(($fin - $debut) * 1000) .' millisecondes.');
 
         return $this->redirectToRoute('admin_home');
     }

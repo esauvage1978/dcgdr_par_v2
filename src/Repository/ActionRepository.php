@@ -85,22 +85,33 @@ class ActionRepository extends ServiceEntityRepository
                 PoleRepository::ALIAS,
                 AxeRepository::ALIAS,
                 CorbeilleRepository::ALIAS_ACTION_WRITERS,
-                CorbeilleRepository::ALIAS_ACTION_READERS
+                CorbeilleRepository::ALIAS_ACTION_READERS,
+                DeployementRepository::ALIAS,
+                CorbeilleRepository::ALIAS_DEPLOYEMENT_WRITERS,
+                OrganismeRepository::ALIAS,
+                IndicatorRepository::ALIAS,
+                IndicatorValueRepository::ALIAS
             )
             ->leftjoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
+            ->leftjoin(self::ALIAS.'.deployements', DeployementRepository::ALIAS)
+            ->leftjoin(DeployementRepository::ALIAS.'.organisme', OrganismeRepository::ALIAS)
+            ->leftjoin(DeployementRepository::ALIAS.'.writers', CorbeilleRepository::ALIAS_DEPLOYEMENT_WRITERS)
+            ->leftjoin(DeployementRepository::ALIAS.'.indicatorValues', IndicatorValueRepository::ALIAS)
+            ->leftjoin(self::ALIAS.'.indicators', IndicatorRepository::ALIAS)
             ->leftjoin(CategoryRepository::ALIAS.'.thematique', ThematiqueRepository::ALIAS)
             ->leftjoin(ThematiqueRepository::ALIAS.'.pole', PoleRepository::ALIAS)
             ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS)
             ->leftjoin(self::ALIAS.'.writers', CorbeilleRepository::ALIAS_ACTION_WRITERS)
             ->leftjoin(self::ALIAS.'.readers', CorbeilleRepository::ALIAS_ACTION_READERS);
 
+        if(empty($dto->getId())) {
         $builder
             ->where(AxeRepository::ALIAS.'.enable='.($dto->isAxeEnable() ? 'true' : 'false'))
             ->andwhere(PoleRepository::ALIAS.'.enable='.($dto->isPoleEnable() ? 'true' : 'false'))
             ->andwhere(ThematiqueRepository::ALIAS.'.enable='.($dto->isThematiqueEnable() ? 'true' : 'false'))
             ->andwhere(CategoryRepository::ALIAS.'.enable='.($dto->isCategoryEnable() ? 'true' : 'false'))
             ->andwhere(AxeRepository::ALIAS.'.archiving='.($dto->isActionArchiving() ? 'true' : 'false'));
-
+        }
         return $builder;
     }
 
@@ -123,8 +134,14 @@ class ActionRepository extends ServiceEntityRepository
 
         $builder = $this->findAllForDto_initialise($dto);
 
+        if (!empty($dto->getId())) {
+            $builder->andwhere(self::ALIAS.'.id = :id');
+
+            $params = $this->addParams($params, 'id', $dto->getId());
+        }
+
         if (!empty($dto->getAxeId())) {
-            $builder->where(AxeRepository::ALIAS.'.id = :axeid');
+            $builder->andwhere(AxeRepository::ALIAS.'.id = :axeid');
 
             $params = $this->addParams($params, 'axeid', $dto->getAxeId());
         }

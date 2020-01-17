@@ -43,6 +43,38 @@
         </div>
         <div class="col-sm-12 col-md-6 col-lg-5  ">
             <div class="card">
+                <div class="card-body">
+                    {{ include('home/btn/_home_action.html.twig',
+                        {   'domaine':'deployement',
+                            'titre':'Mes deployements',
+                            'url':'my_deployement',
+                            'filtre':'all'}) }}
+                    <ul class="list-unstyled">
+                        {{ include('home/btn/_home_action_li.html.twig',
+                            {   'domaine':'deployement_without_jalon',
+                                'color':'warning',
+                                'titre':'Mes deployements sans jalon',
+                                'url':'my_deployement',
+                                'filtre':'without_jalon'}) }}
+                        {{ include('home/btn/_home_action_li.html.twig',
+                            {   'domaine':'deployement_jalon_to_late',
+                                'color':'danger',
+                                'titre':'Mes deployements avec jalon dépassé',
+                                'url':'my_deployement',
+                                'filtre':'jalon_to_late'}) }}
+                        {{ include('home/btn/_home_action_li.html.twig',
+                            {   'domaine':'deployement_jalon_to_near',
+                                'color':'warning',
+                                'titre':'Mes deployements avec jalon <=7 jours',
+                                'url':'my_deployement',
+                                'filtre':'jalon_to_near'}) }}
+                        {{ include('home/btn/_home_action_li.html.twig',
+                            {   'domaine':'deployement_jalon_to_come_up',
+                                'titre':'Mes deployements avec jalon > 7 jours',
+                                'url':'my_deployement',
+                                'filtre':'jalon_to_come_up'}) }}
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -52,4 +84,17 @@
 
 
 {% block javascripts %}
+    <script src="{{ absolute_url( asset('js/home_action.js')) }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            searchCount('deployement', '{{ path('ajax_my_deployement_count') }}', 'all');
+            searchCount('deployement_without_jalon', '{{ path('ajax_my_deployement_count') }}', 'without_jalon');
+            searchCount('deployement_jalon_to_late', '{{ path('ajax_my_deployement_count') }}', 'jalon_to_late');
+            searchCount('deployement_jalon_to_near', '{{ path('ajax_my_deployement_count') }}', 'jalon_to_near');
+            searchCount('deployement_jalon_to_come_up', '{{ path('ajax_my_deployement_count') }}', 'jalon_to_come_up');
+            {% for axe in axes %}
+            searchCountAxe('{{axe.id}}','{{ path('ajax_action_for_axe_count') }}' );
+            {% endfor %}
+        })
+    </script>
 {% endblock %}

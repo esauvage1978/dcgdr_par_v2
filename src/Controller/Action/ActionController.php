@@ -77,12 +77,20 @@ class ActionController extends AppControllerAbstract
      * @Route("/action/{id}", name="action_show", methods={"GET"})
      * @IsGranted("ROLE_USER")
      */
-    public function showAction(Action $entity): Response
+    public function showAction(
+        ActionSearchDto $actionSearchDto,
+        ActionRepository $actionRepository,
+        string $id
+): Response
     {
-        $this->denyAccessUnlessGranted(ActionVoter::READ, $entity);
+        $actionSearchDto->setId($id);
+        /** @var Action $action */
+        $action=$actionRepository->findAllForDto($actionSearchDto)[0];
+
+        $this->denyAccessUnlessGranted(ActionVoter::READ, $action);
 
         return $this->render(self::ENTITY.'/show.html.twig', [
-            self::ENTITY => $entity,
+            self::ENTITY => $action,
         ]);
     }
 

@@ -3,11 +3,13 @@
 namespace App\Controller\Deployement;
 
 use App\Controller\AppControllerAbstract;
+use App\Dto\DeployementSearchDto;
 use App\Entity\Action;
 use App\Entity\Deployement;
 use App\Entity\Organisme;
 use App\Form\Deployement\DeployementAppendType;
 use App\Form\Deployement\DeployementEditType;
+use App\Helper\DeployementFilter;
 use App\Manager\DeployementManager;
 use App\Repository\CorbeilleRepository;
 use App\Repository\DeployementRepository;
@@ -182,4 +184,23 @@ class DeployementController extends AppControllerAbstract
             self::ENTITY => $entity,
         ]);
     }
+
+    /**
+     * @Route("/my/deployement/{filter?}", name="my_deployement", methods={"GET"})
+     *
+     * @param string|null           $filter
+     *
+     * @return Response
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function myDeployementAction(
+        DeployementFilter $deploiementFilter,
+        ?string $filter): Response
+    {
+        return $this->render('deployement/indexmy.html.twig',
+            $deploiementFilter->getData($filter)
+            );
+    }
+
 }

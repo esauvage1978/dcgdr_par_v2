@@ -4,6 +4,7 @@ namespace App\Dto;
 
 class ActionSearchDto
 {
+    private $id;
     private $axeId;
     private $actionArchiving;
     private $axeEnable;
@@ -15,6 +16,38 @@ class ActionSearchDto
     private $categoryRef;
     private $actionRef;
 
+
+
+    public function __construct()
+    {
+        $this->axeEnable=true;
+        $this->poleEnable=true;
+        $this->thematiqueEnable=true;
+        $this->categoryEnable=true;
+        $this->actionArchiving=false;
+    }
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     * @return ActionSearchDto
+     */
+    public function setId($id)
+    {
+        $this->axeEnable=null;
+        $this->poleEnable=null;
+        $this->thematiqueEnable=null;
+        $this->categoryEnable=null;
+        $this->actionArchiving=null;
+        $this->id = $id;
+        return $this;
+    }
     /**
      * @return mixed
      */
@@ -211,15 +244,6 @@ class ActionSearchDto
 
 
 
-
-    public function __construct()
-    {
-        $this->axeEnable=true;
-        $this->poleEnable=true;
-        $this->thematiqueEnable=true;
-        $this->categoryEnable=true;
-        $this->actionArchiving=false;
-    }
 
 
 }

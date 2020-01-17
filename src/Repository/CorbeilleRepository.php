@@ -18,6 +18,7 @@ class CorbeilleRepository extends ServiceEntityRepository
     const ALIAS_ACTION_READERS = 'car';
     const ALIAS_ACTION_WRITERS = 'caw';
     const ALIAS_ACTION_VALIDERS = 'cav';
+    const ALIAS_DEPLOYEMENT_WRITERS = 'cdw';
 
     public function __construct(ManagerRegistry $registry)
     {

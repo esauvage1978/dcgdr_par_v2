@@ -99,6 +99,16 @@ class DeployementVoter extends Voter
 
     public function canAppendUpdate(Deployement $deploiement, User $user)
     {
+        if( $deploiement->getAction()->getCategory()->getThematique()->getPole()->getAxe()->getArchiving()) {
+            return false;
+        }
+
+        foreach ($deploiement->getWriters() as $corbeille) {
+            if (in_array($user, $corbeille->getUsers()->toArray())) {
+                return true;
+            }
+        }
+
         return $this->actionVoter->canUpdate($deploiement->getAction(), $user);
     }
 }

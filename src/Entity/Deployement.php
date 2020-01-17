@@ -55,11 +55,18 @@ class Deployement implements EntityInterface
      */
     private $indicatorValues;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Corbeille", inversedBy="deployementWriters")
+     * @ORM\JoinTable("deployementwriter_corbeille")
+     */
+    private $writers;
+
     public function __construct()
     {
         $this->setTaux1('0');
         $this->setTaux2('0');
         $this->indicatorValues = new ArrayCollection();
+        $this->writers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,5 +187,31 @@ class Deployement implements EntityInterface
     public function isEnded(): bool
     {
         return empty($this->getEndAt());
+    }
+
+    /**
+     * @return Collection|Corbeille[]
+     */
+    public function getWriters(): Collection
+    {
+        return $this->writers;
+    }
+
+    public function addWriter(Corbeille $writer): self
+    {
+        if (!$this->writers->contains($writer)) {
+            $this->writers[] = $writer;
+        }
+
+        return $this;
+    }
+
+    public function removeWriter(Corbeille $writer): self
+    {
+        if ($this->writers->contains($writer)) {
+            $this->writers->removeElement($writer);
+        }
+
+        return $this;
     }
 }

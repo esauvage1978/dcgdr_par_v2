@@ -15,6 +15,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 class UserRepository extends ServiceEntityRepository
 {
     const ALIAS = 'u';
+    const ALIAS_DEPLOYEMENT_WRITERS = 'cdwu';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -27,6 +28,23 @@ class UserRepository extends ServiceEntityRepository
             ->select(self::ALIAS, OrganismeRepository::ALIAS, CorbeilleRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.organismes',OrganismeRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.corbeilles',CorbeilleRepository::ALIAS)
+            ->orderBy(self::ALIAS . '.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findAllWriterForDeployement()
+    {
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(
+                self::ALIAS,
+                CorbeilleRepository::ALIAS,
+            )
+            ->innerJoin(self::ALIAS.'.corbeilles',CorbeilleRepository::ALIAS)
+            ->innerJoin(CorbeilleRepository::ALIAS.'.deployementWriters',DeployementRepository::ALIAS)
+            ->where(CorbeilleRepository::ALIAS.'.enable=true')
+            ->andWhere(self::ALIAS.'.enable=true')
             ->orderBy(self::ALIAS . '.name', 'ASC')
             ->getQuery()
             ->getResult()

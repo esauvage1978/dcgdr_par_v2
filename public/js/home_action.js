@@ -18,3 +18,30 @@ function searchCount(domaine, route, filtre) {
         }
     });
 }
+
+function searchCountAxe(axeId, route,) {
+    var selecteurCompletOverlay="#overlay_axe_" + axeId;
+    var selecteurCompletBadge="#axe_" + axeId;
+    $(selecteurCompletOverlay).removeClass('d-none');
+
+    $.ajax({
+        method: "POST",
+        url: route + '/' + axeId,
+        data: {},
+        dataType: 'json',
+        success: function (json) {
+
+            if (json ===  0) {
+
+                $(selecteurCompletBadge).text(json + ' action');
+
+            } else if (json >  0) {
+
+                $(selecteurCompletBadge).text(json + ' actions');
+
+            }
+
+            $(selecteurCompletOverlay).addClass('d-none');
+        }
+    });
+}
