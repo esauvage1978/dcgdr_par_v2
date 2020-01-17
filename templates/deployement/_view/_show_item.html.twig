@@ -1,0 +1,39 @@
+<div class="info-box bg-gray-light">
+    <span class="info-box-icon bg-info elevation-1">
+        <i class="fas fa-city"></i>
+    </span>
+
+    <div class="info-box-content">
+        <span class="info-box-number">
+               {% if deployement | deployementCanAppendRead %}
+                    <a href="{{ path('deployement_append', {'id': deployement.id}) }}">
+                        {{ deployement.organisme.name }}
+                    </a>
+                {% else %}
+                    {{ deployement.organisme.name }}
+                {% endif %}
+        </span>
+        <span>
+                {% if deployement | deployementCanAppendRead %}
+                    <a href="{{ path('deployement_append', {'id': deployement.id}) }}">
+                        {{ deployement.action.name }} - {{ deployement.organisme.name }}
+                    </a>
+                {% else %}
+                    {{ deployement.action.name }}
+                {% endif %}
+            </span>
+        <span class="info-box-number">
+                {{ deployement.action.category.thematique.ref }}-{{ deployement.action.category.ref }}
+                -{{ deployement.action.ref }}
+
+            </span>
+        <small>
+            {{ deployement.action.category.thematique.pole.axe.name }}
+        </small>
+    </div>
+</div>
+
+
+
+
+

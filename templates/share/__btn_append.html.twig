@@ -1,4 +1,4 @@
 <a class="btn bg-fuchsia  {{  sm | default('') ?  'btn-sm' : ''  }} {{  mr | default('') ?  'mr-1' : ''  }}"
-   href="{{ path(url, {'id': id}) }}{{  anchor | default('')}}">
+   href="{{ absolute_url(path(url, {'id': id})) }}{{  anchor | default('')}}">
     <i class="fas fa-user-edit"></i> Compléter
 </a>

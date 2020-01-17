@@ -1,0 +1,19 @@
+<!-- Intervenants -->
+<section id="anchor_intervenant" class="bg-white">
+    <h5 class="text-purple p-1  text-center ">
+        Intervenants
+    </h5>
+    {% if deployement.writers.count >0 %}
+        <article class="card-body ">
+            <h6>Pilote</h6>
+            <div class="list-group list-group-flush  bg-light">
+                {% for corbeille in deployement.writers %}
+                    {{ include('corbeille/_show_list_group_item.html.twig' , {'show_code_organisme': true, 'link' : true}) }}
+                {% else %}
+                    <div class="list-group-item">En attente d'ajout</div>
+                {% endfor %}
+            </div>
+        </article>
+    {% endif %}
+</section>
+

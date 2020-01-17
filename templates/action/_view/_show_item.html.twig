@@ -1,22 +1,39 @@
-<div class="card bg-light">
-    <div class="card-header text-muted border-bottom-0">
-        {% if action | actionCanRead %}
-            <a href="{{ path('action_show', {'id': action.id}) }}">
-                {{ action.fullname }}
-            </a>
-        {% else %}
-            {{ action.fullname }}
-        {% endif %}
-    </div>
-    <div class="card-body pt-0">
+    <div class="info-box  bg-gray-light">
+        <span class="info-box-icon bg-info elevation-1">
+            <i class="fas fa-bolt"></i>
+        </span>
 
-    </div>
-    <div class="card-footer">
-        <div class="text-right">
+        <div class="info-box-content">
+            <span >
+                {% if action | actionCanRead %}
+                    <a href="{{ path('action_show', {'id': action.id}) }}">
+                        {{ action.name }}
+                    </a>
+                {% else %}
+                    {{ action.name }}
+                {% endif %}
+            </span>
+            <span class="info-box-number">
+                {{ action.category.thematique.ref }}-{{ action.category.ref }}
+                -{{ action.ref }}
 
+            </span>
+            <small>
+                {{ action.category.thematique.pole.axe.name }}
+                {%  if action.category.enable ==false or
+                    action.category.thematique.enable ==false or
+                    action.category.thematique.pole.enable ==false or
+                    action.category.thematique.pole.axe.enable ==false  %}
+                    <span class="badge badge-danger text-sm float-right">L'action n'est pas visible</span>
+                {% endif %}
+                {%  if action.category.thematique.pole.axe.archiving ==true  %}
+                    <span class="badge badge-danger text-sm float-right">L'action est archivée</span>
+                {% endif %}
+            </small>
         </div>
     </div>
-</div>
+
+
 
 
 

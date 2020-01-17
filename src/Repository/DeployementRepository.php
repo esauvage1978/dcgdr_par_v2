@@ -2,11 +2,14 @@
 
 namespace App\Repository;
 
+use App\Dto\DeployementSearchDto;
 use App\Entity\Action;
 use App\Entity\Deployement;
+use App\Entity\IndicatorValue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Deployement|null find($id, $lockMode = null, $lockVersion = null)
@@ -79,6 +82,115 @@ class DeployementRepository extends ServiceEntityRepository
             return $stmt->execute([]);
         } catch (DBALException $e) {
             return 'Error'.$e->getMessage();
+        }
+    }
+
+
+    private function findAllForDto_initialise(DeployementSearchDto $dto): QueryBuilder
+    {
+        $builder = $this->createQueryBuilder(self::ALIAS)
+            ->select(
+                self::ALIAS,
+                ActionRepository::ALIAS,
+                CategoryRepository::ALIAS,
+                ThematiqueRepository::ALIAS,
+                PoleRepository::ALIAS,
+                AxeRepository::ALIAS,
+                CorbeilleRepository::ALIAS_DEPLOYEMENT_WRITERS,
+                UserRepository::ALIAS_DEPLOYEMENT_WRITERS,
+                OrganismeRepository::ALIAS,
+                IndicatorRepository::ALIAS,
+                IndicatorValueRepository::ALIAS
+            )
+
+            ->leftjoin(self::ALIAS.'.action', ActionRepository::ALIAS)
+            ->leftjoin(self::ALIAS.'.organisme', OrganismeRepository::ALIAS)
+            ->leftjoin(self::ALIAS.'.indicatorValues', IndicatorValueRepository::ALIAS)
+            ->leftjoin(IndicatorValueRepository::ALIAS.'.indicator', IndicatorRepository::ALIAS)
+            ->leftjoin(ActionRepository::ALIAS.'.category', CategoryRepository::ALIAS)
+            ->leftjoin(CategoryRepository::ALIAS.'.thematique', ThematiqueRepository::ALIAS)
+            ->leftjoin(ThematiqueRepository::ALIAS.'.pole', PoleRepository::ALIAS)
+            ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS)
+            ->leftjoin(self::ALIAS.'.writers', CorbeilleRepository::ALIAS_DEPLOYEMENT_WRITERS)
+            ->leftjoin(CorbeilleRepository::ALIAS_DEPLOYEMENT_WRITERS.'.users', UserRepository::ALIAS_DEPLOYEMENT_WRITERS);
+
+        $builder
+            ->where(AxeRepository::ALIAS.'.enable='.($dto->actionSearchDto->isAxeEnable() ? 'true' : 'false'))
+            ->andwhere(PoleRepository::ALIAS.'.enable='.($dto->actionSearchDto->isPoleEnable() ? 'true' : 'false'))
+            ->andwhere(ThematiqueRepository::ALIAS.'.enable='.($dto->actionSearchDto->isThematiqueEnable() ? 'true' : 'false'))
+            ->andwhere(CategoryRepository::ALIAS.'.enable='.($dto->actionSearchDto->isCategoryEnable() ? 'true' : 'false'))
+            ->andwhere(AxeRepository::ALIAS.'.archiving='.($dto->actionSearchDto->isActionArchiving() ? 'true' : 'false'))
+            ->andwhere(CorbeilleRepository::ALIAS_DEPLOYEMENT_WRITERS.'.enable='.($dto->isCorbeilleEnable() ? 'true' : 'false'))
+            ->andwhere(IndicatorRepository::ALIAS.'.enable='.($dto->isIndicatorEnable() ? 'true' : 'false'))
+            ->andwhere(IndicatorValueRepository::ALIAS.'.enable='.($dto->isIndicatorValueEnable() ? 'true' : 'false'));
+
+        return $builder;
+    }
+
+    private function findAllForDto_orderBy(QueryBuilder $builder): QueryBuilder
+    {
+        $builder
+            ->orderBy(AxeRepository::ALIAS.'.name', 'ASC')
+            ->orderBy(PoleRepository::ALIAS.'.name', 'ASC')
+            ->orderBy(ThematiqueRepository::ALIAS.'.ref', 'ASC')
+            ->orderBy(CategoryRepository::ALIAS.'.ref', 'ASC')
+            ->orderBy(ActionRepository::ALIAS.'.ref ', 'ASC')
+            ->orderBy(ActionRepository::ALIAS.'.name ', 'ASC');
+
+        return $builder;
+    }
+
+    public function findAllForDto(DeployementSearchDto $dto)
+    {
+        $params = [];
+
+        $builder = $this->findAllForDto_initialise($dto);
+
+        if (!empty($dto->getUserWriter())) {
+            $builder->andwhere(UserRepository::ALIAS_DEPLOYEMENT_WRITERS.'.id = :userid');
+
+            $params = $this->addParams($params, 'userid', $dto->getUserWriter());
+        }
+
+        if ($dto->getJalonNotPresent()) {
+            $builder->andWhere( DeployementRepository::ALIAS. '.showAt is null ');
+        }
+
+        if (!empty($dto->getJalonFrom()) && empty($dto->getJalonTo())) {
+            $builder->andWhere(
+                DeployementRepository::ALIAS. '.showAt ' .
+                $dto->getJalonOperator() .' :from');
+
+            $params = $this->addParams($params, 'from', $dto->getJalonFrom());
+        } else if (!empty($dto->getJalonFrom()) && !empty($dto->getJalonTo())) {
+            $builder->andWhere(
+                DeployementRepository::ALIAS. '.showAt BETWEEN  :from AND :to');
+
+            $params = $this->addParams($params, 'from', $dto->getJalonFrom());
+            $params = $this->addParams($params, 'to', $dto->getJalonTo());
+        }
+
+
+        if (count($params) > 0) {
+            $builder->setParameters($params);
+        }
+
+        $builder = $this->findAllForDto_orderBy($builder);
+
+        return $builder
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function addParams($params, $key, $value): array
+    {
+        $onevalue = [$key => $value];
+        if (0 == count($params)) {
+            return $onevalue;
+        } else {
+            $total = array_merge($onevalue, $params);
+
+            return $total;
         }
     }
 }

@@ -95,17 +95,21 @@
     <div class="row justify-content-start  pb-5">
         {{ include('deployement/_show/_name.html.twig') }}
 
-        <div class="row">
+        <div class="row col-12">
             <div id="col1"
-                 class="col-sm-12  order-sm-second  col-md-12 order-sm-second col-lg-12 order-lg-second col-xl-3 order-xl-first">
+                 class="col-sm-12  order-sm-second  col-md-12 order-sm-second col-lg-6 order-lg-second col-xl-2 order-xl-first">
                 {{ include('deployement/_show/_tuile.html.twig') }}
                 {{ include('deployement/_show/_date.html.twig') }}
+
             </div>
             <div id="col2"
-                 class="col-sm-12  order-sm-first  col-md-12 order-md-first col-lg-12  order-lg-first col-xl-9 order-xl-second bg-white  p-5">
+                 class="col-sm-12  order-sm-first  col-md-12 order-md-first col-lg-12  order-lg-first col-xl-7 order-xl-second  bg-white  p-5">
                 {{ include('action/_show/_classement.html.twig',{'action':deployement.action}) }}
                 {{ include('action/_show/_cadrage.html.twig',{'action':deployement.action}) }}
                 {{ include('action/_show/_info_part.html.twig',{'action':deployement.action}) }}
+            </div>
+            <div id="col3" class="col-sm-12 col-md-12 col-lg-6 col-xl-3">
+                {{ include('deployement/_show/_intervenant.html.twig') }}
             </div>
         </div>
         <div class="col-12 bg-white  p-5 mt-5">

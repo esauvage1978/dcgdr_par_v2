@@ -77,6 +77,10 @@ class ActionVoter extends Voter
 
     public function canUpdate(Action $action, User $user)
     {
+        if( $action->getCategory()->getThematique()->getPole()->getAxe()->getArchiving()) {
+            return false;
+        }
+
         if ($this->security->isGranted('ROLE_GESTIONNAIRE')) {
             return true;
         }

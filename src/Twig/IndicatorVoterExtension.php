@@ -39,6 +39,10 @@ class IndicatorVoterExtension extends AbstractExtension
 
     public function indicatorCanUpdate(Indicator $indicator)
     {
+        if( $indicator->getAction()->getCategory()->getThematique()->getPole()->getAxe()->getArchiving()) {
+            return false;
+        }
+
         /** @var User $user */
         $user = $this->security->getToken()->getUser();
 

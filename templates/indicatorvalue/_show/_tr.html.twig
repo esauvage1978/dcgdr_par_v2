@@ -15,11 +15,13 @@
 
 
     <td class="text-right align-middle ">
+        {% if indicatorValue.deployement | deployementCanAppendUpdate %}
             {{ include('share/__btn_append.html.twig',
                 {   'url':'deployement_append_edit',
                     'id':indicatorValue.deployement.id,
                     'sm':true,
                     'anchor':'#scrollspy_indicateur_' ~ indicatorValue.id
                 }) }}
+        {% endif %}
     </td>
 </tr>

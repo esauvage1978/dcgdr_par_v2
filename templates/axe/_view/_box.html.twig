@@ -12,28 +12,10 @@
             <div class="progress-bar" style="width: {{ axe.taux1 }}%"></div>
         </div>
         <span class="progress-description">
-               {% if   axe.poles.count==0 %}
-                   Aucune action
-               {% else %}
-                   {% set nbr_a=0 %}
-                   {% for pole in axe.poles %}
-                       {% for thematique in pole.thematiques %}
-                           {% for category in thematique.categories %}
-                               {% set nbr_a = nbr_a + category.actions.count %}
-                           {% endfor %}
-                       {% endfor %}
-                   {% endfor %}
-                   {% if   nbr_a==0 %}
-                       Aucune action
-                   {% elseif   nbr_a==0 %}
-                       1 action
-                   {% else %}
-                       {{ nbr_a }} actions
-                   {% endif %}
-
-               {% endif %}
-                </span>
+            <span id="axe_{{ axe.id }}" >
+                <i id="overlay_axe_{{ axe.id }}" class=" d-none fas  fa-sync-alt"></i>
+            </span>
+        </span>
     </div>
-    <!-- /.info-box-content -->
 </div>
 </a>

@@ -83,12 +83,19 @@ class Corbeille implements EntityInterface
      */
     private $actionValiders;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Deployement", mappedBy="writers")
+     * @ORM\JoinTable("deployementwriter_corbeille")
+     */
+    private $deployementWriters;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->actionReaders = new ArrayCollection();
         $this->actionWriters = new ArrayCollection();
         $this->actionValiders = new ArrayCollection();
+        $this->deployementWriters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -311,6 +318,34 @@ class Corbeille implements EntityInterface
         if ($this->actionValiders->contains($actionValider)) {
             $this->actionValiders->removeElement($actionValider);
             $actionValider->removeValider($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Deployement[]
+     */
+    public function getDeployementWriters(): Collection
+    {
+        return $this->deployementWriters;
+    }
+
+    public function addDeployementWriter(Deployement $deployementWriter): self
+    {
+        if (!$this->deployementWriters->contains($deployementWriter)) {
+            $this->deployementWriters[] = $deployementWriter;
+            $deployementWriter->addWriter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeployementWriter(Deployement $deployementWriter): self
+    {
+        if ($this->deployementWriters->contains($deployementWriter)) {
+            $this->deployementWriters->removeElement($deployementWriter);
+            $deployementWriter->removeWriter($this);
         }
 
         return $this;
