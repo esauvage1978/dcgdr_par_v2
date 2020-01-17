@@ -61,12 +61,19 @@ class Deployement implements EntityInterface
      */
     private $writers;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Corbeille", inversedBy="deployementReaders")
+     * @ORM\JoinTable("deployementreader_corbeille")
+     */
+    private $readers;
+
     public function __construct()
     {
         $this->setTaux1('0');
         $this->setTaux2('0');
         $this->indicatorValues = new ArrayCollection();
         $this->writers = new ArrayCollection();
+        $this->readers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -210,6 +217,33 @@ class Deployement implements EntityInterface
     {
         if ($this->writers->contains($writer)) {
             $this->writers->removeElement($writer);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|Corbeille[]
+     */
+    public function getReaders(): Collection
+    {
+        return $this->readers;
+    }
+
+    public function addReader(Corbeille $reader): self
+    {
+        if (!$this->readers->contains($reader)) {
+            $this->readers[] = $reader;
+        }
+
+        return $this;
+    }
+
+    public function removeReader(Corbeille $reader): self
+    {
+        if ($this->readers->contains($reader)) {
+            $this->readers->removeElement($reader);
         }
 
         return $this;

@@ -94,6 +94,12 @@ class DeployementVoter extends Voter
 
     public function canAppendRead(Deployement $deploiement, User $user)
     {
+        foreach ($deploiement->getReaders() as $corbeille) {
+            if (in_array($user, $corbeille->getUsers()->toArray())) {
+                return true;
+            }
+        }
+
         return $this->actionVoter->canRead($deploiement->getAction(), $user);
     }
 

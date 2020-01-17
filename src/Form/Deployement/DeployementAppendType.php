@@ -15,6 +15,7 @@ class DeployementAppendType extends AppTypeAbstract
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->buildFormWriters($builder);
+        $this->buildFormReaders($builder);
         
         return $builder
             ->add('showat', DateType::class, [
