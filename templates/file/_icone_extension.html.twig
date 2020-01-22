@@ -1,0 +1,18 @@
+{% set icone='file-alt' %}
+{%  if extension== 'pdf' %}
+    {% set icone='file-pdf' %}
+{% elseif extension== 'png' or extension== 'gif' or extension== 'jpg' or  extension== 'jpeg' or  extension== 'bmp'    %}
+    {% set icone='file-image' %}
+{% elseif extension== 'zip' or extension== '7z' or extension== 'tar'  %}
+    {% set icone='file-archive' %}
+{% elseif extension== 'csv'  %}
+    {% set icone='file-csv' %}
+{% elseif extension== 'doc' or  extension== 'docx' or extension== 'docm' %}
+    {% set icone='file-word' %}
+{% elseif extension== 'ppt' or extension == 'pptx' %}
+    {% set icone='file-powerpoint' %}
+{% elseif extension== 'xls' or  extension== 'xlsx' or extension== 'xlsm' %}
+    {% set icone='file-excel' %}
+{%  endif %}
+
+<i class="far fa-fw  fa-{{ icone }}"></i>

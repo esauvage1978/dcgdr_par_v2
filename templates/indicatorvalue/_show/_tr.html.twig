@@ -1,9 +1,9 @@
 <tr>
-    <td class="align-middle col-2">
+    <td class="align-middle ">
         {{ indicatorValue.deployement.organisme.fullname }}
 
     </td>
-    <td class="text-center align-middle col-2 ">
+    <td class="text-center align-middle  ">
         {{ include('indicatorvalue/_show/_tr_' ~ indicatorValue.indicator.indicatortype ~ '.html.twig') }}
         {{ include('share/_taux_progress_bar_label.html.twig' , {'taux1': indicatorValue.taux1,'taux2': indicatorValue.taux2} ) }}
     </td>

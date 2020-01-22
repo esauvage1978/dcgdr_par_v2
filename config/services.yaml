@@ -7,6 +7,8 @@ parameters:
     directory_import : '%kernel.project_dir%/data/importFixtures/'
     mailer.mail: 'emmanuel.sauvage@live.fr'
     mailer.name: '[ DCGDR PAR ] Emmanuel SAUVAGE '
+    directory_file_action : '%kernel.project_dir%/public/uploads/actions'
+    directory_data_doc : '%kernel.project_dir%/data/doc'
 
 services:
     # default configuration for services in *this* file
@@ -41,5 +43,11 @@ services:
             entity: App\Entity\IndicatorValue
 
     App\Listener\IndicatorListener:
+        tags:
+            - { name: doctrine.orm.entity_listener }
+
+    App\Listener\ActionFileUploadListener:
+        arguments:
+            $directory: '%directory_file_action%'
         tags:
             - { name: doctrine.orm.entity_listener }

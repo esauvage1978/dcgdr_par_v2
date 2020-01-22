@@ -128,6 +128,16 @@ class Action implements EntityInterface
      */
     private $indicators;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ActionFile", mappedBy="action", orphanRemoval=true,cascade={"persist"})
+     */
+    private $actionFiles;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ActionLink", mappedBy="action",cascade={"persist"})
+     */
+    private $actionLinks;
+
     public function __construct()
     {
         $this->setTaux1('0');
@@ -141,6 +151,8 @@ class Action implements EntityInterface
         $this->validers = new ArrayCollection();
         $this->deployements = new ArrayCollection();
         $this->indicators = new ArrayCollection();
+        $this->actionFiles = new ArrayCollection();
+        $this->actionLinks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -514,6 +526,68 @@ class Action implements EntityInterface
             // set the owning side to null (unless already changed)
             if ($indicator->getAction() === $this) {
                 $indicator->setAction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ActionFile[]
+     */
+    public function getActionFiles(): Collection
+    {
+        return $this->actionFiles;
+    }
+
+    public function addActionFile(ActionFile $actionFile): self
+    {
+        if (!$this->actionFiles->contains($actionFile)) {
+            $this->actionFiles[] = $actionFile;
+            $actionFile->setAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionFile(ActionFile $actionFile): self
+    {
+        if ($this->actionFiles->contains($actionFile)) {
+            $this->actionFiles->removeElement($actionFile);
+            // set the owning side to null (unless already changed)
+            if ($actionFile->getAction() === $this) {
+                $actionFile->setAction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ActionLink[]
+     */
+    public function getActionLinks(): Collection
+    {
+        return $this->actionLinks;
+    }
+
+    public function addActionLink(ActionLink $actionLink): self
+    {
+        if (!$this->actionLinks->contains($actionLink)) {
+            $this->actionLinks[] = $actionLink;
+            $actionLink->setAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionLink(ActionLink $actionLink): self
+    {
+        if ($this->actionLinks->contains($actionLink)) {
+            $this->actionLinks->removeElement($actionLink);
+            // set the owning side to null (unless already changed)
+            if ($actionLink->getAction() === $this) {
+                $actionLink->setAction(null);
             }
         }
 
