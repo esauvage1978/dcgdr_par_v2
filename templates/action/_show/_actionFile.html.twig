@@ -1,0 +1,31 @@
+{% if action.actionFiles.count != 0 or action.actionLinks.count != 0 %}
+
+<article id="file" class="bg-white">
+    <h5 class="text-purple p-1 pt-3 text-center ">
+        documents joints
+    </h5>
+    <div class="card-body">
+
+        <ul class="list-unstyled">
+
+
+            {% for actionFile in action.actionFiles %}
+                <li>
+                    <a target="_blank" href="{{ path('action_file_show',{'id':action.id, 'fileId':actionFile.id}) }}" class="btn-link text-secondary">
+                        {{ include('file/_icone_extension.html.twig',{'extension': actionFile.fileExtension})}}
+                        {{ actionFile.title  }}.{{ actionFile.fileExtension  }}
+                    </a>
+                </li>
+            {% endfor %}
+            {% for actionLink in action.actionLinks %}
+                <li>
+                    <a target="_blank" href="{{ actionLink.link }}" class="btn-link text-secondary">
+                        <i class="fas fa-globe"></i>
+                         {{ actionLink.title  }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+{% endif %}

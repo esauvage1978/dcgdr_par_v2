@@ -113,6 +113,7 @@
                 {{ include('action/_edit/_cibles.html.twig') }}
                 {{ include('action/_edit/_vecteurs.html.twig') }}
                 {{ include('action/_edit/_intervenant.html.twig') }}
+                {{ include('action/_edit/_actionFile.html.twig') }}
 
             </div>
 
@@ -139,6 +140,7 @@
 
 
 {% block javascripts %}
+    <script src="{{ absolute_url( asset('js/file/action_file.js')) }}"></script>
     <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
     <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
     <script src="{{ absolute_url( asset('js/fillCombobox/fillCombobox.js')) }}"></script>
@@ -162,7 +164,10 @@
                 $('#action_edit_category').val($('#cmb_category').val());
             });
 
-
+            $(document).on('change', '.custom-file-input', function () {
+                let fileName = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+                $(this).parent('.custom-file').find('.custom-file-label').text(fileName);
+            });
         })
     </script>
 {% endblock %}

@@ -8,9 +8,11 @@ use App\Entity\Action;
 use App\Form\Action\ActionCreateType;
 use App\Form\Action\ActionEditType;
 use App\Manager\ActionManager;
+use App\Repository\ActionFileRepository;
 use App\Repository\ActionRepository;
 use App\Security\ActionVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +28,7 @@ class ActionController extends AppControllerAbstract
      */
     public function indexAction(ActionRepository $repository): Response
     {
-        return $this->render(self::ENTITY.'/index.html.twig', [
+        return $this->render(self::ENTITY . '/index.html.twig', [
             self::ENTITYS => $repository->findAllEnableAndNotArchiving(),
         ]);
     }
@@ -39,10 +41,13 @@ class ActionController extends AppControllerAbstract
         ActionRepository $repository,
         ActionSearchDto $actionSearchDto,
         string $id_axe
-): Response {
+    ): Response
+    {
+
         $actionSearchDto->setAxeId($id_axe);
 
-        return $this->render(self::ENTITY.'/index.html.twig', [
+
+        return $this->render(self::ENTITY . '/index.html.twig', [
             self::ENTITYS => $repository->findAllForDto($actionSearchDto),
         ]);
     }
@@ -64,7 +69,7 @@ class ActionController extends AppControllerAbstract
 
                 return $this->redirectToRoute('action_edit', ['id' => $entity->getId()]);
             }
-            $this->addFlash(self::DANGER, self::MSG_ERROR.$manager->getErrors($entity));
+            $this->addFlash(self::DANGER, self::MSG_ERROR . $manager->getErrors($entity));
         }
 
         return $this->render('action/new.html.twig', [
@@ -81,17 +86,38 @@ class ActionController extends AppControllerAbstract
         ActionSearchDto $actionSearchDto,
         ActionRepository $actionRepository,
         string $id
-): Response
+    ): Response
     {
         $actionSearchDto->setId($id);
         /** @var Action $action */
-        $action=$actionRepository->findAllForDto($actionSearchDto)[0];
+        $action = $actionRepository->findAllForDto($actionSearchDto)[0];
 
         $this->denyAccessUnlessGranted(ActionVoter::READ, $action);
 
-        return $this->render(self::ENTITY.'/show.html.twig', [
+        return $this->render(self::ENTITY . '/show.html.twig', [
             self::ENTITY => $action,
         ]);
+    }
+
+    /**
+     * @Route("/action/{id}/file/{fileId}", name="action_file_show", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function actionFileShowAction(
+        Request $request,
+        Action $action,
+        string $fileId,
+        ActionFileRepository $actionFileRepository): Response
+    {
+        $this->denyAccessUnlessGranted(ActionVoter::READ, $action);
+
+        $actionFile = $actionFileRepository->find($fileId);
+
+        // load the file from the filesystem
+        $file = new File($actionFile->getHref());
+
+        // rename the downloaded file
+        return $this->file($file, $actionFile->getTitle() . '.' . $actionFile->getFileExtension());
     }
 
     /**
@@ -112,6 +138,8 @@ class ActionController extends AppControllerAbstract
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->save($entity);
             $this->addFlash(self::SUCCESS, self::MSG_MODIFY);
+
+            $this->redirectToRoute('action_edit', ['id' => $entity->getId()]);
         }
 
         return $this->render('action/edit.html.twig', [

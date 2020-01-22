@@ -6,13 +6,16 @@ use App\Entity\Action;
 use App\Entity\Cible;
 use App\Entity\Vecteur;
 use App\Form\AppTypeAbstract;
+use App\Form\File\ActionFileType;
+use App\Form\File\ActionLinkType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,6 +28,7 @@ class ActionEditType extends AppTypeAbstract
         $builder = $this->buildFormReaders($builder);
         $builder = $this->buildFormWriters($builder);
         $builder = $this->buildFormValiders($builder);
+
         return $builder
             ->add('regionstartat', DateType::class, [
                 self::REQUIRED => false,
@@ -86,7 +90,8 @@ class ActionEditType extends AppTypeAbstract
                     return $er->createQueryBuilder('c')
                         ->orderBy('c.name', 'ASC');
                 },
-            ])            ->add('vecteurs', EntityType::class, [
+            ])
+            ->add('vecteurs', EntityType::class, [
                 'class' => Vecteur::class,
                 self::CHOICE_LABEL => 'name',
                 self::MULTIPLE => true,
@@ -96,6 +101,16 @@ class ActionEditType extends AppTypeAbstract
                     return $er->createQueryBuilder('v')
                         ->orderBy('v.name', 'ASC');
                 },
+            ])
+            ->add('actionFiles', CollectionType::class, [
+                'entry_type' => actionFileType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+            ])
+            ->add('actionLinks', CollectionType::class, [
+                'entry_type' => actionLinkType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
             ]);
     }
 

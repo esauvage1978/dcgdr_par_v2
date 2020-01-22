@@ -5,7 +5,7 @@
     <div class="card-body">
         {% for vecteur in action.vecteurs %}
             {% if vecteur.enable %}
-            <a href="{{ path('vecteur_show',{'id': vecteur.id}) }}" class="btn btn-info">
+            <a href="{{ path('vecteur_show',{'id': vecteur.id}) }}" class="btn btn-default">
                 {{ vecteur.name }}
             </a>
             {% endif %}
