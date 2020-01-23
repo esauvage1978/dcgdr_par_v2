@@ -4,6 +4,8 @@ namespace App\Form\Deployement;
 
 use App\Entity\Deployement;
 use App\Form\AppTypeAbstract;
+use App\Form\File\DeployementFileType;
+use App\Form\File\DeployementLinkType;
 use App\Form\IndicatorValue\IndicatorValueType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -31,6 +33,16 @@ class DeployementAppendType extends AppTypeAbstract
                 'allow_add' => false,
                 'allow_delete' => false,
             ])
+            ->add('deployementFiles', CollectionType::class, [
+                'entry_type' => DeployementFileType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+            ])
+            ->add('deployementLinks', CollectionType::class, [
+                'entry_type' => DeployementLinkType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+            ]);
             ;
     }
 

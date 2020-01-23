@@ -67,6 +67,16 @@ class Deployement implements EntityInterface
      */
     private $readers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DeployementLink", mappedBy="deployement",cascade={"persist"})
+     */
+    private $deployementLinks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DeployementFile", mappedBy="deployement", orphanRemoval=true,cascade={"persist"})
+     */
+    private $deployementFiles;
+
     public function __construct()
     {
         $this->setTaux1('0');
@@ -74,6 +84,8 @@ class Deployement implements EntityInterface
         $this->indicatorValues = new ArrayCollection();
         $this->writers = new ArrayCollection();
         $this->readers = new ArrayCollection();
+        $this->deployementLinks = new ArrayCollection();
+        $this->deployementFiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -244,6 +256,68 @@ class Deployement implements EntityInterface
     {
         if ($this->readers->contains($reader)) {
             $this->readers->removeElement($reader);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeployementLink[]
+     */
+    public function getDeployementLinks(): Collection
+    {
+        return $this->deployementLinks;
+    }
+
+    public function addDeployementLink(DeployementLink $deployementLink): self
+    {
+        if (!$this->deployementLinks->contains($deployementLink)) {
+            $this->deployementLinks[] = $deployementLink;
+            $deployementLink->setDeployement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeployementLink(DeployementLink $deployementLink): self
+    {
+        if ($this->deployementLinks->contains($deployementLink)) {
+            $this->deployementLinks->removeElement($deployementLink);
+            // set the owning side to null (unless already changed)
+            if ($deployementLink->getDeployement() === $this) {
+                $deployementLink->setDeployement(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeployementFile[]
+     */
+    public function getDeployementFiles(): Collection
+    {
+        return $this->deployementFiles;
+    }
+
+    public function addDeployementFile(DeployementFile $deployementFile): self
+    {
+        if (!$this->deployementFiles->contains($deployementFile)) {
+            $this->deployementFiles[] = $deployementFile;
+            $deployementFile->setDeployement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeployementFile(DeployementFile $deployementFile): self
+    {
+        if ($this->deployementFiles->contains($deployementFile)) {
+            $this->deployementFiles->removeElement($deployementFile);
+            // set the owning side to null (unless already changed)
+            if ($deployementFile->getDeployement() === $this) {
+                $deployementFile->setDeployement(null);
+            }
         }
 
         return $this;

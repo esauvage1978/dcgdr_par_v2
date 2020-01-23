@@ -136,6 +136,7 @@
 {% block javascripts %}
     <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
     <script src="{{ absolute_url( asset('js/indicatorvalue.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/file/deployement_file.js')) }}"></script>
     <script type="text/javascript">
         $(function () {
             $('.indicatorvalue').click(function () {
@@ -143,6 +144,11 @@
                 var route = "{{ path('ajax_create_deployement') }}";
 
                 create_deployement(selecteur, route);
+            });
+
+            $(document).on('change', '.custom-file-input', function () {
+                let fileName = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+                $(this).parent('.custom-file').find('.custom-file-label').text(fileName);
             });
         });
     </script>

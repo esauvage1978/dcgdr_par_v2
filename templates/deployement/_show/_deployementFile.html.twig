@@ -1,0 +1,31 @@
+{% if deployement.deployementFiles.count != 0 or deployement.deployementLinks.count != 0 %}
+
+<article id="file" class="bg-white">
+    <h5 class="text-purple p-1 pt-3 text-center ">
+        documents joints du déploiement
+    </h5>
+    <div class="card-body">
+
+        <ul class="list-unstyled">
+
+
+            {% for deployementFile in deployement.deployementFiles %}
+                <li>
+                    <a target="_blank" href="{{ path('deployement_file_show',{'id':deployement.id, 'fileId':deployementFile.id}) }}" class="btn-link text-secondary">
+                        {{ include('file/_icone_extension.html.twig',{'extension': deployementFile.fileExtension})}}
+                        {{ deployementFile.title  }}.{{ deployementFile.fileExtension  }}
+                    </a>
+                </li>
+            {% endfor %}
+            {% for deployementLink in deployement.deployementLinks %}
+                <li>
+                    <a target="_blank" href="{{ deployementLink.link }}" class="btn-link text-secondary">
+                        <i class="fas fa-globe mr-2"></i>
+                         {{ deployementLink.title  }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+{% endif %}
