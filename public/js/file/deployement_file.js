@@ -71,12 +71,12 @@ function showMainImage()
 }
 function showOtherFile($index)
 {
-    $('#action_edit_actionFiles_' + $index + '_comment').val(new Date());
-    $('#actionFile_' + $index).removeClass('d-none')
+    $('#deployement_edit_deployementFiles_' + $index + '_comment').val(new Date());
+    $('#deployementFile_' + $index).removeClass('d-none')
 }
 
 function showOtherLink($index)
 {
-    $('#action_edit_actionLinks_' + $index + '_comment').val(new Date());
-    $('#actionLink_' + $index).removeClass('d-none')
+    $('#deployement_edit_deployementLinks_' + $index + '_comment').val(new Date());
+    $('#deployementLink_' + $index).removeClass('d-none')
 }

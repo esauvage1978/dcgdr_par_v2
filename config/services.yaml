@@ -51,3 +51,9 @@ services:
             $directory: '%directory_file_action%'
         tags:
             - { name: doctrine.orm.entity_listener }
+
+    App\Listener\DeployementFileUploadListener:
+        arguments:
+            $directory: '%directory_file_action%'
+        tags:
+            - { name: doctrine.orm.entity_listener }

@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ActionFileRepository")
- * @ORM\EntityListeners({"App\Listener\ActionFileUploadListener"})
+ * @ORM\Entity(repositoryClass="App\Repository\DeployementFileRepository")
+ * @ORM\EntityListeners({"App\Listener\DeployementFileUploadListener"})
  */
-class ActionFile implements EntityInterface
+class DeployementFile
 {
     /**
      * @ORM\Id()
@@ -22,8 +22,6 @@ class ActionFile implements EntityInterface
      * @ORM\Column(type="string", length=255)
      */
     private $fileName;
-
-    private $file;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -41,10 +39,10 @@ class ActionFile implements EntityInterface
     private $nbrView;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Action", inversedBy="actionFiles")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Deployement", inversedBy="deployementFiles")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $action;
+    private $deployement;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -56,11 +54,17 @@ class ActionFile implements EntityInterface
      */
     private $comment;
 
+    private $file;
+
     public function __construct()
     {
         $this->setNbrView(0);
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     /**
      * @return string
@@ -75,17 +79,27 @@ class ActionFile implements EntityInterface
      */
     public function getUploadDir(): string
     {
-        return 'uploads/actions/' . $this->getAction()->getId();
+        return 'uploads/actions/' .
+            $this->getDeployement()->getAction()->getId() . '/' .
+            $this->getDeployement()->getId();
     }
 
     public function getHref(): string
     {
-        return $this->getUploadDir() .  '/' . $this->getFileName() . '.' .  $this->getFileExtension() ;
+        return $this->getUploadDir() . '/' .
+            $this->getFileName() . '.' .  $this->getFileExtension() ;
     }
 
-    public function getId(): ?int
+    public function getFile()
     {
-        return $this->id;
+        return $this->file;
+    }
+
+    public function setFile(UploadedFile $actionsFile): DeployementFile
+    {
+        $this->file = $actionsFile;
+
+        return $this;
     }
 
     public function getFileName(): ?string
@@ -105,7 +119,7 @@ class ActionFile implements EntityInterface
         return $this->updateAt;
     }
 
-    public function setUpdateAt(?\DateTimeInterface $updateAt): self
+    public function setUpdateAt(\DateTimeInterface $updateAt): self
     {
         $this->updateAt = $updateAt;
 
@@ -136,14 +150,14 @@ class ActionFile implements EntityInterface
         return $this;
     }
 
-    public function getAction(): ?Action
+    public function getDeployement(): ?Deployement
     {
-        return $this->action;
+        return $this->deployement;
     }
 
-    public function setAction(?Action $action): self
+    public function setDeployement(?Deployement $deployement): self
     {
-        $this->action = $action;
+        $this->deployement = $deployement;
 
         return $this;
     }
@@ -156,18 +170,6 @@ class ActionFile implements EntityInterface
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    public function setFile(UploadedFile $actionsFile): ActionFile
-    {
-        $this->file = $actionsFile;
 
         return $this;
     }

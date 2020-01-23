@@ -103,12 +103,12 @@ class ActionEditType extends AppTypeAbstract
                 },
             ])
             ->add('actionFiles', CollectionType::class, [
-                'entry_type' => actionFileType::class,
+                'entry_type' => ActionFileType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
             ])
             ->add('actionLinks', CollectionType::class, [
-                'entry_type' => actionLinkType::class,
+                'entry_type' => ActionLinkType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
             ]);

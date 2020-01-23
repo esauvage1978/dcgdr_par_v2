@@ -11,11 +11,15 @@ use App\Form\Deployement\DeployementAppendType;
 use App\Form\Deployement\DeployementEditType;
 use App\Helper\DeployementFilter;
 use App\Manager\DeployementManager;
+use App\Repository\ActionFileRepository;
 use App\Repository\CorbeilleRepository;
+use App\Repository\DeployementFileRepository;
 use App\Repository\DeployementRepository;
 use App\Repository\OrganismeRepository;
+use App\Security\ActionVoter;
 use App\Security\DeployementVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +28,27 @@ class DeployementController extends AppControllerAbstract
 {
     const ENTITYS = 'deployements';
     const ENTITY = 'deployement';
+
+    /**
+     * @Route("/deployement/{id}/file/{fileId}", name="deployement_file_show", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function deployementFileShowAction(
+        Request $request,
+        Deployement $deployement,
+        string $fileId,
+        DeployementFileRepository $deployementFileRepository): Response
+    {
+        $this->denyAccessUnlessGranted(DeployementVoter::READ, $deployement);
+
+        $deployementFile = $deployementFileRepository->find($fileId);
+
+        // load the file from the filesystem
+        $file = new File($deployementFile->getHref());
+
+        // rename the downloaded file
+        return $this->file($file, $deployementFile->getTitle() . '.' . $deployementFile->getFileExtension());
+    }
 
     /**
      * @Route("/action/{id}/deployements", name="deployements_for_action", methods={"GET"})
@@ -130,7 +155,7 @@ class DeployementController extends AppControllerAbstract
     }
 
     /**
-     * @Route("/deployement/{id}/append", name="deployement_append", methods={"GET"})
+     * @Route("/deployement/{id}", name="deployement_append", methods={"GET"})
      *
      * @IsGranted("ROLE_USER")
      */

@@ -54,9 +54,7 @@ class FileDirectory
             $fullpathDestination = $cheminDestination . "/" . $fileDestination;
 
             if($this->fsObject->exists($fullpathSource)) {
-                dump('remove '. $cheminDestination . $fileDestination );
                 $this->removeFile($cheminDestination, $fileDestination);
-                dump('copy  '. $fullpathSource . $fullpathDestination );
                 $this->fsObject->copy($fullpathSource, $fullpathDestination);
             } else {
                 dump('file not exist '. $fullpathSource);
