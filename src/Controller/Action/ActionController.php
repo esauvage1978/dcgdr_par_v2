@@ -10,6 +10,7 @@ use App\Form\Action\ActionEditType;
 use App\Manager\ActionManager;
 use App\Repository\ActionFileRepository;
 use App\Repository\ActionRepository;
+use App\Repository\CadrageFileRepository;
 use App\Security\ActionVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\File;
@@ -119,6 +120,28 @@ class ActionController extends AppControllerAbstract
         // rename the downloaded file
         return $this->file($file, $actionFile->getTitle() . '.' . $actionFile->getFileExtension());
     }
+
+    /**
+     * @Route("/action/{id}/filecadrage/{fileId}", name="cadrage_file_show", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function cadrageFileShowAction(
+        Request $request,
+        Action $action,
+        string $fileId,
+        CadrageFileRepository $cadrageFileRepository): Response
+    {
+        $this->denyAccessUnlessGranted(ActionVoter::READ, $action);
+
+        $cadrageFile = $cadrageFileRepository->find($fileId);
+
+        // load the file from the filesystem
+        $file = new File($cadrageFile->getHref());
+
+        // rename the downloaded file
+        return $this->file($file, $cadrageFile->getTitle() . '.' . $cadrageFile->getFileExtension());
+    }
+
 
     /**
      * @Route("/action/{id}/edit", name="action_edit", methods={"GET","POST"})

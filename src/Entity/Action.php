@@ -138,6 +138,16 @@ class Action implements EntityInterface
      */
     private $actionLinks;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CadrageLink", mappedBy="action",cascade={"persist"})
+     */
+    private $cadrageLinks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CadrageFile", mappedBy="action", orphanRemoval=true,cascade={"persist"})
+     */
+    private $cadrageFiles;
+
     public function __construct()
     {
         $this->setTaux1('0');
@@ -153,6 +163,8 @@ class Action implements EntityInterface
         $this->indicators = new ArrayCollection();
         $this->actionFiles = new ArrayCollection();
         $this->actionLinks = new ArrayCollection();
+        $this->cadrageLinks = new ArrayCollection();
+        $this->cadrageFiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -550,18 +562,7 @@ class Action implements EntityInterface
         return $this;
     }
 
-    public function removeActionFile(ActionFile $actionFile): self
-    {
-        if ($this->actionFiles->contains($actionFile)) {
-            $this->actionFiles->removeElement($actionFile);
-            // set the owning side to null (unless already changed)
-            if ($actionFile->getAction() === $this) {
-                $actionFile->setAction(null);
-            }
-        }
 
-        return $this;
-    }
 
     /**
      * @return Collection|ActionLink[]
@@ -588,6 +589,80 @@ class Action implements EntityInterface
             // set the owning side to null (unless already changed)
             if ($actionLink->getAction() === $this) {
                 $actionLink->setAction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CadrageLink[]
+     */
+    public function getCadrageLinks(): Collection
+    {
+        return $this->cadrageLinks;
+    }
+
+    public function addCadrageLink(CadrageLink $cadrageLink): self
+    {
+        if (!$this->cadrageLinks->contains($cadrageLink)) {
+            $this->cadrageLinks[] = $cadrageLink;
+            $cadrageLink->setAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCadrageLink(CadrageLink $cadrageLink): self
+    {
+        if ($this->cadrageLinks->contains($cadrageLink)) {
+            $this->cadrageLinks->removeElement($cadrageLink);
+            // set the owning side to null (unless already changed)
+            if ($cadrageLink->getAction() === $this) {
+                $cadrageLink->setAction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CadrageFile[]
+     */
+    public function getCadrageFiles(): Collection
+    {
+        return $this->cadrageFiles;
+    }
+
+    public function addCadrageFile(CadrageFile $cadrageFile): self
+    {
+        if (!$this->cadrageFiles->contains($cadrageFile)) {
+            $this->cadrageFiles[] = $cadrageFile;
+            $cadrageFile->setAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCadrageFile(CadrageFile $cadrageFile): self
+    {
+        if ($this->cadrageFiles->contains($cadrageFile)) {
+            $this->cadrageFiles->removeElement($cadrageFile);
+            // set the owning side to null (unless already changed)
+            if ($cadrageFile->getAction() === $this) {
+                $cadrageFile->setAction(null);
+            }
+        }
+
+        return $this;
+    }
+    public function removeActionFile(ActionFile $actionFile): self
+    {
+        if ($this->actionFiles->contains($actionFile)) {
+            $this->actionFiles->removeElement($actionFile);
+            // set the owning side to null (unless already changed)
+            if ($actionFile->getAction() === $this) {
+                $actionFile->setAction(null);
             }
         }
 

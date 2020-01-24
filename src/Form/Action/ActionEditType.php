@@ -8,6 +8,8 @@ use App\Entity\Vecteur;
 use App\Form\AppTypeAbstract;
 use App\Form\File\ActionFileType;
 use App\Form\File\ActionLinkType;
+use App\Form\File\CadrageFileType;
+use App\Form\File\CadrageLinkType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -109,6 +111,16 @@ class ActionEditType extends AppTypeAbstract
             ])
             ->add('actionLinks', CollectionType::class, [
                 'entry_type' => ActionLinkType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+            ])
+            ->add('cadrageFiles', CollectionType::class, [
+                'entry_type' => CadrageFileType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+            ])
+            ->add('cadrageLinks', CollectionType::class, [
+                'entry_type' => CadrageLinkType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
             ]);
