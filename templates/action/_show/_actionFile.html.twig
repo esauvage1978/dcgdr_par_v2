@@ -6,20 +6,20 @@
     </h5>
     <div class="card-body">
 
-        <ul class="list-unstyled">
+        <ul  class="list-group list-group-flush">
 
 
             {% for actionFile in action.actionFiles %}
-                <li>
-                    <a target="_blank" href="{{ path('action_file_show',{'id':action.id, 'fileId':actionFile.id}) }}" class="btn-link text-secondary">
+                <li  class="list-group-item">
+                    <a target="_blank" href="{{ path('action_file_show',{'id':action.id, 'fileId':actionFile.id}) }}" >
                         {{ include('file/_icone_extension.html.twig',{'extension': actionFile.fileExtension})}}
                         {{ actionFile.title  }}.{{ actionFile.fileExtension  }}
                     </a>
                 </li>
             {% endfor %}
             {% for actionLink in action.actionLinks %}
-                <li>
-                    <a target="_blank" href="{{ actionLink.link }}" class="btn-link text-secondary">
+                <li  class="list-group-item">
+                    <a target="_blank" href="{{ actionLink.link }}" >
                         <i class="fas fa-globe mr-2"></i>
                          {{ actionLink.title  }}
                     </a>

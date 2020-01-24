@@ -4,3 +4,94 @@
 <section  class="p-3 col-12">
     {{ form_widget(form.cadrage) }}
 </section>
+<article id="file" class="bg-white">
+    <h5 class="text-purple p-1 pt-3 text-center ">
+        documents joints du cadrage
+    </h5>
+    <div class="card-body">
+
+
+        <input type="hidden" id="cadrage_filecount" value="{{ action.cadrageFiles | length }}"/>
+        <input type="hidden" id="cadrage_linkcount" value="{{ action.cadrageLinks | length }}"/>
+
+        <table id="file-media" class="table table-striped table-condensed "
+               style="width:100%">
+            {% for cadrageFile in action.cadrageFiles %}
+                <tr id="cadrage_media-{{ cadrageFile.fileName }}">
+                    <td>
+                        <a type="button" class="text-primary" target="_blank"  href="{{ absolute_url( asset(cadrageFile.href)) }}">
+                            {{ include('file/_icone_extension.html.twig',{'extension': cadrageFile.fileExtension}) }}
+                        </a>
+                    </td>
+                    <td>
+                        <a type="button" class="text-primary" target="_blank"  href="{{ absolute_url( asset(cadrageFile.href)) }}">
+                            {{ cadrageFile.title }}
+                        </a>
+                    </td>
+                    <td class="float-right" style="width: 100px">
+                        <button class="cadragemedia-delete btn btn-danger btn-sm "
+                                data-msg="cadrageFile_{{ loop.index0 }}"
+                                data-media="{{ cadrageFile.fileName }}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <span class="media-edit btn btn-info  btn-sm"
+                              onclick="cadrage_showOtherFile({{ loop.index0 }})">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                    </td>
+                </tr>
+                <tr id="cadrageFile_{{ loop.index0 }}" class="d-none">
+                    <td colspan="3">
+                        {{ form_widget(form.cadrageFiles[loop.index0]) }}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for cadrageLink in action.cadrageLinks %}
+                <tr id="cadrage_media-{{ cadrageLink.id }}">
+                    <td>
+                        <a type="button" class="text-primary" target="_blank" href="{{ cadrageLink.link }}">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a type="button" class="text-primary" target="_blank"  href="{{ cadrageLink.link }}">
+                            {{ cadrageLink.title }}
+                        </a>
+                    </td>
+                    <td class="float-right" style="width: 100px">
+                        <button class="media-delete btn btn-danger btn-sm "
+                                data-msg="cadrageLink_{{ loop.index0 }}"
+                                data-media="{{ cadrageLink.id }}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <span class="media-edit btn btn-info  btn-sm"
+                              onclick="cadrage_showOtherLink({{ loop.index0 }})">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                    </td>
+                </tr>
+                <tr id="cadrageLink_{{ loop.index0 }}" class="d-none">
+                    <td colspan="3">
+                        {{ form_widget(form.cadrageLinks[loop.index0]) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <div id="media-new">
+            <div class="row">
+                <div class="col-12 media-add" id="cadrage_media-add-file"
+                     data-prototype="{{ form_row(form.cadrageFiles.vars.prototype) | e('html_attr') }}">
+                </div>
+                <div class="col-12 media-add" id="cadrage_media-add-link"
+                     data-prototype="{{ form_row(form.cadrageLinks.vars.prototype) | e('html_attr') }}">
+                </div>
+            </div>
+        </div>
+        <div class="pt-4 pb-3">
+            <a href="#file" id="cadrage_add-file" class="btn btn-dark">Ajouter un fichier</a>
+            <a href="#link" id="cadrage_add-link" class="btn btn-dark">Ajouter un lien</a>
+        </div>
+
+    </div>
+</article>

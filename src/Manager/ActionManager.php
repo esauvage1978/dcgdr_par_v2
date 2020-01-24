@@ -24,6 +24,16 @@ class ActionManager extends ManagerAbstract
         {
             $actionLink->setAction($entity);
         }
+
+        foreach ($entity->getCadrageFiles() as $cadrageFile)
+        {
+            $cadrageFile->setAction($entity);
+        }
+
+        foreach ($entity->getCadrageLinks() as $cadrageLink)
+        {
+            $cadrageLink->setAction($entity);
+        }
     }
 
 }

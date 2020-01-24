@@ -1,10 +1,40 @@
 <h3 id="anchor_cadrage" class="text-purple pt-5">
     <small><i class="fas fa-crop-alt"></i></small> Cadrage
 </h3>
-<section  class="mt-4 p-3 col-12 bg-light">
-        {% if action.cadrage %}
-            {{ action.cadrage | raw }}
-        {% else %}
-            en cours de rédaction
+
+        {% if action.cadrage and action.cadrage != '<br>'  %}
+            <section  class="mt-4 p-3 col-12 bg-light">
+                {{ action.cadrage | raw }}
+            </section>
+        {% elseif action.cadrageFiles.count == 0 and action.cadrageLinks.count == 0 %}
+            <section  class="mt-4 p-3 col-12 bg-light">
+                en cours de rédaction
+            </section>
         {% endif %}
+
+
+
+<section  class="mt-4 p-3 col-12 ">
+{% if action.cadrageFiles.count != 0 or action.cadrageLinks.count != 0 %}
+    <ul  class="list-group list-group-flush">
+
+
+        {% for cadrageFile in action.cadrageFiles %}
+            <li  class="list-group-item">
+                <a target="_blank" href="{{ path('cadrage_file_show',{'id':action.id, 'fileId':cadrageFile.id}) }}" >
+                    {{ include('file/_icone_extension.html.twig',{'extension': cadrageFile.fileExtension})}}
+                    {{ cadrageFile.title  }}.{{ cadrageFile.fileExtension  }}
+                </a>
+            </li>
+        {% endfor %}
+        {% for cadrageLink in action.cadrageLinks %}
+            <li  class="list-group-item">
+                <a target="_blank" href="{{ cadrageLink.link }}" >
+                    <i class="fa fa-globe mr-2"></i>
+                    {{ cadrageLink.title  }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 </section>
