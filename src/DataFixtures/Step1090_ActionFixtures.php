@@ -7,9 +7,10 @@ use App\Entity\Category;
 use App\Helper\FixturesImportData;
 use App\Repository\CategoryRepository;
 use App\Validator\ActionValidator;
+use App\Workflow\WorkflowData;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class Step1090_ActionFixtures extends Fixture implements FixtureGroupInterface
@@ -102,7 +103,8 @@ class Step1090_ActionFixtures extends Fixture implements FixtureGroupInterface
             ->setCategory($category)
             ->setRegionStartAt($this->convertDate($data['date_region_debut']))
             ->setRegionEndAt($this->convertDate($data['date_region_fin']))
-            ->setCadrage('Rédaction en cours');
+            ->setCadrage('Rédaction en cours')
+            ->setState(WorkflowData::STATE_STARTED);
 
         if ($data['id_etat'] == '4' && $data['date_region_fin'] === null) {
             $instance->setRegionEndAt($this->convertDate("31/12/2020"));

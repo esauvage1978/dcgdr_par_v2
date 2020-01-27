@@ -1,0 +1,5 @@
+{% if action | actionCanUpdate %}
+    {% for transition in workflow_transitions(action) %}
+        {{ include('workflow/_modal_transition.html.twig',{'transition':transition.name,'id':action.id}) }}
+    {% endfor %}
+{% endif %}

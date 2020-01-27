@@ -1,6 +1,14 @@
 <section id="anchor_date" class="bg-white">
     <div class="card-body">
-
+        <div class="info-box bg-light  mt-3" data-toggle="tooltip" data-html="true"
+             title="{{ action.contentstate}}">
+            <div class="info-box-content">
+                <span class="info-box-text text-center text-muted">Etat</span>
+                <span class="info-box-number text-center  text-lg mb-0">
+                    {{ include('workflow/_state.html.twig' , {'state': action.state} ) }}
+                </span>
+            </div>
+        </div>
         <div class="info-box bg-light  ">
             <div class="info-box-content">
                 <span class="info-box-text text-center text-muted">Taux</span>

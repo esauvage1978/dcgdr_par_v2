@@ -1,0 +1,29 @@
+<!-- ETAT -->
+
+
+<section id="anchor_etat" class="card-deck">
+    <div class="card bg-gray ">
+        <div class="card-body">
+            <div class="ribbon-wrapper ribbon-lg">
+                <div class="ribbon " {{ include ('workflow/_color/_style_background.html.twig',{'state':action.state}) }}>
+                    <small>{{ action.state | workflowGetShortNameOfState }}</small>
+                </div>
+            </div>
+
+            <h4>Etat actuel de l'action</h4>
+            {% if action.contentstate is defined %}
+                <p class=" m-4">
+                    {{ action.contentstate | raw }}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if action | actionCanUpdate %}
+        {% for transition in workflow_transitions(action) %}
+            <div class="card bg-gray ">
+                {{ include('workflow/_transition.html.twig',{'transition':transition.name,'action':action,'choice':true}) }}
+            </div>
+        {% endfor %}
+   {% endif %}
+</section>

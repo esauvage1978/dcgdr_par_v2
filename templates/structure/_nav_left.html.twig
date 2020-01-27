@@ -37,6 +37,15 @@
                      with font-awesome or any other icon font library -->
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     {% if is_granted('ROLE_GESTIONNAIRE_LOCAL') %}
+                        <li class="nav-item ">
+                            <a href="{{path('dashboard')}}" class="nav-link {{  '/dashboard' in app.request.uri ? 'active' :'' }}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Tableau de bord
+                                </p>
+                            </a>
+
+                        </li>
 
                         <li class="nav-item has-treeview ">
                             <a href="#" class="nav-link {{ '/action/' in app.request.uri ? 'active' :'' }}">

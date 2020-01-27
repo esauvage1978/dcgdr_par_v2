@@ -20,15 +20,19 @@
             </span>
             <small>
                 {{ action.category.thematique.pole.axe.name }}
+                <span class="  float-right">
+                {{ include('workflow/_state.html.twig' , {'state': action.state} ) }}
+                </span>
                 {%  if action.category.enable ==false or
                     action.category.thematique.enable ==false or
                     action.category.thematique.pole.enable ==false or
                     action.category.thematique.pole.axe.enable ==false  %}
-                    <span class="badge badge-danger text-sm float-right">L'action n'est pas visible</span>
+                    <span class="badge badge-danger text-xs float-right">L'action n'est pas visible</span>
                 {% endif %}
                 {%  if action.category.thematique.pole.axe.archiving ==true  %}
-                    <span class="badge badge-danger text-sm float-right">L'action est archivée</span>
+                    <span class="badge badge-danger text-xs float-right">L'action est archivée</span>
                 {% endif %}
+
             </small>
         </div>
     </div>

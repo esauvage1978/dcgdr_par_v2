@@ -15,6 +15,7 @@ class ActionSearchDto
     private $thematiqueRef;
     private $categoryRef;
     private $actionRef;
+    private $state;
 
 
 
@@ -241,7 +242,23 @@ class ActionSearchDto
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
 
+    /**
+     * @param mixed $state
+     * @return ActionSearchDto
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+        return $this;
+    }
 
 
 

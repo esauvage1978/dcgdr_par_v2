@@ -1,2 +1,57 @@
 framework:
-    workflows: null
+    workflows:
+        action:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'state'
+            initial_marking: started
+            support:
+                - App\Entity\Action
+            places:
+                - started
+                - cotech
+                - codir
+                - rejected
+                - finalised
+                - deployed
+                - measured
+                - clotured
+                - abandonned
+            transitions:
+                toCotech:
+                    from: started
+                    to: cotech
+                toCodir:
+                    from: cotech
+                    to: codir
+                toRejected:
+                    from: [cotech,codir]
+                    to: rejected
+                toFinalised:
+                    from: codir
+                    to: finalised
+                toDeployed:
+                    from: finalised
+                    to: deployed
+                unDeployed:
+                    from: deployed
+                    to: finalised
+                toMeasured:
+                    from: deployed
+                    to: measured
+                unMeasured:
+                    from: measured
+                    to: deployed
+                toClotured:
+                    from: measured
+                    to: clotured
+                unClotured:
+                    from: clotured
+                    to: measured
+                toAbandonned:
+                    from: [started, cotech, codir,rejected,  finalised, deployed, measured, clotured]
+                    to: abandonned
+                toStarted:
+                    from: [abandonned, cotech, codir, rejected, finalised]
+                    to: started

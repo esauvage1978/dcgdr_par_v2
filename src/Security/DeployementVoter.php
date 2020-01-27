@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\Deployement;
 use App\Entity\User;
+use App\Workflow\WorkflowData;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -105,6 +106,13 @@ class DeployementVoter extends Voter
 
     public function canAppendUpdate(Deployement $deploiement, User $user)
     {
+        $stateClose=[
+          WorkflowData::STATE_STARTED
+        ];
+        if(in_array($deploiement->getAction()->getState(),$stateClose)) {
+            return false;
+        }
+
         if( $deploiement->getAction()->getCategory()->getThematique()->getPole()->getAxe()->getArchiving()) {
             return false;
         }

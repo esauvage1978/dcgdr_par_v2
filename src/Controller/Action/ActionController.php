@@ -12,6 +12,7 @@ use App\Repository\ActionFileRepository;
 use App\Repository\ActionRepository;
 use App\Repository\CadrageFileRepository;
 use App\Security\ActionVoter;
+use App\Workflow\WorkflowData;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +50,7 @@ class ActionController extends AppControllerAbstract
 
 
         return $this->render(self::ENTITY . '/index.html.twig', [
-            self::ENTITYS => $repository->findAllForDto($actionSearchDto),
+            self::ENTITYS => $repository->findAllForDto($actionSearchDto,true),
         ]);
     }
 
@@ -178,5 +179,34 @@ class ActionController extends AppControllerAbstract
     public function deleteAction(Request $request, Action $entity, ActionManager $manager): Response
     {
         return $this->delete($request, $entity, $manager, self::ENTITY);
+    }
+
+    /**
+     * @Route("/workflow/actions/{state?}", name="actions_by_state", methods={"GET"})
+     *
+     * @param ActionRepository $actionRepository
+     * @param string $state
+     *
+     * @return Response
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function actionsByStateAction(
+        ActionRepository $actionRepository,
+        string $state,
+        ActionSearchDto $actionSearchDto
+    ): Response
+    {
+        $actionSearchDto->setState($state);
+
+        $complement = '';
+        $nextSteps = WorkflowData::getTransitionsForState($state);
+        $resultRepo = $actionRepository->findAllForDto($actionSearchDto,true);
+
+        return $this->render('action/index_dashboard.html.twig', [
+            'actions' => $resultRepo,
+            'complement' => $complement,
+            'nextSteps' => $nextSteps,
+        ]);
     }
 }

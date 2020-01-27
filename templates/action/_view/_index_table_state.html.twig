@@ -5,9 +5,9 @@
         <th class="all text-center">Référence</th>
         <th class="desktop">Plan d'actions</th>
         <th class="all">Action</th>
-        <th class="all text-center">Etat</th>
-        <th class="desktop"></th>
-        <th class="all"></th>
+        <th class="all">Etat</th>
+        <th class="desktop text-center"></th>
+        <th class="all text-center"></th>
     </tr>
     </thead>
     <tbody>
@@ -36,7 +36,15 @@
             <td class="text-center align-middle">
                 {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': action.taux1, 'taux2': action.taux2  }) }}
             </td>
-
+            {% if nextSteps is defined %}
+                <td class=" align-middle col-4">
+                    {% for nextStep in nextSteps %}
+                        <div class="bg-gray col-sm-12 mb-2 position-relative p-3">
+                            {{ include('workflow/_transition.html.twig',{'transition':nextStep,'action':action,'choice':false}) }}
+                        </div>
+                    {% endfor %}
+                </td>
+            {% endif %}
             <td class="d-flex flex-column bd-highlight">
 
                 {% if action | actionCanRead %}
