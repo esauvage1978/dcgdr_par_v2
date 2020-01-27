@@ -24,6 +24,7 @@
             </div>
         </div>
     </form>
+
     <ul class="navbar-nav ml-auto">
         <a class="nav-link" href="{{ path('indicator_contributif') }}" title="Les indicateurs contributifs régionaux">
             <i class="fas fa-chart-line"></i>
@@ -31,6 +32,16 @@
         <a class="nav-link" href="{{ path('my_deployement') }}" title="Mes déploiements">
             <i class="fas fa-city"></i>
         </a>
+        <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+            <i class="fa fa-bolt"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <span class="dropdown-item dropdown-header">Liste des actions par état</span>
+            <div class="dropdown-divider"></div>
+            <a href="{{ path('actions_by_state',{'state':'started'}) }}" class="nav-link">
+                {{ include('workflow/_state.html.twig',{'state':'started'})}}
+            </a>
+        </div>
         <li class="nav-item">
             <a class="nav-link d-none" id="showSidebar" onclick="switch_sidebar();">
                 <i class="fas fa-th-large"></i>

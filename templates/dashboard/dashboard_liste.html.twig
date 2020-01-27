@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} Plan d'actions{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h1 class="m-0 text-dark">Actions {{ complement }} </h1>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">Dashboard</a></li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="tableAdministration" class="table table-striped table-condensed "
+                                   style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th class="all text-center">Référence</th>
+                                    <th class="desktop">Classement</th>
+                                    <th class="all">Action</th>
+                                    <th class="desktop text-center"></th>
+                                    <th class="all col-1 "></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for action in actions %}
+                                    <tr>
+                                        <td class=" text-lg-center col-1 align-middle">
+                                            {{ action.category.thematique.ref }}-{{ action.category.ref }}
+                                            -{{ action.ref }}
+                                            <br/>
+                                            <small class="text-muted">{{ action.id }}</small>
+                                        </td>
+                                        <td class="text-xs  align-middle">
+                                            {{ action.category.thematique.pole.axe.name }}
+                                            <br/>
+                                            {{ action.category.thematique.pole.name }}
+                                            <br/>
+                                            {{ action.category.thematique.name }}
+                                            <br/>
+                                            {{ action.category.name }}
+                                        </td>
+                                        <td class="align-middle">{{ action.name }}</td>
+
+
+                                        <td class=" align-middle col-4">
+                                            {%  for nextStep in nextSteps %}
+                                                {{ include('workflow/_critere/_' ~ nextStep ~ '.html.twig')}}
+                                            {% endfor %}
+                                        </td>
+
+                                        <td class="d-flex flex-column bd-highlight ">
+
+                                            {{ include('share/__btn_show.html.twig',
+                                                {   'url':'action_show',
+                                                    'id':action.id,
+                                                    'sm':true
+                                                }) }}
+                                            {% set btn=include('share/__btn_edit.html.twig',
+                                                {   'url':'action_edit',
+                                                    'id':action.id,
+                                                    'sm':true,
+                                                })  %}
+                                            {% if is_granted('ROLE_GESTIONNAIRE') %}
+                                                <span class="mb-2"></span>
+                                                {{ btn | raw }}
+                                            {% elseif action.writers | isWriter %}
+                                                {{ btn | raw }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6">Aucun d'enregistrement</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('plugins/datatables/jquery.dataTables.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')) }}"></script>
+    <script>
+        $(function () {
+            $('#tableAdministration').DataTable(
+                {
+                    stateSave: true,
+                    responsive: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    scrollX: false,
+                    ordering: true,
+                    "order": [[2, 'asc']],
+                    "columns": [
+                        null,
+                        null,
+                        null,
+                        {"orderable": false},
+                        {"orderable": false}
+                    ],
+                    "language": {
+                        buttons: {
+                            copyTitle: 'Ajouté au presse-papiers',
+                            copyKeys: 'Appuyez sur <i>ctrl</i> ou <i>\u2318</i> + <i>C</i> pour copier les données du tableau à votre presse-papiers. <br><br>Pour annuler, cliquez sur ce message ou appuyez sur Echap.',
+                            copySuccess: {
+                                _: '%d lignes copiées',
+                                1: '1 ligne copiée'
+                            }
+                        },
+                        "sProcessing": "Traitement en cours...",
+                        "sSearch": "Rechercher&nbsp;:",
+                        "sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
+                        "sInfo": "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                        "sInfoEmpty": "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                        "sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                        "sInfoPostFix": "",
+                        "sLoadingRecords": "Chargement en cours...",
+                        "sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                        "sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
+                        "oPaginate": {
+                            "sFirst": "Premier",
+                            "sPrevious": "Pr&eacute;c&eacute;dent",
+                            "sNext": "Suivant",
+                            "sLast": "Dernier"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+                        },
+
+                    }
+
+                })
+
+        });
+    </script>
+{% endblock %}

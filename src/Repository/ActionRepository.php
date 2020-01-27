@@ -115,6 +115,34 @@ class ActionRepository extends ServiceEntityRepository
         return $builder;
     }
 
+    private function findMinimumForDto_initialise(ActionSearchDto $dto): QueryBuilder
+    {
+        $builder = $this->createQueryBuilder(self::ALIAS)
+            ->select(
+                self::ALIAS,
+                CategoryRepository::ALIAS,
+                ThematiqueRepository::ALIAS,
+                PoleRepository::ALIAS,
+                AxeRepository::ALIAS,
+                CorbeilleRepository::ALIAS_ACTION_WRITERS,
+                CorbeilleRepository::ALIAS_ACTION_READERS
+            )
+            ->leftjoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
+            ->leftjoin(CategoryRepository::ALIAS.'.thematique', ThematiqueRepository::ALIAS)
+            ->leftjoin(ThematiqueRepository::ALIAS.'.pole', PoleRepository::ALIAS)
+            ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS)
+            ->leftjoin(self::ALIAS.'.writers', CorbeilleRepository::ALIAS_ACTION_WRITERS)
+            ->leftjoin(self::ALIAS.'.readers', CorbeilleRepository::ALIAS_ACTION_READERS)
+            ->where(AxeRepository::ALIAS.'.enable='.($dto->isAxeEnable() ? 'true' : 'false'))
+            ->andwhere(PoleRepository::ALIAS.'.enable='.($dto->isPoleEnable() ? 'true' : 'false'))
+            ->andwhere(ThematiqueRepository::ALIAS.'.enable='.($dto->isThematiqueEnable() ? 'true' : 'false'))
+            ->andwhere(CategoryRepository::ALIAS.'.enable='.($dto->isCategoryEnable() ? 'true' : 'false'))
+            ->andwhere(AxeRepository::ALIAS.'.archiving='.($dto->isActionArchiving() ? 'true' : 'false'));
+
+        return $builder;
+    }
+
+
     private function findAllForDto_orderBy(QueryBuilder $builder): QueryBuilder
     {
         $builder
@@ -128,16 +156,25 @@ class ActionRepository extends ServiceEntityRepository
         return $builder;
     }
 
-    public function findAllForDto(ActionSearchDto $dto)
+    public function findAllForDto(ActionSearchDto $dto, bool $minilu=false)
     {
         $params = [];
 
-        $builder = $this->findAllForDto_initialise($dto);
+        $minilu?
+            $builder = $this->findMinimumForDto_initialise($dto) :
+            $builder = $this->findAllForDto_initialise($dto)
+        ;
 
         if (!empty($dto->getId())) {
             $builder->andwhere(self::ALIAS.'.id = :id');
 
             $params = $this->addParams($params, 'id', $dto->getId());
+        }
+
+        if (!empty($dto->getState())) {
+            $builder->andwhere(self::ALIAS.'.state = :state');
+
+            $params = $this->addParams($params, 'state', $dto->getState());
         }
 
         if (!empty($dto->getAxeId())) {

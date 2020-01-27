@@ -43,14 +43,38 @@ class ActionController extends AppControllerAbstract
         ?string $axeid): Response
     {
         $actionSearchDto->setAxeId($axeid);
+
         if ($request->isXmlHttpRequest()) {
             return $this->json(
                 count($actionRepository->findAllForDto(
-                    $actionSearchDto
+                    $actionSearchDto,true
                 )));
         }
 
         return new Response("Ce n'est pas une requête Ajax");
     }
 
+    /**
+     * @Route("/ajax/workflow/actions/nbr/{state?}", name="ajax_actions_by_state", methods={"POST"})
+     *
+     * @param Request          $request
+     * @param ActionRepository $actionRepository
+     *
+     * @return Response
+     *
+     * @IsGranted("ROLE_USER")
+     *
+     */
+    public function ajaxActionsByStatAction(Request $request,ActionSearchDto $actionSearchDto, ActionRepository $actionRepository, ?string $state): Response
+    {
+        $actionSearchDto->setState($state);
+        $resultRepo = $actionRepository->findAllForDto($actionSearchDto,true);
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->json(
+                count($resultRepo));
+        }
+
+        return new Response("Ce n'est pas une requête Ajax");
+    }
 }

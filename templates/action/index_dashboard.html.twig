@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} Plan d'actions{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h1 class="m-0 text-dark">Actions {{ complement }} </h1>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('dashboard') }}">Dashboard</a></li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{ include('action/_view/_index_table_state.html.twig') }}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('plugins/datatables/jquery.dataTables.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')) }}"></script>
+    <script>
+        $(function () {
+            $('#tableAdministration').DataTable(
+                {
+                    stateSave: true,
+                    responsive: true,
+                    scrollCollapse: true,
+                    paging: false,
+                    scrollX: false,
+                    ordering: true,
+                    "order": [[1, 'asc'],[2, 'asc']],
+                    "columns": [
+                        null,
+                        null,
+                        null,
+                        {"orderable": false},
+                        {"orderable": false},
+                        {"orderable": false},
+                        {"orderable": false}
+                    ],
+                    "language": {
+                        buttons: {
+                            copyTitle: 'Ajouté au presse-papiers',
+                            copyKeys: 'Appuyez sur <i>ctrl</i> ou <i>\u2318</i> + <i>C</i> pour copier les données du tableau à votre presse-papiers. <br><br>Pour annuler, cliquez sur ce message ou appuyez sur Echap.',
+                            copySuccess: {
+                                _: '%d lignes copiées',
+                                1: '1 ligne copiée'
+                            }
+                        },
+                        "sProcessing": "Traitement en cours...",
+                        "sSearch": "Rechercher&nbsp;:",
+                        "sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
+                        "sInfo": "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                        "sInfoEmpty": "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                        "sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                        "sInfoPostFix": "",
+                        "sLoadingRecords": "Chargement en cours...",
+                        "sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                        "sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
+                        "oPaginate": {
+                            "sFirst": "Premier",
+                            "sPrevious": "Pr&eacute;c&eacute;dent",
+                            "sNext": "Suivant",
+                            "sLast": "Dernier"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+                        },
+
+                    }
+
+                })
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} Organisme {% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+
+{% endblock %}
+
+{% block body %}
+
+    <!-- MESSAGE -->
+
+    <div class="card card-info">
+        <div class="card-header">
+            <div class="card-title">
+                <h5>Cycle de vie des actions</h5>
+            </div>
+        </div>
+
+        <div class="card-body p-5">
+
+            <div class="row">
+                <!-- 0 started -->
+                <div class="col-2">
+                    {{ include('dashboard/_dashboard_state.html.twig',{
+                        'state':'started',
+                        'url':'actions_by_state'
+                    }) }}
+                </div>
+
+
+
+                <!-- 7 abandonne -->
+                <div class="col-2 offset-3 ">
+                    {{ include('dashboard/_dashboard_state.html.twig',{
+                        'state':'abandonned',
+                        'url':'actions_by_state'
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <!-- 1 cotech -->
+                <div class="col-2">
+                    {{ include('dashboard/_dashboard_state.html.twig',{
+                        'state':'cotech',
+                        'url':'actions_by_state'
+                    }) }}
+                </div>
+
+                <div class="col-2">
+                    {{ include('dashboard/_dashboard_state.html.twig',{
+                        'state':'rejected',
+                        'url':'actions_by_state'
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <!-- 1 codir -->
+                <div class="col-2">
+                    {{ include('dashboard/_dashboard_state.html.twig',{
+                        'state':'codir',
+                        'url':'actions_by_state'
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <!-- 3 toDeploy -->
+                <div class="col-2 ">
+                    {{ include('dashboard/_dashboard_state.html.twig',{
+                        'state':'finalised',
+                        'url':'actions_by_state'
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <!-- 4 deployed -->
+                <div class="col-2 ">
+                    {{ include('dashboard/_dashboard_state.html.twig',{
+                        'state':'deployed',
+                        'url':'actions_by_state'
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <!-- 5 toMeasure -->
+                <div class="col-2 ">
+                    {{ include('dashboard/_dashboard_state.html.twig',{
+                        'state':'measured',
+                        'url':'actions_by_state'
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <!-- 6 closed -->
+                <div class="col-2 ">
+                    {{ include('dashboard/_dashboard_state.html.twig',{
+                        'state':'clotured',
+                        'url':'actions_by_state'
+                    }) }}
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('js/dashboard_action.js')) }}"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            searchCount('started', '{{ path('ajax_actions_by_state') }}');
+            searchCount('abandonned', '{{ path('ajax_actions_by_state') }}');
+            searchCount('rejected', '{{ path('ajax_actions_by_state') }}');
+            searchCount('cotech', '{{ path('ajax_actions_by_state') }}');
+            searchCount('codir', '{{ path('ajax_actions_by_state') }}');
+            searchCount('finalise', '{{ path('ajax_actions_by_state') }}');
+            searchCount('deployed', '{{ path('ajax_actions_by_state') }}');
+            searchCount('measured', '{{ path('ajax_actions_by_state') }}');
+            searchCount('clotured', '{{ path('ajax_actions_by_state') }}');
+        });
+    </script>
+{% endblock %}

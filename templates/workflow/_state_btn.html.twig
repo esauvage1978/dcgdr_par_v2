@@ -1,0 +1,6 @@
+<div class="col text-center">
+    <button type="button" class="btn {{ css | default('') }}" {{ include('workflow/_color/_style_background.html.twig',{ 'state':state}) }}
+            data-toggle="modal" data-target="#modal-{{ transition }}">
+        <i class="fas fa-external-link-alt "></i> {{ action }}
+    </button>
+</div>

@@ -148,8 +148,26 @@ class Action implements EntityInterface
      */
     private $cadrageFiles;
 
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $state;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $stateAt;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $contentState;
+
     public function __construct()
     {
+        $this->setState(WorkflowData::STATE_STARTED);
+        $this->setStateAt(new \DateTime());
+
         $this->setTaux1('0');
         $this->setTaux2('0');
         $this->setShowAll(true);
@@ -656,6 +674,7 @@ class Action implements EntityInterface
 
         return $this;
     }
+
     public function removeActionFile(ActionFile $actionFile): self
     {
         if ($this->actionFiles->contains($actionFile)) {
@@ -665,6 +684,42 @@ class Action implements EntityInterface
                 $actionFile->setAction(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): self
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function getStateAt(): ?\DateTimeInterface
+    {
+        return $this->stateAt;
+    }
+
+    public function setStateAt(\DateTimeInterface $stateAt): self
+    {
+        $this->stateAt = $stateAt;
+
+        return $this;
+    }
+
+    public function getContentState(): ?string
+    {
+        return $this->contentState;
+    }
+
+    public function setContentState(?string $contentState): self
+    {
+        $this->contentState = $contentState;
 
         return $this;
     }

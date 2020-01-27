@@ -1,0 +1,77 @@
+{% set data = (transition | workflowGetModalDataForTransition) %}
+<div class="card-body">
+    <div class="ribbon-wrapper ribbon-lg">
+        <div class="ribbon " {{ include ('workflow/_color/_style_background.html.twig',{'state':data.state}) }}>
+            <small>{{ data.state | workflowGetShortNameOfState }}</small>
+        </div>
+    </div>
+    <p class="mt-2"></p>
+
+    {% if workflow_can(action, data.transition ) %}
+
+        <p>
+            <i class="fa fa-info-circle"></i>
+            L'action peut basculer vers l'état {{ include('workflow/_state.html.twig',{'state':data.state}) }}
+        </p>
+
+        {% for message in action | workflowGetExplains(data.transition) %}
+            <p>
+                <small>
+                    {{ message }}
+                </small>
+            </p>
+        {% endfor %}
+
+        {% if choice==true %}
+            {{ include('workflow/_state_btn.html.twig',{
+                'state':data.state,
+                'transition': data.transition,
+                'action':data.btn_label,
+                'css':'mb-3'
+            }) }}
+        {% endif %}
+
+
+    {% else %}
+        <p class="text-warning">
+            <i class="fa fa-exclamation-triangle"></i>
+            L'action ne peut pas basculer vers
+            l'état {{ include('workflow/_state.html.twig',{'state':data.state}) }}
+        </p>
+
+        <span class="text-warning">Les conditions ne sont pas réunies pour basculer l'action</span>
+
+        {% set iconSuccess='<i class="fa fa-check-circle"></i>' %}
+        {% set iconDanger='<i class="fa fa-stop-circle"></i>' %}
+
+        {% set checkMessages=action | workflowGetCheckMessages(data.transition) %}
+        {% if checkMessages | length >0 %}
+            <ul class="list-unstyled mt-1 p-2 rounded-1 bg-light">
+
+                {% for checkMessage in checkMessages %}
+                    <li>
+                        <small>
+                            {% if checkMessage.type == 'success' %}
+                                <span class="text-success  ">
+                                {{ iconSuccess | raw }}
+                                    {{ checkMessage.message }}
+                            </span>
+                            {% elseif checkMessage.type == 'danger' %}
+                                <span class="text-danger  ">
+                                {{ iconDanger | raw }}
+                                    {{ checkMessage.message }}
+                            </span>
+                            {% elseif checkMessage.type == 'info' %}
+                                <span class="text-info  ">
+                        {{ checkMessage.message }}
+                    </span>
+                            {% else %}
+                                {{ checkMessage.message }}
+                            {% endif %}
+                        </small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+</div>

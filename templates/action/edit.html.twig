@@ -90,10 +90,13 @@
 {% endblock %}
 
 {% block body %}
+    <script src="{{ absolute_url( asset('plugins/jquery/jquery.min.js')) }}"></script>
+    {{ include('action/_edit/_etat_modal.html.twig') }}
 
     {{ form_start(form) }}
     <section class="row justify-content-start  pb-5">
         {{ include('action/_show/_name.html.twig') }}
+        {{ include('action/_edit/_etat.html.twig',{'show_info':true}) }}
         <div class="row col-12 ">
             <div id="col1"
                  class="col-sm-12  order-sm-second  col-md-12 order-sm-second col-lg-6 order-lg-second col-xl-2 order-xl-first ">
