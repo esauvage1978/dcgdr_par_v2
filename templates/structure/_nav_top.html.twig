@@ -25,14 +25,14 @@
         </div>
     </form>
 
-    <ul class="navbar-nav ml-auto">
+    <div class="navbar-nav ml-auto">
         <a class="nav-link" href="{{ path('indicator_contributif') }}" title="Les indicateurs contributifs régionaux">
             <i class="fas fa-chart-line"></i>
         </a>
         <a class="nav-link" href="{{ path('my_deployement') }}" title="Mes déploiements">
             <i class="fas fa-city"></i>
         </a>
-        <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+        <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false" title="Les actions">
             <i class="fa fa-bolt"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -74,10 +74,10 @@
                 {{ include('workflow/_state.html.twig',{'state':'abandonned'})}}
             </a>
         </div>
-        <li class="nav-item">
-            <a class="nav-link d-none" id="showSidebar" onclick="switch_sidebar();">
+        <div class="nav-item">
+            <a class="nav-link d-none" id="showSidebar" onclick="switch_sidebar();" title="Masquer / afficher le menu latéral droit">
                 <i class="fas fa-th-large"></i>
             </a>
-        </li>
-    </ul>
+        </div>
+    </div>
 </nav>
