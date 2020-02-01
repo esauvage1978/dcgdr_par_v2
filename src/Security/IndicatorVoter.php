@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\Indicator;
 use App\Entity\User;
+use App\Workflow\WorkflowData;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -75,6 +76,16 @@ class IndicatorVoter extends Voter
 
     public function canUpdate(Indicator $indicator, User $user)
     {
+        $states=[
+            WorkflowData::STATE_STARTED,
+            WorkflowData::STATE_FINALISED,
+        ];
+
+        if (!in_array($indicator->getAction()->getState(),$states))
+        {
+            return false;
+        }
+
         if ($this->security->isGranted('ROLE_GESTIONNAIRE')) {
             return true;
         }
