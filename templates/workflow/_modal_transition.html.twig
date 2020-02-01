@@ -41,7 +41,7 @@
     <script type="text/javascript">
         $(function () {
             $('#a_{{ data.transition }}').click(function () {
-                if($('#{{ data.transition }}_content').val()=="") {
+                if($('#{{ data.transition }}_content').val()==="") {
                     alert('Le commentaire est vide');
                     return;
                 }
