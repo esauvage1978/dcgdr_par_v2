@@ -1,6 +1,6 @@
 <li id="{{ domaine }}" class="mb-1 ml-3">
     <a href="{{ path(url) }}/{{ filtre }}">
-        <span id="head_{{ domaine }}">{{ titre }}</span>
+        <span id="head_{{ domaine }}">{{ titre | raw }}</span>
         <span id="badge_{{ domaine }}" class="float-right badge badge-{{ color | default('info') }}">
             <i id="overlay_{{ domaine }}" class=" d-none fas  fa-sync-alt"></i>
         </span>

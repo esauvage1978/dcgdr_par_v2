@@ -16,16 +16,6 @@ class ActionState implements EntityInterface
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Action", inversedBy="actionStates")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $action;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="actionStates")
-     */
-    private $user;
 
     /**
      * @ORM\Column(type="string", length=20)
@@ -47,6 +37,16 @@ class ActionState implements EntityInterface
      */
     private $content;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Action", inversedBy="actionStates")
+     */
+    private $action;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="actionStates")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,29 +59,6 @@ class ActionState implements EntityInterface
         return $this;
     }
 
-    public function getAction(): ?Action
-    {
-        return $this->action;
-    }
-
-    public function setAction(?Action $action): self
-    {
-        $this->action = $action;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     public function getStateOld(): ?string
     {
@@ -127,6 +104,30 @@ class ActionState implements EntityInterface
     public function setContent(?string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getAction(): ?Action
+    {
+        return $this->action;
+    }
+
+    public function setAction(?Action $action): self
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -1,0 +1,27 @@
+<div style="padding:10px; border-radius: 10px;border: 1px solid lightskyblue">
+    <a href="{{ url('action_show',{id:action.id}) }}">
+        <h3>{{ action.name }}</h3>
+    </a>
+
+    <div style="padding-top: 30px">
+        <p>
+            <em>Classement : </em>
+        <ul>
+            <li>{{ action.category.thematique.pole.axe.name }}</li>
+            <li>{{ action.category.thematique.pole.name }}</li>
+            <li>{{ action.category.thematique.name }}</li>
+            <li>{{ action.category.name }}</li>
+        </ul>
+        </p>
+        <p>
+            <em>R&eacute;f&eacute;rence : </em><strong>{{ action.category.thematique.ref }}
+                -{{ action.category.ref }}
+                -{{ action.ref }}</strong>
+        </p>
+        <p><em>Num&eacute;ro de l'action : </em><strong>{{ action.id }}</strong></p>
+        <p><em>Adresse : </em><strong>{{ url('action_show',{id:action.id}) }}</strong></p>
+        <p>Commentaire :</p>
+        <p><strong>{{ action.contentState | raw }}</strong></p>
+
+    </div>
+</div>

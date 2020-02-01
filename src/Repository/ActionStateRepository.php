@@ -14,6 +14,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ActionStateRepository extends ServiceEntityRepository
 {
+    const ALIAS = 'ast';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ActionState::class);
@@ -21,13 +23,16 @@ class ActionStateRepository extends ServiceEntityRepository
 
     public function findAllForAction(string $actionId)
     {
-        return $this->createQueryBuilder('ast')
-            ->select('ast, a, u')
-            ->join('ast.action', 'a')
-            ->join('ast.user', 'u')
-            ->where('ast.action = :action')
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(
+                self::ALIAS,
+                ActionRepository::ALIAS,
+                UserRepository::ALIAS)
+            ->join( self::ALIAS.'.action', ActionRepository::ALIAS)
+            ->join(self::ALIAS.'.user', UserRepository::ALIAS)
+            ->where(self::ALIAS.'.action = :action')
             ->setParameter('action', $actionId)
-            ->orderBy('a.id', 'ASC')
+            ->orderBy( self::ALIAS.'.id', 'ASC')
             ->getQuery()
             ->getResult();
     }

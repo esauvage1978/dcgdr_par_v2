@@ -14,8 +14,7 @@
     {% for action in actions %}
         <tr>
             <td class=" text-lg-center align-middle">
-                {{ action.category.thematique.ref }}-{{ action.category.ref }}
-                -{{ action.ref }}
+                {{ action.category.thematique.ref }}-{{ action.category.ref }}-{{ action.ref }}
                 <br/>
                 <small class="text-muted">{{ action.id }}</small>
             </td>
@@ -36,15 +35,7 @@
             <td class="text-center align-middle">
                 {{ include('share/_taux_progress_bar_label.html.twig', {'taux1': action.taux1, 'taux2': action.taux2  }) }}
             </td>
-            {% if nextSteps is defined %}
-                <td class=" align-middle col-4">
-                    {% for nextStep in nextSteps %}
-                        <div class="bg-gray col-sm-12 mb-2 position-relative p-3">
-                            {{ include('workflow/_transition.html.twig',{'transition':nextStep,'action':action,'choice':false}) }}
-                        </div>
-                    {% endfor %}
-                </td>
-            {% endif %}
+
             <td class="d-flex flex-column bd-highlight">
 
                 {% if action | actionCanRead %}

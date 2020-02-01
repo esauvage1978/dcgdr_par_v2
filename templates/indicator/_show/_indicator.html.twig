@@ -8,7 +8,7 @@
             <span class="mr-2">
                 {{ indicator.indicatorType | indicatorGetNameOfIndicator }}
             </span>
-            {% if indicator | indicatorCanUpdate %}
+            {% if indicator | indicatorCanUpdate  and indicator.action.state!='cotech' %}
                 {{ include('share/__btn_edit.html.twig',
                     {   'url':'indicator_edit',
                         'id':indicator.id,

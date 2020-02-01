@@ -95,6 +95,16 @@ class DeployementVoter extends Voter
 
     public function canAppendRead(Deployement $deploiement, User $user)
     {
+        $states=[
+            WorkflowData::STATE_DEPLOYED,
+            WorkflowData::STATE_MEASURED,
+            WorkflowData::STATE_CLOTURED
+        ];
+        if (!in_array($deploiement->getAction()->getState(),$states))
+        {
+            return false;
+        }
+
         foreach ($deploiement->getReaders() as $corbeille) {
             if (in_array($user, $corbeille->getUsers()->toArray())) {
                 return true;
@@ -106,10 +116,13 @@ class DeployementVoter extends Voter
 
     public function canAppendUpdate(Deployement $deploiement, User $user)
     {
-        $stateClose=[
-          WorkflowData::STATE_STARTED
+        $states=[
+            WorkflowData::STATE_DEPLOYED,
+            WorkflowData::STATE_MEASURED,
+            WorkflowData::STATE_CLOTURED
         ];
-        if(in_array($deploiement->getAction()->getState(),$stateClose)) {
+        if (!in_array($deploiement->getAction()->getState(),$states))
+        {
             return false;
         }
 

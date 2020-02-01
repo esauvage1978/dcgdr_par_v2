@@ -41,13 +41,15 @@
                                     }) }}
                             {% endif %}
 
+                            {% if deployement | deployementCanAppendUpdate %}
                             {{ include('share/__btn_show.html.twig',
                                 {   'url':'deployement_append',
                                     'id':deployement.id,
                                     'sm':true
                                 }) }}
+                            {% endif %}
 
-                            {% if deployement | deployementCanUpdate %}
+                            {% if deployement | deployementCanUpdate and deployement.action.state!='cotech'  %}
                                 {{ include('share/__btn_edit.html.twig',
                                     {   'url':'deployement_edit',
                                         'id':deployement.id,

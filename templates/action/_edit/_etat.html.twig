@@ -20,9 +20,9 @@
     </div>
 
     {% if action | actionCanUpdate %}
-        {% for transition in workflow_transitions(action) %}
+        {% for transition in action.state | workflowGetTransitionsForState %}
             <div class="card bg-gray ">
-                {{ include('workflow/_transition.html.twig',{'transition':transition.name,'action':action,'choice':true}) }}
+                {{ include('workflow/_transition.html.twig',{'transition':transition,'action':action,'choice':true}) }}
             </div>
         {% endfor %}
    {% endif %}

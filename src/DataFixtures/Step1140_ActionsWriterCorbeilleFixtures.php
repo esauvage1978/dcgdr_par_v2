@@ -9,7 +9,7 @@ use App\Repository\ActionRepository;
 use App\Repository\CorbeilleRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class Step1140_ActionsWriterCorbeilleFixtures extends Fixture implements FixtureGroupInterface
@@ -35,6 +35,16 @@ class Step1140_ActionsWriterCorbeilleFixtures extends Fixture implements Fixture
      */
     private $entityManagerInterface;
 
+    /**
+     * @var Corbeille|null
+     */
+    private $writers;
+
+    /**
+     * @var Corbeille|null
+     */
+    private $validers;
+
     public function __construct(
         FixturesImportData $fixturesImportData,
         CorbeilleRepository $corbeilleRepository,
@@ -45,6 +55,8 @@ class Step1140_ActionsWriterCorbeilleFixtures extends Fixture implements Fixture
         $this->corbeilles = $corbeilleRepository->findAll();
         $this->actions = $actionRepository->findAll();
         $this->entityManagerInterface = $entityManagerI;
+        $this->writers = $corbeilleRepository->findOneBy(['id' => '32']);
+        $this->validers = $corbeilleRepository->findOneBy(['id' => '7']);
     }
 
     public function getInstance(string $id, $entitys)
@@ -72,6 +84,13 @@ class Step1140_ActionsWriterCorbeilleFixtures extends Fixture implements Fixture
                 $action->addWriter($corbeille);
 
                 $this->entityManagerInterface->persist($action);
+            }
+
+            foreach ($this->actions as $action) {
+                $action->addWriter($this->writers)
+                    ->addValider($this->validers);
+
+                $manager->persist($action);
             }
         }
 

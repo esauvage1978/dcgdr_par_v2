@@ -7,6 +7,7 @@ use App\Dto\ActionSearchDto;
 use App\Entity\Action;
 use App\Form\Action\ActionCreateType;
 use App\Form\Action\ActionEditType;
+use App\Helper\ActionFilter;
 use App\Manager\ActionManager;
 use App\Repository\ActionFileRepository;
 use App\Repository\ActionRepository;
@@ -28,10 +29,12 @@ class ActionController extends AppControllerAbstract
      * @Route("/actions/liste", name="action_index", methods={"GET"})
      * @IsGranted("ROLE_USER")
      */
-    public function indexAction(ActionRepository $repository): Response
-    {
-        return $this->render(self::ENTITY . '/index.html.twig', [
-            self::ENTITYS => $repository->findAllEnableAndNotArchiving(),
+    public function indexAction(
+        ActionRepository $repository,
+        ActionSearchDto $actionSearchDto
+    ): Response {
+        return $this->render(self::ENTITY.'/index.html.twig', [
+            self::ENTITYS => $repository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_TABLEAU),
         ]);
     }
 
@@ -43,14 +46,11 @@ class ActionController extends AppControllerAbstract
         ActionRepository $repository,
         ActionSearchDto $actionSearchDto,
         string $id_axe
-    ): Response
-    {
-
+    ): Response {
         $actionSearchDto->setAxeId($id_axe);
 
-
-        return $this->render(self::ENTITY . '/index.html.twig', [
-            self::ENTITYS => $repository->findAllForDto($actionSearchDto,true),
+        return $this->render(self::ENTITY.'/index.html.twig', [
+            self::ENTITYS => $repository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_TABLEAU),
         ]);
     }
 
@@ -71,7 +71,7 @@ class ActionController extends AppControllerAbstract
 
                 return $this->redirectToRoute('action_edit', ['id' => $entity->getId()]);
             }
-            $this->addFlash(self::DANGER, self::MSG_ERROR . $manager->getErrors($entity));
+            $this->addFlash(self::DANGER, self::MSG_ERROR.$manager->getErrors($entity));
         }
 
         return $this->render('action/new.html.twig', [
@@ -88,15 +88,14 @@ class ActionController extends AppControllerAbstract
         ActionSearchDto $actionSearchDto,
         ActionRepository $actionRepository,
         string $id
-    ): Response
-    {
+    ): Response {
         $actionSearchDto->setId($id);
         /** @var Action $action */
-        $action = $actionRepository->findAllForDto($actionSearchDto)[0];
+        $action = $actionRepository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_UNITAIRE)[0];
 
         $this->denyAccessUnlessGranted(ActionVoter::READ, $action);
 
-        return $this->render(self::ENTITY . '/show.html.twig', [
+        return $this->render(self::ENTITY.'/show.html.twig', [
             self::ENTITY => $action,
         ]);
     }
@@ -119,7 +118,7 @@ class ActionController extends AppControllerAbstract
         $file = new File($actionFile->getHref());
 
         // rename the downloaded file
-        return $this->file($file, $actionFile->getTitle() . '.' . $actionFile->getFileExtension());
+        return $this->file($file, $actionFile->getTitle().'.'.$actionFile->getFileExtension());
     }
 
     /**
@@ -140,9 +139,8 @@ class ActionController extends AppControllerAbstract
         $file = new File($cadrageFile->getHref());
 
         // rename the downloaded file
-        return $this->file($file, $cadrageFile->getTitle() . '.' . $cadrageFile->getFileExtension());
+        return $this->file($file, $cadrageFile->getTitle().'.'.$cadrageFile->getFileExtension());
     }
-
 
     /**
      * @Route("/action/{id}/edit", name="action_edit", methods={"GET","POST"})
@@ -184,9 +182,6 @@ class ActionController extends AppControllerAbstract
     /**
      * @Route("/workflow/actions/{state?}", name="actions_by_state", methods={"GET"})
      *
-     * @param ActionRepository $actionRepository
-     * @param string $state
-     *
      * @return Response
      *
      * @IsGranted("ROLE_USER")
@@ -195,18 +190,33 @@ class ActionController extends AppControllerAbstract
         ActionRepository $actionRepository,
         string $state,
         ActionSearchDto $actionSearchDto
-    ): Response
-    {
+    ): Response {
         $actionSearchDto->setState($state);
 
         $complement = '';
         $nextSteps = WorkflowData::getTransitionsForState($state);
-        $resultRepo = $actionRepository->findAllForDto($actionSearchDto,true);
+        $resultRepo = $actionRepository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_TABLEAU);
 
         return $this->render('action/index_dashboard.html.twig', [
             'actions' => $resultRepo,
             'complement' => $complement,
             'nextSteps' => $nextSteps,
         ]);
+    }
+
+    /**
+     * @Route("/my/action/{filter?}", name="my_action", methods={"GET"})
+     *
+     * @return Response
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function myActionAction(
+        ActionFilter $actionFilter,
+        ?string $filter): Response
+    {
+        return $this->render('action/indexmy.html.twig',
+            $actionFilter->getData($filter)
+        );
     }
 }
