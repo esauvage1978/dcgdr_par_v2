@@ -5,42 +5,38 @@
             <small>{{ data.state | workflowGetShortNameOfState }}</small>
         </div>
     </div>
-    <p class="mt-2"></p>
+    <p class="mt-2 "></p>
 
     {% if workflow_can(action, data.transition ) %}
-
-        <p>
-            <i class="fa fa-info-circle"></i>
-            L'action peut basculer vers l'état {{ include('workflow/_state.html.twig',{'state':data.state}) }}
-        </p>
-
-        {% for message in action | workflowGetExplains(data.transition) %}
-            <p>
-                <small>
-                    {{ message }}
-                </small>
+            <p class="text-center text-success">
+                <i class="far fa-check-circle fa-4x "></i>
             </p>
-        {% endfor %}
 
-        {% if choice==true %}
-            {{ include('workflow/_state_btn.html.twig',{
-                'state':data.state,
-                'transition': data.transition,
-                'action':data.btn_label,
-                'css':'mb-3'
-            }) }}
-        {% endif %}
+            {% for message in action | workflowGetExplains(data.transition) %}
+                <p>
+                    <small>
+                        {{ message }}
+                    </small>
+                </p>
+            {% endfor %}
+</div>
+<div class="card-footer">
+            {% if choice==true %}
 
-
+                {{ include('workflow/_state_btn.html.twig',{
+                    'state':data.state,
+                    'transition': data.transition,
+                    'action':data.btn_label,
+                    'css':'mb-3'
+                }) }}
+            {% endif %}
+</div>
     {% else %}
-        <p class="text-warning">
-            <i class="fa fa-exclamation-triangle"></i>
-            L'action ne peut pas basculer vers
-            l'état {{ include('workflow/_state.html.twig',{'state':data.state}) }}
+        <p class="text-center text-warning">
+            <i class="far fa-times-circle fa-4x "></i>
         </p>
 
-        <span class="text-warning">Les conditions ne sont pas réunies pour basculer l'action</span>
-
+        <span class="text-warning">Les conditions ne sont pas réunies</span>
         {% set iconSuccess='<i class="fa fa-check-circle"></i>' %}
         {% set iconDanger='<i class="fa fa-stop-circle"></i>' %}
 
@@ -73,5 +69,6 @@
                 {% endfor %}
             </ul>
         {% endif %}
-    {% endif %}
 </div>
+    {% endif %}
+

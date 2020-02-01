@@ -57,13 +57,13 @@ class WorkflowExtension extends AbstractExtension
     {
         $object =  'App\Workflow\Transaction\Transition' . ucfirst( $transition);
         $instance=new $object($action);
-        //return $instance->getExplains();
+        return $instance->getExplains();
     }
 
     public function workflowGetCheckMessages(Action $action,string $transition)
     {
         $object =  'App\Workflow\Transaction\Transition' . ucfirst( $transition);
         $instance=new $object($action);
-        //return $instance->getCheckMessages();
+        return $instance->getCheckMessages();
     }
 }

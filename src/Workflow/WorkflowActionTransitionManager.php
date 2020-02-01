@@ -5,7 +5,6 @@ namespace App\Workflow;
 
 
 use App\Entity\Action;
-use App\Workflow\TransitionToCotech;
 
 class WorkflowActionTransitionManager
 {

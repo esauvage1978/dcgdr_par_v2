@@ -17,7 +17,12 @@ class ActionSearchDto
     private $actionRef;
     private $state;
 
-
+    private $jalonOperator;
+    private $jalonFrom;
+    private $jalonTo;
+    private $jalonNotPresent;
+    private $UserWriter;
+    private $UserValider;
 
     public function __construct()
     {
@@ -260,7 +265,111 @@ class ActionSearchDto
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getJalonOperator()
+    {
+        return $this->jalonOperator;
+    }
 
+    /**
+     * @param mixed $jalonOperator
+     * @return ActionSearchDto
+     */
+    public function setJalonOperator($jalonOperator)
+    {
+        $this->jalonOperator = $jalonOperator;
+        return $this;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getJalonFrom()
+    {
+        return $this->jalonFrom;
+    }
 
+    /**
+     * @param mixed $jalonFrom
+     * @return ActionSearchDto
+     */
+    public function setJalonFrom($jalonFrom)
+    {
+        $this->jalonFrom = $jalonFrom;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJalonTo()
+    {
+        return $this->jalonTo;
+    }
+
+    /**
+     * @param mixed $jalonTo
+     * @return ActionSearchDto
+     */
+    public function setJalonTo($jalonTo)
+    {
+        $this->jalonTo = $jalonTo;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJalonNotPresent()
+    {
+        return $this->jalonNotPresent;
+    }
+
+    /**
+     * @param mixed $jalonNotPresent
+     * @return ActionSearchDto
+     */
+    public function setJalonNotPresent($jalonNotPresent)
+    {
+        $this->jalonNotPresent = $jalonNotPresent;
+        return $this;
+    }
+
+    /**
+     * @return string | null
+     */
+    public function getUserWriter(): ?string
+    {
+        return $this->UserWriter;
+    }
+
+    /**
+     * @return ActionSearchDto
+     */
+    public function setUserWriter(string $UserWriter): ActionSearchDto
+    {
+        $this->UserWriter = $UserWriter;
+
+        return $this;
+    }
+
+    /**
+     * @return string | null
+     */
+    public function getUserValider(): ?string
+    {
+        return $this->UserValider;
+    }
+
+    /**
+     * @return ActionSearchDto
+     */
+    public function setUserValider(string $UserValider): ActionSearchDto
+    {
+        $this->UserValider = $UserValider;
+
+        return $this;
+    }
 }

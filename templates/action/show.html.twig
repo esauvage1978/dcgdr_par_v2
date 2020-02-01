@@ -78,6 +78,10 @@
                 'titre':''
             }) }}
     {% endif %}
+    <span class="mb-3"></span>
+    <a href="{{ path('workflow_action_history',{'id': action.id }) }}" class="btn btn-link bg-yellow">
+        <i class="fa fa-history"></i> Historique des états
+    </a>
 
 {% endblock %}
 

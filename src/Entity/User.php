@@ -118,11 +118,17 @@ class User implements UserInterface, EntityInterface
      */
     private $indicatorValueHistories;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ActionState", mappedBy="user")
+     */
+    private $actionStates;
+
     public function __construct()
     {
         $this->organismes = new ArrayCollection();
         $this->corbeilles = new ArrayCollection();
         $this->indicatorValueHistories = new ArrayCollection();
+        $this->actionStates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -442,6 +448,37 @@ class User implements UserInterface, EntityInterface
             // set the owning side to null (unless already changed)
             if ($indicatorValueHistory->getUser() === $this) {
                 $indicatorValueHistory->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ActionState[]
+     */
+    public function getActionStates(): Collection
+    {
+        return $this->actionStates;
+    }
+
+    public function addActionState(ActionState $actionState): self
+    {
+        if (!$this->actionStates->contains($actionState)) {
+            $this->actionStates[] = $actionState;
+            $actionState->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionState(ActionState $actionState): self
+    {
+        if ($this->actionStates->contains($actionState)) {
+            $this->actionStates->removeElement($actionState);
+            // set the owning side to null (unless already changed)
+            if ($actionState->getUser() === $this) {
+                $actionState->setUser(null);
             }
         }
 

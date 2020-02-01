@@ -41,6 +41,38 @@
             <a href="{{ path('actions_by_state',{'state':'started'}) }}" class="nav-link">
                 {{ include('workflow/_state.html.twig',{'state':'started'})}}
             </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ path('actions_by_state',{'state':'cotech'}) }}" class="nav-link">
+                {{ include('workflow/_state.html.twig',{'state':'cotech'})}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ path('actions_by_state',{'state':'rejected'}) }}" class="nav-link">
+                {{ include('workflow/_state.html.twig',{'state':'rejected'})}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ path('actions_by_state',{'state':'codir'}) }}" class="nav-link">
+                {{ include('workflow/_state.html.twig',{'state':'codir'})}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ path('actions_by_state',{'state':'finalised'}) }}" class="nav-link">
+                {{ include('workflow/_state.html.twig',{'state':'finalised'})}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ path('actions_by_state',{'state':'deployed'}) }}" class="nav-link">
+                {{ include('workflow/_state.html.twig',{'state':'deployed'})}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ path('actions_by_state',{'state':'measured'}) }}" class="nav-link">
+                {{ include('workflow/_state.html.twig',{'state':'measured'})}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ path('actions_by_state',{'state':'clotured'}) }}" class="nav-link">
+                {{ include('workflow/_state.html.twig',{'state':'clotured'})}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ path('actions_by_state',{'state':'abandonned'}) }}" class="nav-link">
+                {{ include('workflow/_state.html.twig',{'state':'abandonned'})}}
+            </a>
         </div>
         <li class="nav-item">
             <a class="nav-link d-none" id="showSidebar" onclick="switch_sidebar();">

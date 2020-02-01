@@ -158,10 +158,16 @@ class Action implements EntityInterface
      */
     private $stateAt;
 
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $contentState;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ActionState", mappedBy="action")
+     */
+    private $actionStates;
 
     public function __construct()
     {
@@ -183,6 +189,7 @@ class Action implements EntityInterface
         $this->actionLinks = new ArrayCollection();
         $this->cadrageLinks = new ArrayCollection();
         $this->cadrageFiles = new ArrayCollection();
+        $this->actionStates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -723,4 +730,37 @@ class Action implements EntityInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|ActionState[]
+     */
+    public function getActionStates(): Collection
+    {
+        return $this->actionStates;
+    }
+
+    public function addActionState(ActionState $actionState): self
+    {
+        if (!$this->actionStates->contains($actionState)) {
+            $this->actionStates[] = $actionState;
+            $actionState->setAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionState(ActionState $actionState): self
+    {
+        if ($this->actionStates->contains($actionState)) {
+            $this->actionStates->removeElement($actionState);
+            // set the owning side to null (unless already changed)
+            if ($actionState->getAction() === $this) {
+                $actionState->setAction(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

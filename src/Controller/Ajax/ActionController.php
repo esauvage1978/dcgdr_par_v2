@@ -4,6 +4,7 @@ namespace App\Controller\Ajax;
 
 use App\Controller\AppControllerAbstract;
 use App\Dto\ActionSearchDto;
+use App\Helper\ActionFilter;
 use App\Repository\ActionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,7 +48,7 @@ class ActionController extends AppControllerAbstract
         if ($request->isXmlHttpRequest()) {
             return $this->json(
                 count($actionRepository->findAllForDto(
-                    $actionSearchDto,true
+                    $actionSearchDto,ActionRepository::FILTRE_DTO_INIT_AJAX
                 )));
         }
 
@@ -68,11 +69,32 @@ class ActionController extends AppControllerAbstract
     public function ajaxActionsByStatAction(Request $request,ActionSearchDto $actionSearchDto, ActionRepository $actionRepository, ?string $state): Response
     {
         $actionSearchDto->setState($state);
-        $resultRepo = $actionRepository->findAllForDto($actionSearchDto,true);
+        $resultRepo = $actionRepository->findAllForDto($actionSearchDto,ActionRepository::FILTRE_DTO_INIT_AJAX);
 
         if ($request->isXmlHttpRequest()) {
             return $this->json(
                 count($resultRepo));
+        }
+
+        return new Response("Ce n'est pas une requête Ajax");
+    }
+
+    /**
+     * @Route("/ajax/my/action/count/{filter?}", name="ajax_my_action_count", methods={"POST"})
+     *
+     * @return Response
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function ajaxMyActionCountAction(
+        Request $request,
+        ActionFilter $actionFilter,
+        ?string $filter): Response
+    {
+        ;
+        if ($request->isXmlHttpRequest()) {
+            return $this->json(
+                $actionFilter->getData($filter)['nbr']);
         }
 
         return new Response("Ce n'est pas une requête Ajax");

@@ -1,9 +1,5 @@
 App\Entity\Action:
   constraints:
-    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-        fields: [category, name]
-        errorPath: name
-        message: 'Le nom  "{{ value }}" est déjà déclaré pour cette catégorie.'
   properties:
     name:
       - NotBlank: ~

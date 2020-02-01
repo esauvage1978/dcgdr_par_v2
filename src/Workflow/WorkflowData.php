@@ -21,7 +21,7 @@ class WorkflowData
     const TRANSITION_TO_CODIR = 'toCodir';
     const TRANSITION_TO_REJECTED = 'toRejected';
     const TRANSITION_TO_FINALISED = 'toFinalised';
-    const TRANSITION_TO_DEPLOYED = 'toDeployed';
+    const TRANSITION_TO_DEPLOYED = 'toDeploye';
     const TRANSITION_TO_MEASURED = 'toMeasured';
     const TRANSITION_TO_CLOTURED = 'toClotured';
     const TRANSITION_UN_DEPLOYED = 'unDeployed';
@@ -128,6 +128,41 @@ class WorkflowData
 
         return $stateName;
     }
+    public static function getTitleOfMail(string $state)
+    {
+        $stateName = '';
+        switch ($state) {
+            case self::STATE_STARTED:
+                $stateName = ' Une action est revenue à l\'état "action proposée"';
+                break;
+            case self::STATE_COTECH:
+                $stateName = ' Une action est proposée au COTECH';
+                break;
+            case self::STATE_REJECTED:
+                $stateName = ' Une action est refusée';
+                break;
+            case self::STATE_CODIR:
+                $stateName = ' Une action est proposée au CODIR';
+                break;
+            case self::STATE_FINALISED:
+                $stateName = ' Une action est validée par le CORDIR et est en attente de la rédaction méthodologie';
+                break;
+            case self::STATE_DEPLOYED:
+                $stateName = ' Une action est déployée';
+                break;
+            case self::STATE_MEASURED:
+                $stateName = ' Une action est en attente de la mesure de l\efficacité';
+                break;
+            case self::STATE_CLOTURED:
+                $stateName = ' Une action est clôturée';
+                break;
+            case self::STATE_ABANDONNED:
+                $stateName = ' Une action est abandonnée';
+                break;
+        }
+
+        return $stateName;
+    }
     public static function getShortNameOfState(string $state)
     {
         $stateName = '';
@@ -227,7 +262,7 @@ class WorkflowData
             case self::TRANSITION_TO_REJECTED:
                 $data['state']=self::STATE_REJECTED;
                 $data['titre']='Refusée l\'action';
-                $data['btn_label']='Refusée';
+                $data['btn_label']='Refuser';
                 break;
             case self::TRANSITION_TO_STARTED:
                 $data['state']=self::STATE_STARTED;
@@ -237,7 +272,7 @@ class WorkflowData
             case self::TRANSITION_TO_FINALISED:
                 $data['state']=self::STATE_FINALISED;
                 $data['titre']='Validé par le CODIR';
-                $data['btn_label']='Valider par le CODIR';
+                $data['btn_label']='Valider';
                 break;
             case self::TRANSITION_UN_DEPLOYED:
                 $data['state']=self::STATE_FINALISED;

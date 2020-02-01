@@ -19,6 +19,11 @@ class ActionRepository extends ServiceEntityRepository
 {
     const ALIAS = 'ac';
 
+    const FILTRE_DTO_INIT_TABLEAU='tableau';
+    const FILTRE_DTO_INIT_UNITAIRE='unitaire';
+    const FILTRE_DTO_INIT_AJAX='ajax';
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Action::class);
@@ -75,7 +80,7 @@ class ActionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    private function findAllForDto_initialise(ActionSearchDto $dto): QueryBuilder
+    private function findForDto_initialise_unitaire(ActionSearchDto $dto): QueryBuilder
     {
         $builder = $this->createQueryBuilder(self::ALIAS)
             ->select(
@@ -85,6 +90,9 @@ class ActionRepository extends ServiceEntityRepository
                 PoleRepository::ALIAS,
                 AxeRepository::ALIAS,
                 CorbeilleRepository::ALIAS_ACTION_WRITERS,
+                UserRepository::ALIAS_ACTION_WRITERS,
+                CorbeilleRepository::ALIAS_ACTION_VALIDERS,
+                UserRepository::ALIAS_ACTION_VALIDERS,
                 CorbeilleRepository::ALIAS_ACTION_READERS,
                 DeployementRepository::ALIAS,
                 CorbeilleRepository::ALIAS_DEPLOYEMENT_WRITERS,
@@ -92,6 +100,7 @@ class ActionRepository extends ServiceEntityRepository
                 IndicatorRepository::ALIAS,
                 IndicatorValueRepository::ALIAS
             )
+
             ->leftjoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
             ->leftjoin(self::ALIAS.'.deployements', DeployementRepository::ALIAS)
             ->leftjoin(DeployementRepository::ALIAS.'.organisme', OrganismeRepository::ALIAS)
@@ -102,20 +111,16 @@ class ActionRepository extends ServiceEntityRepository
             ->leftjoin(ThematiqueRepository::ALIAS.'.pole', PoleRepository::ALIAS)
             ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS)
             ->leftjoin(self::ALIAS.'.writers', CorbeilleRepository::ALIAS_ACTION_WRITERS)
+            ->leftjoin(CorbeilleRepository::ALIAS_ACTION_WRITERS.'.users', UserRepository::ALIAS_ACTION_WRITERS)
+            ->leftjoin(self::ALIAS.'.validers', CorbeilleRepository::ALIAS_ACTION_VALIDERS)
+            ->leftjoin(CorbeilleRepository::ALIAS_ACTION_VALIDERS.'.users', UserRepository::ALIAS_ACTION_VALIDERS)
             ->leftjoin(self::ALIAS.'.readers', CorbeilleRepository::ALIAS_ACTION_READERS);
 
-        if(empty($dto->getId())) {
-        $builder
-            ->where(AxeRepository::ALIAS.'.enable='.($dto->isAxeEnable() ? 'true' : 'false'))
-            ->andwhere(PoleRepository::ALIAS.'.enable='.($dto->isPoleEnable() ? 'true' : 'false'))
-            ->andwhere(ThematiqueRepository::ALIAS.'.enable='.($dto->isThematiqueEnable() ? 'true' : 'false'))
-            ->andwhere(CategoryRepository::ALIAS.'.enable='.($dto->isCategoryEnable() ? 'true' : 'false'))
-            ->andwhere(AxeRepository::ALIAS.'.archiving='.($dto->isActionArchiving() ? 'true' : 'false'));
-        }
+
+
         return $builder;
     }
-
-    private function findMinimumForDto_initialise(ActionSearchDto $dto): QueryBuilder
+    private function findForDto_initialise_rqt_ajax(ActionSearchDto $dto): QueryBuilder
     {
         $builder = $this->createQueryBuilder(self::ALIAS)
             ->select(
@@ -125,6 +130,9 @@ class ActionRepository extends ServiceEntityRepository
                 PoleRepository::ALIAS,
                 AxeRepository::ALIAS,
                 CorbeilleRepository::ALIAS_ACTION_WRITERS,
+                UserRepository::ALIAS_ACTION_WRITERS,
+                CorbeilleRepository::ALIAS_ACTION_VALIDERS,
+                UserRepository::ALIAS_ACTION_VALIDERS,
                 CorbeilleRepository::ALIAS_ACTION_READERS
             )
             ->leftjoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
@@ -132,12 +140,29 @@ class ActionRepository extends ServiceEntityRepository
             ->leftjoin(ThematiqueRepository::ALIAS.'.pole', PoleRepository::ALIAS)
             ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS)
             ->leftjoin(self::ALIAS.'.writers', CorbeilleRepository::ALIAS_ACTION_WRITERS)
+            ->leftjoin(CorbeilleRepository::ALIAS_ACTION_WRITERS.'.users', UserRepository::ALIAS_ACTION_WRITERS)
+            ->leftjoin(self::ALIAS.'.validers', CorbeilleRepository::ALIAS_ACTION_VALIDERS)
+            ->leftjoin(CorbeilleRepository::ALIAS_ACTION_VALIDERS.'.users', UserRepository::ALIAS_ACTION_VALIDERS)
             ->leftjoin(self::ALIAS.'.readers', CorbeilleRepository::ALIAS_ACTION_READERS)
-            ->where(AxeRepository::ALIAS.'.enable='.($dto->isAxeEnable() ? 'true' : 'false'))
-            ->andwhere(PoleRepository::ALIAS.'.enable='.($dto->isPoleEnable() ? 'true' : 'false'))
-            ->andwhere(ThematiqueRepository::ALIAS.'.enable='.($dto->isThematiqueEnable() ? 'true' : 'false'))
-            ->andwhere(CategoryRepository::ALIAS.'.enable='.($dto->isCategoryEnable() ? 'true' : 'false'))
-            ->andwhere(AxeRepository::ALIAS.'.archiving='.($dto->isActionArchiving() ? 'true' : 'false'));
+            ;
+
+        return $builder;
+    }
+    private function findForDto_initialise_tableau(ActionSearchDto $dto): QueryBuilder
+    {
+        $builder = $this->createQueryBuilder(self::ALIAS)
+            ->select(
+                self::ALIAS,
+                CategoryRepository::ALIAS,
+                ThematiqueRepository::ALIAS,
+                PoleRepository::ALIAS,
+                AxeRepository::ALIAS
+            )
+            ->leftjoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
+            ->leftjoin(CategoryRepository::ALIAS.'.thematique', ThematiqueRepository::ALIAS)
+            ->leftjoin(ThematiqueRepository::ALIAS.'.pole', PoleRepository::ALIAS)
+            ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS)
+            ;
 
         return $builder;
     }
@@ -156,19 +181,43 @@ class ActionRepository extends ServiceEntityRepository
         return $builder;
     }
 
-    public function findAllForDto(ActionSearchDto $dto, bool $minilu=false)
+    public function findAllForDto(ActionSearchDto $dto, string $filtre)
     {
         $params = [];
 
-        $minilu?
-            $builder = $this->findMinimumForDto_initialise($dto) :
-            $builder = $this->findAllForDto_initialise($dto)
-        ;
-
-        if (!empty($dto->getId())) {
+        switch ($filtre)
+        {
+            case self::FILTRE_DTO_INIT_TABLEAU:
+                $builder = $this->findForDto_initialise_tableau($dto);
+                break;
+            case self::FILTRE_DTO_INIT_UNITAIRE:
+                $builder = $this->findForDto_initialise_unitaire($dto);
+                break;
+            case self::FILTRE_DTO_INIT_AJAX:
+                $builder = $this->findForDto_initialise_rqt_ajax($dto);
+                break;
+        }
+        if(empty($dto->getId())) {
+            $builder
+                ->where(AxeRepository::ALIAS . '.enable=' . ($dto->isAxeEnable() ? 'true' : 'false'))
+                ->andwhere(PoleRepository::ALIAS . '.enable=' . ($dto->isPoleEnable() ? 'true' : 'false'))
+                ->andwhere(ThematiqueRepository::ALIAS . '.enable=' . ($dto->isThematiqueEnable() ? 'true' : 'false'))
+                ->andwhere(CategoryRepository::ALIAS . '.enable=' . ($dto->isCategoryEnable() ? 'true' : 'false'))
+                ->andwhere(AxeRepository::ALIAS . '.archiving=' . ($dto->isActionArchiving() ? 'true' : 'false'));
+        } else {
             $builder->andwhere(self::ALIAS.'.id = :id');
 
             $params = $this->addParams($params, 'id', $dto->getId());
+        }
+
+        if (!empty($dto->getUserWriter())) {
+            $builder->andwhere(UserRepository::ALIAS_ACTION_WRITERS.'.id = :userid');
+            $params = $this->addParams($params, 'userid', $dto->getUserWriter());
+        }
+
+        if (!empty($dto->getUserValider())) {
+            $builder->andwhere(UserRepository::ALIAS_ACTION_VALIDERS.'.id = :userid');
+            $params = $this->addParams($params, 'userid', $dto->getUserValider());
         }
 
         if (!empty($dto->getState())) {

@@ -4,7 +4,7 @@
 namespace App\Workflow\Transaction;
 
 
-class TransitionToDeployed extends TransitionAbstract
+class TransitionToDeploye extends TransitionAbstract
 {
 
     public function getExplains(): array

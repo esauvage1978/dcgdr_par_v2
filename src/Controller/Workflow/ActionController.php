@@ -7,6 +7,7 @@ use App\Entity\Action;
 use App\Repository\ActionStateRepository;
 use App\Workflow\WorkflowActionManager;
 use DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,17 +21,32 @@ class ActionController extends AppControllerAbstract
     const ENTITYS = 'actions';
     const ENTITY = 'action';
 
-
-
     /**
-     * @Route("/action/{id}/check/{transition}", name="workflow_action_check_apply_transition", methods={"GET","POST"})
+     * @Route("/{id}/check", name="workflow_action_check", methods={"GET","POST"})
      *
      * @param Action          $action
      * @param WorkflowActionManager $workflow
      *
      * @return Response
      *
-     * @Security("is_granted('ROLE_USER') ")
+     * @IsGranted("ROLE_USER")
+     */
+    public function checkAction(Action $action, WorkflowActionManager $workflow): Response
+    {
+        return $this->render('verif/workflow.html.twig', [
+            'action' => $action,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/check/{transition}", name="workflow_action_check_apply_transition", methods={"GET","POST"})
+     *
+     * @param Action          $action
+     * @param WorkflowActionManager $workflow
+     *
+     * @return Response
+     *
+     * @IsGranted("ROLE_USER")
      */
     public function checkApplyTransitionAcion(Action $action, WorkflowActionManager $workflow, string $transition): Response
     {
@@ -38,17 +54,17 @@ class ActionController extends AppControllerAbstract
 
         $workflow->applyTransition($action, $transition,'Modification effectuée par l\'administrateur');
 
-        return $this->redirectToRoute('verif_workflow_show',['id'=>$action->getId()]);
+        return $this->redirectToRoute('workflow_action_check',['id'=>$action->getId()]);
     }
     /**
-     * @Route("/action/{id}/history", name="workflow_action_history", methods={"GET"})
+     * @Route("/{id}/history", name="workflow_action_history", methods={"GET"})
      *
      * @param ActionStateRepository $repository
      * @param Action $action
      *
      * @return Response
      *
-     * @Security("is_granted('ROLE_USER') ")
+     * @IsGranted("ROLE_USER")
      */
     public function showHistoryAction(ActionStateRepository $repository, Action $action): Response
     {
@@ -59,7 +75,7 @@ class ActionController extends AppControllerAbstract
     }
 
     /**
-     * @Route("/action/{id}/{transition}", name="workflow_action_apply_transition", methods={"GET","POST"})
+     * @Route("/{id}/{transition}", name="workflow_action_apply_transition", methods={"GET","POST"})
      *
      * @param Request $request
      * @param Action $entity
@@ -68,7 +84,7 @@ class ActionController extends AppControllerAbstract
      *
      * @return Response
      *
-     * @Security("is_granted('ROLE_USER') ")
+     * @IsGranted("ROLE_USER")
      * @throws \Exception
      */
     public function applyTransitionAction(Request $request, Action $entity, WorkflowActionManager $workflowActionManager, string $transition): Response
@@ -89,6 +105,7 @@ class ActionController extends AppControllerAbstract
 
         return $this->redirectToRoute('action_edit', ['id' => $entity->getId()]);
     }
+
 
 
 }

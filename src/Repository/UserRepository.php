@@ -16,6 +16,8 @@ class UserRepository extends ServiceEntityRepository
 {
     const ALIAS = 'u';
     const ALIAS_DEPLOYEMENT_WRITERS = 'cdwu';
+    const ALIAS_ACTION_WRITERS = 'cawu';
+    const ALIAS_ACTION_VALIDERS = 'cavu';
 
     public function __construct(ManagerRegistry $registry)
     {
