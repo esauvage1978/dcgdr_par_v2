@@ -85,6 +85,16 @@ class DeployementVoter extends Voter
 
     public function canUpdate(Deployement $deploiement, User $user)
     {
+        $states=[
+            WorkflowData::STATE_STARTED,
+            WorkflowData::STATE_FINALISED,
+        ];
+
+        if (!in_array($deploiement->getAction()->getState(),$states))
+        {
+            return false;
+        }
+
         return $this->actionVoter->canUpdate($deploiement->getAction(), $user);
     }
 
