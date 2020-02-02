@@ -21,7 +21,7 @@ class WorkflowData
     const TRANSITION_TO_CODIR = 'toCodir';
     const TRANSITION_TO_REJECTED = 'toRejected';
     const TRANSITION_TO_FINALISED = 'toFinalised';
-    const TRANSITION_TO_DEPLOYED = 'toDeploye';
+    const TRANSITION_TO_DEPLOYE = 'toDeploye';
     const TRANSITION_TO_MEASURED = 'toMeasured';
     const TRANSITION_TO_CLOTURED = 'toClotured';
     const TRANSITION_UN_DEPLOYED = 'unDeployed';
@@ -62,7 +62,7 @@ class WorkflowData
                 break;
             case self::STATE_FINALISED:
                 $transitions = [
-                    self::TRANSITION_TO_DEPLOYED,
+                    self::TRANSITION_TO_DEPLOYE,
                     self::TRANSITION_TO_ABANDONNED,
                     self::TRANSITION_TO_STARTED]
                 ;
@@ -71,7 +71,7 @@ class WorkflowData
                 $transitions = [
                     self::TRANSITION_TO_MEASURED,
                     self::TRANSITION_TO_ABANDONNED,
-                    self::TRANSITION_UN_DEPLOYED
+                    self::TRANSITION_UN_DEPLOYE
                 ];
                 break;
             case self::STATE_MEASURED:
@@ -279,7 +279,7 @@ class WorkflowData
                 $data['titre']='Reprendre l\'action';
                 $data['btn_label']='Reprendre l\'action';
                 break;
-            case self::TRANSITION_TO_DEPLOYED:
+            case self::TRANSITION_TO_DEPLOYE:
                 $data['state']=self::STATE_DEPLOYED;
                 $data['titre']='Déployer l\'action';
                 $data['btn_label']='Déployer l\'action';

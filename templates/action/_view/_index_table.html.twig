@@ -14,9 +14,11 @@
     {% for action in actions %}
         <tr>
             <td class=" text-lg-center align-middle">
-                {{ action.category.thematique.ref }}-{{ action.category.ref }}-{{ action.ref }}
-                <br/>
-                <small class="text-muted">{{ action.id }}</small>
+                <a href="{{ path('action_show',{'id':action.id}) }}">
+                    {{ action.category.thematique.ref }}-{{ action.category.ref }}-{{ action.ref }}
+                    <br/>
+                    <small class="text-muted">{{ action.id }}</small>
+                </a>
             </td>
             <td class="text-xs align-middle">
                 {{ action.category.thematique.pole.axe.name }}
@@ -27,7 +29,11 @@
                 <br/>
                 {{ action.category.fullname }}
             </td>
-            <td class="align-middle">{{ action.fullname }}</td>
+            <td class="align-middle">
+                <a href="{{ path('action_show',{'id':action.id}) }}">
+                    {{ action.name }}
+                </a>
+            </td>
             <td class="text-center align-middle">
                 {{ include('workflow/_state.html.twig' , {'state': action.state} ) }}
             </td>

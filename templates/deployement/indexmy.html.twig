@@ -10,7 +10,14 @@
 
 {% block body_header %}
     <div class="col">
-        <h1 class="m-0 text-dark"> <i class="fas fa-city"></i> Mes {{ deployements | length }} déploiements {{ complement | default('') }}</h1>
+        <h1 class="m-0 text-dark"> <i class="fas fa-city"></i>
+            {%  if  deployements | length==1  %}
+                Mon déploiement
+            {% else %}
+            Mes {{ deployements | length }} déploiements
+            {% endif %}
+            {{ complement | default('') }}
+        </h1>
     </div>
     <div class="col">
         <ol class="breadcrumb float-sm-right">
