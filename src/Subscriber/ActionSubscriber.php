@@ -55,9 +55,9 @@ class ActionSubscriber implements EventSubscriberInterface
     {
         $this->onGuard($event, WorkflowData::TRANSITION_TO_FINALISED);
     }
-    public function onGuardToDeployed(GuardEvent $event)
+    public function onGuardToDeploye(GuardEvent $event)
     {
-        $this->onGuard($event, WorkflowData::TRANSITION_TO_DEPLOYED);
+        $this->onGuard($event, WorkflowData::TRANSITION_TO_DEPLOYE);
     }
     public function onGuardToMeasured(GuardEvent $event)
     {
@@ -107,7 +107,7 @@ class ActionSubscriber implements EventSubscriberInterface
             'workflow.action.guard.toRejected' => ['onGuardToRejected'],
             'workflow.action.guard.toAbandonned' => ['onGuardToAbandonned'],
             'workflow.action.guard.toFinalised' => ['onGuardToFinalised'],
-            'workflow.action.guard.toDeployed' => ['onGuardToDeployed'],
+            'workflow.action.guard.toDeploye' => ['onGuardToDeploye'],
             'workflow.action.guard.toMeasured' => ['onGuardToMeasured'],
             'workflow.action.guard.toClotured' => ['onGuardToClotured'],
             'workflow.action.guard.unClotured' => ['onGuardUnClotured'],
