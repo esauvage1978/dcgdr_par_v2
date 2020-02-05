@@ -1,6 +1,8 @@
 function searchCount(domaine, route, filtre) {
     var selecteurCompletOverlay="#overlay_" + domaine;
     var selecteurCompletBadge="#badge_" + domaine;
+    var selecteurAll='#' + domaine;
+
     $(selecteurCompletOverlay).removeClass('d-none');
 
     $.ajax({
@@ -12,7 +14,8 @@ function searchCount(domaine, route, filtre) {
 
             if (json >  0) {
                 $(selecteurCompletBadge).text(json);
-
+            } else {
+                $(selecteurAll).addClass('d-none');
             }
             $(selecteurCompletOverlay).addClass('d-none');
         }

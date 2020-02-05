@@ -100,6 +100,10 @@ class DeployementVoter extends Voter
 
     public function canDelete(Deployement $deploiement, User $user)
     {
+        if ($this->security->isGranted('ROLE_GESTIONNAIRE')) {
+            return true;
+        }
+
         return $this->actionVoter->canUpdate($deploiement->getAction(), $user);
     }
 

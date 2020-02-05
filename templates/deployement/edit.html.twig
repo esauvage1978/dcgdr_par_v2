@@ -40,35 +40,46 @@
             <div class="col-sm-12 col-md-12 col-lg-6  ">
                 <div class="card ">
                     <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">
-                                Organisme
-                            </label>
-                            <div class="col mt-1">
-                                {{ deployement.organisme.name }}
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" for="{{ form.showat.vars.id }}">
-                                Jalon
-                            </label>
-                            <div>
-                                {{ form_widget(form.showat) }}
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" for="{{ form.endat.vars.id }}">
-                                Date de fin
-                            </label>
-                            <div>
-                                {{ form_widget(form.endat) }}
-                            </div>
-                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 ">
+                                <h5 class="text-purple p-1  text-center ">
+                                    Données générales
+                                </h5>
+                                <div class="form-group row ">
+                                    <label class="col-sm-6 col-form-label">
+                                        Organisme
+                                    </label>
+                                    <div class="col mt-1">
+                                        {{ deployement.organisme.name }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-6 col-form-label" for="{{ form.showat.vars.id }}">
+                                        Jalon
+                                    </label>
+                                    <div>
+                                        {{ form_widget(form.showat) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-6 col-form-label" for="{{ form.endat.vars.id }}">
+                                        Date de fin
+                                    </label>
+                                    <div>
+                                        {{ form_widget(form.endat) }}
+                                    </div>
+                                </div>
 
-                        <div class="d-none">
-                            <button name="update" id="update">{{ button_label|default('Save') }}</button>
-                        </div>
+                                <div class="d-none">
+                                    <button name="update" id="update">{{ button_label|default('Save') }}</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 ">
+                                {{ include('deployement/_edit/_intervenant.html.twig') }}
+                                {{ include('deployement/_edit/_deployementFile.html.twig',{'deployement':deployement}) }}
+                            </div>
 
+                        </div>
                     </div>
                     <div class="card-footer">
                         <div class="row">
@@ -99,6 +110,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="col-sm-12 col-md-12 col-lg-4 ">
                 <div class="card ">

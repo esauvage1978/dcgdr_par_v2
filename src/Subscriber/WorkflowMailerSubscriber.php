@@ -3,6 +3,7 @@
 namespace App\Subscriber;
 
 use App\Entity\Action;
+use App\Entity\Deployement;
 use App\Event\WorkflowTransitionEvent;
 use App\Helper\SendMail;
 use App\Repository\ActionRepository;
@@ -31,7 +32,8 @@ class WorkflowMailerSubscriber implements EventSubscriberInterface
         SendMail $sendmail,
         ActionRepository $actionRepository,
         ParameterBagInterface $parameterBag
-    ) {
+    )
+    {
         $this->sendmail = $sendmail;
         $this->actionRepository = $actionRepository;
         $this->parameterBag = $parameterBag;
@@ -54,15 +56,28 @@ class WorkflowMailerSubscriber implements EventSubscriberInterface
         /** @var string $state */
         $state = $action->getState();
 
-        $parameter = 'mailer.workflow.'.$state;
+        $stateMailForDeployement = [
+            WorkflowData::STATE_DEPLOYED,
+            WorkflowData::STATE_MEASURED,
+        ];
 
-        if (!$this->parameterBag->get($parameter)) {
+        $this->sendMailForAction($action, $state);
+
+        if (in_array($state, $stateMailForDeployement)) {
+            $this->sendMailForDeployement($action, $state);
+        }
+        return 0;
+    }
+
+    private function sendMailForAction(Action $action, string $state)
+    {
+        if (!$this->checkMailForState($state)) {
             return -1;
         }
 
         $validers = [
-          WorkflowData::STATE_COTECH,
-          WorkflowData::STATE_CODIR,
+            WorkflowData::STATE_COTECH,
+            WorkflowData::STATE_CODIR,
         ];
 
         if (in_array($state, $validers)) {
@@ -76,13 +91,40 @@ class WorkflowMailerSubscriber implements EventSubscriberInterface
             'action' => $action,
         ];
 
-        dump($datas);
-
         return $this->sendmail->send(
             $datas,
-            'workflow.'.$state,
-            'DCGDR PAR : '.WorkflowData::getTitleOfMail($state)
+            'workflow/' . $state,
+            'DCGDR PAR : ' . WorkflowData::getTitleOfMail($state)
         );
+    }
+
+    private function sendMailForDeployement(Action $action, string $state)
+    {
+        if (!$this->checkMailForState($state)) {
+            return -1;
+        }
+
+        foreach ($action->getDeployements() as $deployement) {
+
+            $user =$this->getUserDeployementWriters($deployement);
+
+            $datas = [
+                'user' => $user,
+                'deployement' => $deployement,
+            ];
+
+            $this->sendmail->send(
+                $datas,
+                'workflow/' . $state . '_unitaire',
+                'DCGDR PAR : ' . WorkflowData::getTitleOfMail($state)
+            );
+        }
+    }
+
+    private function checkMailForState(string $state): bool
+    {
+        $parameter = 'mailer.workflow.' . $state;
+        return $this->parameterBag->get($parameter);
     }
 
     public function getUserValider(Action $action)
@@ -103,6 +145,21 @@ class WorkflowMailerSubscriber implements EventSubscriberInterface
     {
         $users = [];
         foreach ($action->getWriters() as $corbeille) {
+            foreach ($corbeille->getUsers() as $user) {
+                $users = array_merge([
+                    $user->getEmail() => $user->getName(),
+                ], $users);
+            }
+        }
+
+        return $users;
+    }
+
+    public function getUserDeployementWriters(Deployement $deployement)
+    {
+        $users = [];
+
+        foreach ($deployement->getWriters() as $corbeille) {
             foreach ($corbeille->getUsers() as $user) {
                 $users = array_merge([
                     $user->getEmail() => $user->getName(),

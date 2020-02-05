@@ -3,7 +3,6 @@
 namespace App\Controller\Deployement;
 
 use App\Controller\AppControllerAbstract;
-use App\Dto\DeployementSearchDto;
 use App\Entity\Action;
 use App\Entity\Deployement;
 use App\Entity\Organisme;
@@ -11,12 +10,10 @@ use App\Form\Deployement\DeployementAppendType;
 use App\Form\Deployement\DeployementEditType;
 use App\Helper\DeployementFilter;
 use App\Manager\DeployementManager;
-use App\Repository\ActionFileRepository;
 use App\Repository\CorbeilleRepository;
 use App\Repository\DeployementFileRepository;
 use App\Repository\DeployementRepository;
 use App\Repository\OrganismeRepository;
-use App\Security\ActionVoter;
 use App\Security\DeployementVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\File;
@@ -47,7 +44,7 @@ class DeployementController extends AppControllerAbstract
         $file = new File($deployementFile->getHref());
 
         // rename the downloaded file
-        return $this->file($file, $deployementFile->getTitle() . '.' . $deployementFile->getFileExtension());
+        return $this->file($file, $deployementFile->getTitle().'.'.$deployementFile->getFileExtension());
     }
 
     /**
@@ -65,11 +62,12 @@ class DeployementController extends AppControllerAbstract
     }
 
     /**
-     * @Route("/deploiement/{id}/edit", name="deployement_edit", methods={"GET","POST"})
+     * @Route("/deploiement/{id}/actionedit", name="deployement_edit", methods={"GET","POST"})
      *
      * @param string $message =self::MSG_MODIFY
      *
      * @IsGranted("ROLE_USER")
+     *
      * @return Response
      */
     public function editAction(
@@ -94,11 +92,7 @@ class DeployementController extends AppControllerAbstract
     }
 
     /**
-     * @Route("/{id}", name="deployement_delete", methods={"DELETE"})
-     *
-     * @param Deployement        $entity
-     * @param DeployementManager $manager
-     * @param Request            $request
+     * @Route("/deployement/{id}", name="deployement_delete", methods={"DELETE"})
      *
      * @return Response
      *
@@ -109,7 +103,6 @@ class DeployementController extends AppControllerAbstract
         Deployement $entity,
         DeployementManager $manager): Response
     {
-        $this->denyAccessUnlessGranted(DeployementVoter::DELETE, $entity);
 
         $idAction = $entity->getAction()->getId();
 
@@ -120,7 +113,7 @@ class DeployementController extends AppControllerAbstract
             $this->addFlash(self::DANGER, self::MSG_DELETE_DANGER);
         }
 
-        return $this->redirectToRoute('deployement_liste_edit', ['id' => $idAction]);
+        return $this->redirectToRoute('deployements_for_action', ['id' => $idAction]);
     }
 
     /**
@@ -144,10 +137,16 @@ class DeployementController extends AppControllerAbstract
             return $this->redirectToRoute('deployement_liste_edit', ['id' => $action->getId()]);
         }
 
+        $corbeilles = $corbeilleRepository->findBy(['organisme' => $organisme, 'showDefault' => true]);
+
         $deployement = new Deployement();
         $deployement
             ->setAction($action)
             ->setOrganisme($organisme);
+
+        foreach ($corbeilles as $corbeille) {
+            $deployement->addWriter($corbeille);
+        }
 
         $deployementManager->save($deployement);
 
@@ -169,7 +168,7 @@ class DeployementController extends AppControllerAbstract
     }
 
     /**
-     * @Route("/deployement/{id}/append/edit", name="deployement_append_edit", methods={"GET","POST"})
+     * @Route("/deployement/{id}/edit", name="deployement_append_edit", methods={"GET","POST"})
      *
      * @IsGranted("ROLE_USER")
      */
@@ -196,9 +195,6 @@ class DeployementController extends AppControllerAbstract
     /**
      * @Route("/{id}/history", name="deployement_history", methods={"GET"})
      *
-     * @param Request     $request
-     * @param Deployement $entity
-     *
      * @return Response
      *
      * @IsGranted("ROLE_USER")
@@ -213,8 +209,6 @@ class DeployementController extends AppControllerAbstract
     /**
      * @Route("/my/deployement/{filter?}", name="my_deployement", methods={"GET"})
      *
-     * @param string|null           $filter
-     *
      * @return Response
      *
      * @IsGranted("ROLE_USER")
@@ -227,5 +221,4 @@ class DeployementController extends AppControllerAbstract
             $deploiementFilter->getData($filter)
             );
     }
-
 }

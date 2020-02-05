@@ -10,7 +10,7 @@
 
 {% block body_header %}
     <div class="col">
-            <h1 class="m-0 text-dark">Liste des indicateurs contributifs régionaux </h1>
+        <h1 class="m-0 text-dark">Liste des indicateurs contributifs régionaux </h1>
     </div>
     <div class="col">
         <ol class="breadcrumb float-sm-right">
@@ -32,6 +32,7 @@
                                 <tr>
                                     <th class="all text-center">Référence</th>
                                     <th class="desktop">Action</th>
+                                    <th class="all text-center align-middle">Fin de déploiement</th>
                                     <th class="all">Indicateur</th>
                                     <th class="all col-2">Taux</th>
                                     <th class="all text-center col-1"></th>
@@ -41,23 +42,32 @@
                                 {% for indicator in indicators %}
                                     <tr>
                                         <td class=" text-lg-center col-1 align-middle">
-                                            {{ indicator.action.category.thematique.ref }}-{{ indicator.action.category.ref }}
+                                            {{ indicator.action.category.thematique.ref }}
+                                            -{{ indicator.action.category.ref }}
                                             -{{ indicator.action.ref }}
                                             <br/>
                                             <small class="text-muted">{{ indicator.action.id }}</small>
                                         </td>
                                         <td class="text-xs align-middle">
                                             {{ indicator.action.name }}
+                                            <div class="float-right">
+                                                {{ include('workflow/_state.html.twig' , {'state': indicator.action.state} ) }}
+                                            </div>
                                             <hr>
                                             <small>
-                                            {{ indicator.action.category.thematique.pole.axe.name }}
-                                            <br/>
-                                            {{ indicator.action.category.thematique.pole.name }}
-                                            <br/>
-                                            {{ indicator.action.category.thematique.name }}
-                                            <br/>
-                                            {{ indicator.action.category.name }}
+                                                {{ indicator.action.category.thematique.pole.axe.name }}
+                                                <br/>
+                                                {{ indicator.action.category.thematique.pole.name }}
+                                                <br/>
+                                                {{ indicator.action.category.thematique.name }}
+                                                <br/>
+                                                {{ indicator.action.category.name }}
                                             </small>
+                                        </td>
+                                        <td class="text-center  align-middle">
+                                            {% if indicator.action.state=='deployed' %}
+                                                {{ include('action/_view/_regionendat.html.twig',{'regionendat':indicator.action.regionendat}) }}
+                                            {% endif %}
                                         </td>
                                         <td class="align-middle">{{ indicator.name }}</td>
                                         <td class="text-center align-middle">

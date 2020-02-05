@@ -1,10 +1,13 @@
-<a href="{{ path(url) }}/{{ filtre }}">
-    <div id="{{ domaine }}" class="card indicatorvalue bg-{{ color | default('info') }}">
-        <div id="head_{{ domaine }}" class="card-header">
-            <h3 class="card-title">{{ titre }}</h3>
-            <span id="badge_{{ domaine }}" class="float-right badge badge-secondary">
+<a href="{{ path(url) }}/{{ filtre }}"
+   class="list-group-item list-group-item-action"
+   id="{{ domaine }}">
+    <div class="d-flex justify-content-between align-items-center">
+        <h6 class="mb-1">{{ titre | raw }}</h6>
+
+        <span id="badge_{{ domaine }}" class="badge badge-light text-lg text-primary ">
                 <i id="overlay_{{ domaine }}" class=" d-none fas  fa-sync-alt"></i>
-            </span>
-        </div>
+        </span>
+
     </div>
+
 </a>

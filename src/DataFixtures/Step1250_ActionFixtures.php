@@ -74,46 +74,46 @@ class Step1250_ActionFixtures extends Fixture implements FixtureGroupInterface
             $content='bascule automatique du dossier (' . $data['id_etat'] . ')';
             switch ($data['id_etat']) {
                 case "1":
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,$content);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,$content,true);
                     break;
                 case "2":
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_REJECTED,$content);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_REJECTED,$content,true);
                     break;
                 case "3":
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,$content);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,$content,true);
                     break;
                 case "4":
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_DEPLOYED,$content);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_DEPLOYE,$content,true);
                     break;
                 case "5":
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_DEPLOYED,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_MEASURED,$content);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_DEPLOYE,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_MEASURED,$content,true);
                     break;
                 case "6":
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_DEPLOYED,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_MEASURED,$content);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_DEPLOYE,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_MEASURED,$content,true);
                     break;
                 case "7":
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'');
-                   $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_DEPLOYED,'');
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_MEASURED,$content);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_COTECH,'',true);
+                   $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_CODIR,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_FINALISED,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_DEPLOYE,'',true);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_MEASURED,$content,true);
                     break;
                 case "8":
-                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_ABANDONNED,$content);
+                    $this->workflowManager->applyTransition($instance, WorkflowData::TRANSITION_TO_ABANDONNED,$content,true);
                     break;
 
             }

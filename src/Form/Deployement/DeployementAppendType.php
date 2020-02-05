@@ -43,7 +43,6 @@ class DeployementAppendType extends AppTypeAbstract
                 'allow_add' => true,
                 'allow_delete' => true,
             ]);
-            ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

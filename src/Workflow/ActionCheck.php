@@ -71,10 +71,12 @@ class ActionCheck
     public function checkRegionStartAtBeforeOrEqualNow()
     {
         if (!empty($this->action->getRegionStartAt()) ) {
-            if (new \DateTime() <= $this->action->getRegionStartAt()) {
+            if (new \DateTime() >= $this->action->getRegionStartAt()) {
                 $this->actionCheckMessage->addMessageError('La date de début est passée (<=).');
+                return true;
             }
         }
+        return false;
     }
     public function checkRegionStartAtAfterNow()
     {
