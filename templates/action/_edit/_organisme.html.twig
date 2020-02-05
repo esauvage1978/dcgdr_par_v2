@@ -39,7 +39,9 @@
         <div class="card-footer">
             <div class="col  d-flex justify-content-center align-items-center p-1">
                 <a class="btn btn-info "
-                   href="{{ path('deployements_for_action', {'id': action.id}) }}">
+                   href="{{ path('deployements_for_action', {'id': action.id}) }}"
+                   data-html="true"
+                   data-toggle="tooltip" data-placement="top" title="Ce bouton permet d'associer des organismes à l'action">
                     <i class="fas fa-warehouse"></i> Sélection des organismes
                 </a>
             </div>

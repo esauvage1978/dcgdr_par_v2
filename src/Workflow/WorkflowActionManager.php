@@ -6,6 +6,7 @@ use App\Entity\Action;
 use App\Entity\User;
 use App\Event\WorkflowTransitionEvent;
 use App\Manager\ActionStateManager;
+use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\StateMachine;
@@ -21,7 +22,7 @@ class WorkflowActionManager
     /**
      * @var Registry
      */
-    private $worflow;
+    private $workflow;
     /**
      * @var StateMachine
      */
@@ -42,22 +43,29 @@ class WorkflowActionManager
      */
     private $dispatcher;
 
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
     public function __construct(
         ActionStateManager $actionStateManager,
-        Registry $worflow,
+        Registry $workflow,
         Security $securityContext,
-        EventDispatcherInterface $dispatcher
+        EventDispatcherInterface $dispatcher,
+        UserRepository $userRepository
     ) {
         $this->actionStateManager = $actionStateManager;
         $this->securityContext = $securityContext;
-        $this->worflow = $worflow;
+        $this->workflow = $workflow;
         $this->dispatcher = $dispatcher;
+        $this->userRepository = $userRepository;
     }
 
     private function initialiseStateMachine(Action $action)
     {
         if (null == $this->stateMachine) {
-            $this->stateMachine = $this->worflow->get($action, 'action');
+            $this->stateMachine = $this->workflow->get($action, 'action');
         }
     }
 
@@ -68,24 +76,44 @@ class WorkflowActionManager
         $this->initialiseStateMachine($action);
 
         if ($this->stateMachine->can($action, $transition)) {
-            $this->workflowActionTransitionManager = new WorkflowActionTransitionManager($action, $transition);
+            $this->apply_change_state($action, $transition, $automate, $content);
 
-            $this->workflowActionTransitionManager->intialiseActionForTransition($content, $automate);
+            $user = $this->loadUser($automate);
 
-            $this->stateMachine->apply($action, $transition);
+            $this->send_mails($user, $action);
 
-            if (!$automate) {
-                /** @var User $user */
-                $user = $this->securityContext->getToken()->getUser();
-                $event = new WorkflowTransitionEvent($user, $action);
-                $this->dispatcher->dispatch($event, WorkflowTransitionEvent::NAME);
-
-                $this->actionStateManager->saveActionInHistory($action, $stateOld, $user);
-            }
+            $this->historisation($user, $action, $stateOld);
 
             return true;
         }
 
         return false;
+    }
+
+    private function apply_change_state(Action $action, string $transition, bool $automate, string $content)
+    {
+        $this->workflowActionTransitionManager = new WorkflowActionTransitionManager($action, $transition);
+        $this->workflowActionTransitionManager->intialiseActionForTransition($content, $automate);
+        $this->stateMachine->apply($action, $transition);
+    }
+
+    private function send_mails(User $user, Action $action)
+    {
+        $event = new WorkflowTransitionEvent($user, $action);
+        $this->dispatcher->dispatch($event, WorkflowTransitionEvent::NAME);
+    }
+
+    private function historisation(User $user, Action $action, string $stateOld)
+    {
+        $this->actionStateManager->saveActionInHistory($action, $stateOld, $user);
+    }
+
+    private function loadUser(bool $automate)
+    {
+        if (!$automate) {
+            return $this->securityContext->getToken()->getUser();
+        } else {
+            return $this->userRepository->find(1);
+        }
     }
 }

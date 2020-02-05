@@ -1,0 +1,56 @@
+<div style="padding:10px; border-radius: 10px;border: 1px solid lightskyblue">
+    <a href="{{ url('deployement_append_edit',{id:deployement.id}) }}">
+        <h3>{{ deployement.action.name }}</h3>
+    </a>
+
+    <div style="padding-top: 30px">
+        <p>
+            <em>Classement : </em>
+        <ul>
+            <li>{{ deployement.action.category.thematique.pole.axe.name }}</li>
+            <li>{{ deployement.action.category.thematique.pole.name }}</li>
+            <li>{{ deployement.action.category.thematique.name }}</li>
+            <li>{{ deployement.action.category.name }}</li>
+        </ul>
+        </p>
+        <p>
+            <em>R&eacute;f&eacute;rence : </em><strong>{{ deployement.action.category.thematique.ref }}
+                -{{ deployement.action.category.ref }}
+                -{{ deployement.action.ref }}</strong>
+        </p>
+        <p><em>Num&eacute;ro de l'action : </em><strong>{{ deployement.action.id }}</strong></p>
+        <p><em>Adresse : </em><strong>{{ url('deployement_append_edit',{id:deployement.id}) }}</strong></p>
+        {% if deployement.action.state in ['deployed', 'measure'] %}
+            <p>
+                <em>Déploiement : </em> du <strong>
+                    {% if deployement.action.regionstartat %}
+                        {{ deployement.action.regionstartat | date('d/m/Y') }}
+                    {% else %}
+                        --/--/----
+                    {% endif %}
+                </strong>
+                au
+                <strong>
+                    {% if deployement.action.regionendat %}
+                        {{ deployement.action.regionendat | date('d/m/Y') }}
+                    {% else %}
+                        --/--/----
+                    {% endif %}
+                </strong>
+            </p>
+        {% endif %}
+        <p>Commentaire :</p>
+        <p><strong>{{ deployement.action.contentState | raw }}</strong></p>
+
+    </div>
+</div>
+
+<div style="padding:10px; border-radius: 10px;border: 1px solid lightskyblue">
+    {% for indicatorValue in deployement.indicatorValues %}
+        {% if indicatorValue.enable and indicatorValue.indicator.enable %}
+            <p>
+                {{ indicatorValue.indicator.name }}
+            </p>
+        {% endif %}
+    {% endfor %}
+</div>

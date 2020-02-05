@@ -47,7 +47,10 @@
 
         <div class="card-footer">
             <div class="col  d-flex justify-content-center align-items-center p-1">
-                <a class="btn btn-success" href="{{ path('indicator_new',{'id':action.id}) }}">
+                <a class="btn btn-success" href="{{ path('indicator_new',{'id':action.id}) }}"
+                   data-html="true"
+                   data-toggle="tooltip" data-placement="top" title="Ce bouton permet d'ajouter un indicateur à l'action"
+                >
                     <i class="fas fa-plus"></i> Ajouter un indicateur
                 </a>
             </div>

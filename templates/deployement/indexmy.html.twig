@@ -10,11 +10,11 @@
 
 {% block body_header %}
     <div class="col">
-        <h1 class="m-0 text-dark"> <i class="fas fa-city"></i>
-            {%  if  deployements | length==1  %}
+        <h1 class="m-0 text-dark"><i class="fas fa-city"></i>
+            {% if  deployements | length==1 %}
                 Mon déploiement
             {% else %}
-            Mes {{ deployements | length }} déploiements
+                Mes {{ deployements | length }} déploiements
             {% endif %}
             {{ complement | default('') }}
         </h1>
@@ -44,6 +44,7 @@
                                     <th class="desktop  text-center align-middle">Plan d'actions</th>
                                     <th class="all  text-center align-middle">Action</th>
                                     <th class="all  align-middle">Organisme</th>
+                                    <th class="all text-center align-middle">Fin de déploiement</th>
                                     <th class="all text-center align-middle">Jalon</th>
                                     <th class="desktop text-center align-middle">Indicateur</th>
                                     <th class="desktop text-center align-middle">Taux</th>
@@ -68,7 +69,7 @@
                                             <br/>
                                             {{ deployement.action.category.name }}
                                         </td>
-                                        <td  class="align-middle">
+                                        <td class="align-middle">
                                             {% if deployement.action | actionCanRead %}
                                                 <a href="{{ path('action_show', {'id': deployement.action.id}) }}">
                                                     {{ deployement.action.name }}
@@ -76,9 +77,13 @@
                                             {% else %}
                                                 {{ deployement.action.name }}
                                             {% endif %}
+
                                         </td>
                                         <td class="align-middle">
                                             {{ deployement.organisme.name }}
+                                        </td>
+                                        <td class="text-center  align-middle">
+                                            {{ include('action/_view/_regionendat.html.twig',{'regionendat':deployement.action.regionendat}) }}
                                         </td>
                                         <td class="text-center  align-middle">
                                             {{ include('deployement/_view/_jalon.html.twig') }}

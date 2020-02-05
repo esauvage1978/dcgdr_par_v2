@@ -71,7 +71,7 @@ class WorkflowData
                 $transitions = [
                     self::TRANSITION_TO_MEASURED,
                     self::TRANSITION_TO_ABANDONNED,
-                    self::TRANSITION_UN_DEPLOYE
+                    self::TRANSITION_UN_DEPLOYED
                 ];
                 break;
             case self::STATE_MEASURED:

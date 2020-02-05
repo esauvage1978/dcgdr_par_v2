@@ -51,31 +51,33 @@
                 <div class="card-header">
                     <h3 class="card-title">Actions</h3>
                 </div>
-                <div class="card-body p-0">
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                        <td>
+                <div class="card-body ">
+                    <ul class="list-unstyled">
+                        <li>
                             <h5>
                                 <a class="btn btn-info" href="{{ path('command_calcul_taux') }}">
                                     <i class="  fas fa-"></i>
                                     Lance le calcul des taux
                                 </a>
                             </h5>
-                        </td>
-                        </tr>
-                        <tr>
-                        <td>
+                        </li>
+                        <li>
                             <h5>
-                                <a class="btn btn-info" href="{{ path('deployement_jalon_notificator') }}">
+                                <a class="btn btn-info" href="{{ path('command_deployement_jalon_notificator') }}">
                                     <i class="  fas fa-"></i>
                                     Lance les notifications des déploiements ayant le jalon à aujourd'hui
                                 </a>
                             </h5>
-                        </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                        </li>
+                        <li>
+                            <h5>
+                                <a class="btn btn-info" href="{{ path('command_workflow') }}">
+                                    <i class="  fas fa-"></i>
+                                    Lance les actions du workflow
+                                </a>
+                            </h5>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

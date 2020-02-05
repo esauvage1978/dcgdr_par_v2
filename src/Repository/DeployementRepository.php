@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Dto\DeployementSearchDto;
 use App\Entity\Action;
 use App\Entity\Deployement;
-use App\Entity\IndicatorValue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;
@@ -85,7 +84,6 @@ class DeployementRepository extends ServiceEntityRepository
         }
     }
 
-
     private function findAllForDto_initialise(DeployementSearchDto $dto): QueryBuilder
     {
         $builder = $this->createQueryBuilder(self::ALIAS)
@@ -153,23 +151,28 @@ class DeployementRepository extends ServiceEntityRepository
         }
 
         if ($dto->getJalonNotPresent()) {
-            $builder->andWhere( DeployementRepository::ALIAS. '.showAt is null ');
+            $builder->andWhere(DeployementRepository::ALIAS.'.showAt is null ');
         }
+
+        if (!empty($dto->actionSearchDto->getState())) {
+            $builder->andWhere(ActionRepository::ALIAS.'.state = :state ');
+            $params = $this->addParams($params, 'state', $dto->actionSearchDto->getState());
+        }
+
 
         if (!empty($dto->getJalonFrom()) && empty($dto->getJalonTo())) {
             $builder->andWhere(
-                DeployementRepository::ALIAS. '.showAt ' .
-                $dto->getJalonOperator() .' :from');
+                DeployementRepository::ALIAS.'.showAt '.
+                $dto->getJalonOperator().' :from');
 
             $params = $this->addParams($params, 'from', $dto->getJalonFrom());
-        } else if (!empty($dto->getJalonFrom()) && !empty($dto->getJalonTo())) {
+        } elseif (!empty($dto->getJalonFrom()) && !empty($dto->getJalonTo())) {
             $builder->andWhere(
-                DeployementRepository::ALIAS. '.showAt BETWEEN  :from AND :to');
+                DeployementRepository::ALIAS.'.showAt BETWEEN  :from AND :to');
 
             $params = $this->addParams($params, 'from', $dto->getJalonFrom());
             $params = $this->addParams($params, 'to', $dto->getJalonTo());
         }
-
 
         if (count($params) > 0) {
             $builder->setParameters($params);

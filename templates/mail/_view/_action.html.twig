@@ -20,6 +20,25 @@
         </p>
         <p><em>Num&eacute;ro de l'action : </em><strong>{{ action.id }}</strong></p>
         <p><em>Adresse : </em><strong>{{ url('action_show',{id:action.id}) }}</strong></p>
+        {% if action.state in ['deployed', 'measure'] %}
+            <p>
+                <em>Déploiement : </em> du <strong>
+                    {% if action.regionstartat %}
+                        {{ action.regionstartat | date('d/m/Y') }}
+                    {% else %}
+                        --/--/----
+                    {% endif %}
+                </strong>
+                au
+                <strong>
+                    {% if action.regionendat %}
+                        {{ action.regionendat | date('d/m/Y') }}
+                    {% else %}
+                        --/--/----
+                    {% endif %}
+                </strong>
+            </p>
+        {% endif %}
         <p>Commentaire :</p>
         <p><strong>{{ action.contentState | raw }}</strong></p>
 
