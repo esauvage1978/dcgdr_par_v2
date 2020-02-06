@@ -174,12 +174,21 @@ class DeployementRepository extends ServiceEntityRepository
             $params = $this->addParams($params, 'to', $dto->getJalonTo());
         }
 
+        if (!empty($dto->getSearch())) {
+            $builder
+                ->andwhere(IndicatorValueRepository::ALIAS.'.content like :search')
+                ->orWhere(IndicatorValueRepository::ALIAS.'.goal like :search')
+                ->orWhere(IndicatorValueRepository::ALIAS.'.value like :search')
+;
+
+            $params = $this->addParams($params, 'search', '%'.$dto->getSearch().'%');
+        }
+
         if (count($params) > 0) {
             $builder->setParameters($params);
         }
 
         $builder = $this->findAllForDto_orderBy($builder);
-
         return $builder
             ->getQuery()
             ->getResult();

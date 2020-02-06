@@ -1,12 +1,11 @@
-<a href="{{ path(url) }}/{{ state }}">
-<div class="info-box bg-light ">
-    <div class="info-box-content">
-        <span class="info-box-text text-center">
-            {{ include('workflow/_state.html.twig',{'state':state}) }}
-        </span>
-        <span id="badge_{{state}}" class="info-box-number text-center  text-lg mb-0">
-            <i id="overlay_{{ state }}" class=" d-none fas  fa-sync-alt"></i>
-        </span>
-    </div>
+<div class=" pb-5 mr-3" style="width:250px;">
+    <a href="{{ path(url) }}/{{ state }}">
+        <div class="text-center">
+            <br/>
+            <span id="badge_{{ state }}" class="badge badge-light text-center text-md mb-0">
+                <i id="overlay_{{ state }}" class=" d-none fas  fa-sync-alt"></i>
+            </span>
+        </div>
+
+    </a>
 </div>
-</a>

@@ -206,28 +206,28 @@ class WorkflowData
                 $stateColor = '#000000';
                 break;
             case self::STATE_COTECH:
-                $stateColor = '#020efd';
+                $stateColor = '#0070c0';
                 break;
             case self::STATE_REJECTED:
-                $stateColor = '#028bfd';
+                $stateColor = '#ffc000';
                 break;
             case self::STATE_CODIR:
-                $stateColor = '#02e2fd';
+                $stateColor = '#00b0f0';
                 break;
             case self::STATE_FINALISED:
-                $stateColor = '#00c3b4';
+                $stateColor = '#00b050';
                 break;
             case self::STATE_DEPLOYED:
-                $stateColor = '#89d51b';
+                $stateColor = '#92d050';
                 break;
             case self::STATE_MEASURED:
-                $stateColor = '#f21cec';
+                $stateColor = '#7030a0';
                 break;
             case self::STATE_CLOTURED:
-                $stateColor = '#9a1cf2';
+                $stateColor = '#c00000';
                 break;
             case self::STATE_ABANDONNED:
-                $stateColor = '#f21c1c';
+                $stateColor = '#ff0000';
                 break;
         }
 

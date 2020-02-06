@@ -3,8 +3,10 @@
 namespace App\Controller\Home;
 
 use App\Dto\ActionSearchDto;
+use App\Dto\DeployementSearchDto;
 use App\Repository\ActionRepository;
 use App\Repository\AxeRepository;
+use App\Repository\DeployementRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,17 +34,29 @@ class HomeController extends AbstractController
      * @IsGranted("ROLE_USER")
      */
     public function homeSearchAction(
-        ActionRepository $repository,
+        ActionRepository $actionrepo,
         ActionSearchDto $actionSearchDto,
+        DeployementRepository $depRepo,
+        DeployementSearchDto $deployementSearchDto,
         Request $request
     ): Response
     {
 
         $actionSearchDto->setSearch($request->request->get('search'));
-        dump($actionSearchDto);
-        return $this->render('home/search.html.twig', [
-            'actions' => $repository->findAllForDto($actionSearchDto),
-        ]);
+        $deployementSearchDto
+            ->setSearch($request->request->get('search'))
+            ->setUserWriter($this->getUser()->getId());
+
+        return $this->render(
+            'home/search.html.twig',
+            [
+                'actions'
+                =>
+                    $actionrepo->findAllForDto($actionSearchDto,ActionRepository::FILTRE_DTO_INIT_SEARCH),
+                'deployements'
+                =>
+                    $depRepo->findAllForDto($deployementSearchDto),
+            ]);
     }
 
 }

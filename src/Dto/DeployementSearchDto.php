@@ -14,6 +14,25 @@ class DeployementSearchDto
     private $jalonTo;
     private $jalonNotPresent;
     public $actionSearchDto;
+    private $search;
+
+    /**
+     * @return mixed
+     */
+    public function getSearch()
+    {
+        return $this->search;
+    }
+
+    /**
+     * @param mixed $search
+     * @return DeployementSearchDto
+     */
+    public function setSearch($search)
+    {
+        $this->search = $search;
+        return $this;
+    }
 
     /**
      * @return mixed

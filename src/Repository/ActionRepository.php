@@ -20,6 +20,7 @@ class ActionRepository extends ServiceEntityRepository
     const ALIAS = 'ac';
 
     const FILTRE_DTO_INIT_TABLEAU='tableau';
+    const FILTRE_DTO_INIT_SEARCH='search';
     const FILTRE_DTO_INIT_UNITAIRE='unitaire';
     const FILTRE_DTO_INIT_AJAX='ajax';
 
@@ -80,6 +81,28 @@ class ActionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    private function findForDto_initialise_search(ActionSearchDto $dto): QueryBuilder
+    {
+        $builder = $this->createQueryBuilder(self::ALIAS)
+            ->select(
+                self::ALIAS,
+                CategoryRepository::ALIAS,
+                ThematiqueRepository::ALIAS,
+                PoleRepository::ALIAS,
+                AxeRepository::ALIAS,
+                IndicatorRepository::ALIAS
+            )
+
+            ->leftjoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
+            ->leftjoin(self::ALIAS.'.indicators', IndicatorRepository::ALIAS)
+            ->leftjoin(CategoryRepository::ALIAS.'.thematique', ThematiqueRepository::ALIAS)
+            ->leftjoin(ThematiqueRepository::ALIAS.'.pole', PoleRepository::ALIAS)
+            ->leftjoin(PoleRepository::ALIAS.'.axe', AxeRepository::ALIAS)
+;
+
+
+        return $builder;
+    }
     private function findForDto_initialise_unitaire(ActionSearchDto $dto): QueryBuilder
     {
         $builder = $this->createQueryBuilder(self::ALIAS)
@@ -196,6 +219,9 @@ class ActionRepository extends ServiceEntityRepository
             case self::FILTRE_DTO_INIT_AJAX:
                 $builder = $this->findForDto_initialise_rqt_ajax($dto);
                 break;
+            case self::FILTRE_DTO_INIT_SEARCH:
+                $builder = $this->findForDto_initialise_search($dto);
+                break;
         }
         if(empty($dto->getId())) {
             $builder
@@ -218,6 +244,24 @@ class ActionRepository extends ServiceEntityRepository
         if (!empty($dto->getUserValider())) {
             $builder->andwhere(UserRepository::ALIAS_ACTION_VALIDERS.'.id = :userid');
             $params = $this->addParams($params, 'userid', $dto->getUserValider());
+        }
+
+        if ($dto->getJalonNotPresent()) {
+            $builder->andWhere(self::ALIAS.'.showAt is null ');
+        }
+
+        if (!empty($dto->getJalonFrom()) && empty($dto->getJalonTo())) {
+            $builder->andWhere(
+                self::ALIAS.'.showAt '.
+                $dto->getJalonOperator().' :from');
+
+            $params = $this->addParams($params, 'from', $dto->getJalonFrom());
+        } elseif (!empty($dto->getJalonFrom()) && !empty($dto->getJalonTo())) {
+            $builder->andWhere(
+                self::ALIAS.'.showAt BETWEEN  :from AND :to');
+
+            $params = $this->addParams($params, 'from', $dto->getJalonFrom());
+            $params = $this->addParams($params, 'to', $dto->getJalonTo());
         }
 
         if (!empty($dto->getState())) {
@@ -250,6 +294,8 @@ class ActionRepository extends ServiceEntityRepository
                 ->andwhere(self::ALIAS.'.name like :search')
                 ->orWhere(self::ALIAS.'.content like :search')
                 ->orWhere(self::ALIAS.'.cadrage like :search')
+                ->orWhere(IndicatorRepository::ALIAS.'.name like :search')
+                ->orWhere(IndicatorRepository::ALIAS.'.content like :search')
                 ->orWhere(CategoryRepository::ALIAS.'.name like :search')
                 ->orWhere(ThematiqueRepository::ALIAS.'.name like :search')
                 ->orWhere(PoleRepository::ALIAS.'.name like :search')

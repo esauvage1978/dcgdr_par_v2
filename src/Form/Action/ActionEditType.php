@@ -62,6 +62,10 @@ class ActionEditType extends AppTypeAbstract
                 self::REQUIRED => false,
                 self::ATTR => [self::ROWS => 10, self::CSS_CLASS => 'textarea'],
             ])
+            ->add('showat', DateType::class, [
+                self::REQUIRED => false,
+                'widget' => 'single_text',
+            ])
             ->add('experimental', CheckboxType::class,
                 [
                     self::LABEL => '  Expérimentation',

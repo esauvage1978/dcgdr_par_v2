@@ -3,6 +3,7 @@
 namespace App\Controller\Home;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -12,13 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class DocController extends AbstractController
 {
     /**
-     * @Route("/documentation", name="documentation", methods={"GET"})
+     * @Route("/doc", name="documentation", methods={"GET"})
      * @return Response
      */
-    public function contactAction(): Response
+    public function documentationAction(): Response
     {
-
-        return $this->render('home/doc.html.twig', []);
+        return $this->render('documentation/index.html.twig', []);
     }
 
 

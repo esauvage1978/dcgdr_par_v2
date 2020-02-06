@@ -132,9 +132,11 @@ class WorkflowMailerSubscriber implements EventSubscriberInterface
         $users = [];
         foreach ($action->getValiders() as $corbeille) {
             foreach ($corbeille->getUsers() as $user) {
-                $users = array_merge([
-                    $user->getEmail() => $user->getName(),
-                ], $users);
+                if($user->getEnable()) {
+                    $users = array_merge([
+                        $user->getEmail() => $user->getName(),
+                    ], $users);
+                }
             }
         }
 
@@ -146,9 +148,11 @@ class WorkflowMailerSubscriber implements EventSubscriberInterface
         $users = [];
         foreach ($action->getWriters() as $corbeille) {
             foreach ($corbeille->getUsers() as $user) {
-                $users = array_merge([
-                    $user->getEmail() => $user->getName(),
-                ], $users);
+                if($user->getEnable()) {
+                    $users = array_merge([
+                        $user->getEmail() => $user->getName(),
+                    ], $users);
+                }
             }
         }
 
@@ -161,9 +165,11 @@ class WorkflowMailerSubscriber implements EventSubscriberInterface
 
         foreach ($deployement->getWriters() as $corbeille) {
             foreach ($corbeille->getUsers() as $user) {
-                $users = array_merge([
-                    $user->getEmail() => $user->getName(),
-                ], $users);
+                if($user->getEnable()) {
+                    $users = array_merge([
+                        $user->getEmail() => $user->getName(),
+                    ], $users);
+                }
             }
         }
 

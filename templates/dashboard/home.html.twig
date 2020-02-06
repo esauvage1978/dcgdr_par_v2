@@ -13,97 +13,71 @@
 
     <!-- MESSAGE -->
 
-    <div class="card card-info">
-        <div class="card-header">
-            <div class="card-title">
-                <h5>Cycle de vie des actions</h5>
-            </div>
+    <h5>Cycle de vie des actions</h5>
+
+
+    <div class="p-5"
+         style="background-image: url('{{ absolute_url( asset('img/fond.png')) }}'); background-repeat: no-repeat;width: 950px   ">
+        <div class="row">
+
+
+            <!-- 0 started -->
+            {{ include('dashboard/_dashboard_state.html.twig',{
+                'state':'started',
+                'url':'actions_by_state'
+            }) }}
         </div>
+        <div class="row">
+            <!-- 1 cotech -->
+            {{ include('dashboard/_dashboard_state.html.twig',{
+                'state':'cotech',
+                'url':'actions_by_state'
+            }) }}
 
-        <div class="card-body p-5">
+            {{ include('dashboard/_dashboard_state.html.twig',{
+                'state':'rejected',
+                'url':'actions_by_state'
+            }) }}
 
-            <div class="row">
-                <!-- 0 started -->
-                <div class="col-2">
-                    {{ include('dashboard/_dashboard_state.html.twig',{
-                        'state':'started',
-                        'url':'actions_by_state'
-                    }) }}
-                </div>
-
-
-
-                <!-- 7 abandonne -->
-                <div class="col-2 offset-3 ">
-                    {{ include('dashboard/_dashboard_state.html.twig',{
-                        'state':'abandonned',
-                        'url':'actions_by_state'
-                    }) }}
-                </div>
-            </div>
-            <div class="row">
-                <!-- 1 cotech -->
-                <div class="col-2">
-                    {{ include('dashboard/_dashboard_state.html.twig',{
-                        'state':'cotech',
-                        'url':'actions_by_state'
-                    }) }}
-                </div>
-
-                <div class="col-2">
-                    {{ include('dashboard/_dashboard_state.html.twig',{
-                        'state':'rejected',
-                        'url':'actions_by_state'
-                    }) }}
-                </div>
-            </div>
-            <div class="row">
-                <!-- 1 codir -->
-                <div class="col-2">
-                    {{ include('dashboard/_dashboard_state.html.twig',{
-                        'state':'codir',
-                        'url':'actions_by_state'
-                    }) }}
-                </div>
-            </div>
-            <div class="row">
-                <!-- 3 toDeploy -->
-                <div class="col-2 ">
-                    {{ include('dashboard/_dashboard_state.html.twig',{
-                        'state':'finalised',
-                        'url':'actions_by_state'
-                    }) }}
-                </div>
-            </div>
-            <div class="row">
-                <!-- 4 deployed -->
-                <div class="col-2 ">
-                    {{ include('dashboard/_dashboard_state.html.twig',{
-                        'state':'deployed',
-                        'url':'actions_by_state'
-                    }) }}
-                </div>
-            </div>
-            <div class="row">
-                <!-- 5 toMeasure -->
-                <div class="col-2 ">
-                    {{ include('dashboard/_dashboard_state.html.twig',{
-                        'state':'measured',
-                        'url':'actions_by_state'
-                    }) }}
-                </div>
-            </div>
-            <div class="row">
-                <!-- 6 closed -->
-                <div class="col-2 ">
-                    {{ include('dashboard/_dashboard_state.html.twig',{
-                        'state':'clotured',
-                        'url':'actions_by_state'
-                    }) }}
-                </div>
-            </div>
-
-
+            {{ include('dashboard/_dashboard_state.html.twig',{
+                'state':'abandonned',
+                'url':'actions_by_state'
+            }) }}
+        </div>
+        <div class="row">
+            <!-- 1 codir -->
+            {{ include('dashboard/_dashboard_state.html.twig',{
+                'state':'codir',
+                'url':'actions_by_state'
+            }) }}
+        </div>
+        <div class="row">
+            <!-- 3 toDeploy -->
+            {{ include('dashboard/_dashboard_state.html.twig',{
+                'state':'finalised',
+                'url':'actions_by_state'
+            }) }}
+        </div>
+        <div class="row">
+            <!-- 4 deployed -->
+            {{ include('dashboard/_dashboard_state.html.twig',{
+                'state':'deployed',
+                'url':'actions_by_state'
+            }) }}
+        </div>
+        <div class="row">
+            <!-- 5 toMeasure -->
+            {{ include('dashboard/_dashboard_state.html.twig',{
+                'state':'measured',
+                'url':'actions_by_state'
+            }) }}
+        </div>
+        <div class="row">
+            <!-- 6 closed -->
+            {{ include('dashboard/_dashboard_state.html.twig',{
+                'state':'clotured',
+                'url':'actions_by_state'
+            }) }}
         </div>
     </div>
 {% endblock %}

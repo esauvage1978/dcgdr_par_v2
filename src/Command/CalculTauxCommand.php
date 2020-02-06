@@ -2,6 +2,8 @@
 
 namespace App\Command;
 
+use App\Helper\CommandInterface;
+use App\Helper\CommandTool;
 use App\Repository\ActionRepository;
 use App\Repository\AxeRepository;
 use App\Repository\CategoryRepository;
@@ -10,11 +12,10 @@ use App\Repository\IndicatorRepository;
 use App\Repository\PoleRepository;
 use App\Repository\ThematiqueRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CalculTauxCommand extends Command
+class CalculTauxCommand extends CommandTool implements CommandInterface
 {
     protected static $defaultName = 'app:calcultaux';
 
@@ -35,38 +36,48 @@ class CalculTauxCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln($this->calcul());
+        $this->runTraitement();
+
+        $this->showMessage($output);
+
         return 0;
     }
 
-    public function calcul(): string
+    public function runTraitement(): void
     {
         $debut = microtime(true);
 
+        $this->addMessage('Calcul pour les indicateurs');
         $indicatorRepo = new IndicatorRepository($this->managerRegistry);
         $indicatorRepo->tauxRaz();
         $indicatorRepo->tauxCalcul();
 
+        $this->addMessage('Calcul pour les déploiements');
         $deployementRepo = new DeployementRepository($this->managerRegistry);
         $deployementRepo->tauxRaz();
         $deployementRepo->tauxCalcul();
 
+        $this->addMessage('Calcul pour les actions');
         $repo = new ActionRepository($this->managerRegistry);
         $repo->tauxRaz();
         $repo->tauxCalcul();
 
+        $this->addMessage('Calcul pour les catégories');
         $repo = new CategoryRepository($this->managerRegistry);
         $repo->tauxRaz();
         $repo->tauxCalcul();
 
+        $this->addMessage('Calcul pour les thématiques');
         $repo = new ThematiqueRepository($this->managerRegistry);
         $repo->tauxRaz();
         $repo->tauxCalcul();
 
+        $this->addMessage('Calcul pour les pôles');
         $repo = new PoleRepository($this->managerRegistry);
         $repo->tauxRaz();
         $repo->tauxCalcul();
 
+        $this->addMessage('Calcul pour les plans d\'actions');
         $repo = new AxeRepository($this->managerRegistry);
         $repo->tauxRaz();
         $repo->tauxCalcul();
@@ -75,11 +86,7 @@ class CalculTauxCommand extends Command
 
         $fin = microtime(true);
 
-        return 'Traitement effectué en  '.$this->calculTime($fin, $debut).' millisecondes.';
+        $this->addMessage('Traitement effectué en  '.$this->calculTime($fin, $debut).' millisecondes.');
     }
 
-    private function calculTime($fin, $debut): int
-    {
-        return ($fin - $debut) * 1000;
-    }
 }

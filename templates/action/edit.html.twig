@@ -105,6 +105,11 @@
         <div class="row col-12 ">
             <div id="col1"
                  class="col-sm-12  order-sm-second  col-md-12 order-sm-second col-lg-6 order-lg-second col-xl-2 order-xl-first ">
+                {%  if action.state in ['abandonned','rejected','clotured'] %}
+                    {{ include('action/_show/_jalon.html.twig') }}
+                {% else %}
+                    {{ include('action/_edit/_jalon.html.twig') }}
+                {% endif %}
                 {%  if action.state in ['cotech','rejected','codir','deployed'] %}
                     {{ include('action/_show/_tuile.html.twig') }}
                 {% else %}
@@ -112,6 +117,7 @@
                     {{ include('action/_edit/_experimentation.html.twig') }}
                     {{ include('action/_edit/_date.html.twig') }}
                 {% endif %}
+
             </div>
             <div id="col2"
                  class=" col-sm-12  order-sm-first  col-md-12 order-md-first col-lg-12  order-lg-first col-xl-7 order-xl-second bg-white p-5">

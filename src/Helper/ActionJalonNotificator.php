@@ -2,12 +2,12 @@
 
 namespace App\Helper;
 
-use App\Dto\DeployementSearchDto;
-use App\Entity\Deployement;
-use App\Repository\DeployementRepository;
+use App\Dto\ActionSearchDto;
+use App\Entity\Action;
+use App\Repository\ActionRepository;
 use App\Repository\UserRepository;
 
-class DeployementJalonNotificator extends Messagor
+class ActionJalonNotificator extends Messagor
 {
     /**
      * @var mixed
@@ -15,14 +15,14 @@ class DeployementJalonNotificator extends Messagor
     private $users;
 
     /**
-     * @var DeployementSearchDto
+     * @var ActionSearchDto
      */
-    private $deployementSearchDto;
+    private $actionSearchDto;
 
     /**
-     * @var DeployementRepository
+     * @var ActionRepository
      */
-    private $deployementRepository;
+    private $actionRepository;
 
     /**
      * @var SendMail
@@ -31,32 +31,30 @@ class DeployementJalonNotificator extends Messagor
 
     public function __construct(
         UserRepository $userRepository,
-        DeployementSearchDto $deployementSearchDto,
-        DeployementRepository $deployementRepository,
+        ActionSearchDto $actionSearchDto,
+        ActionRepository $actionRepository,
         SendMail $sendMail
     ) {
-        $this->users = $userRepository->findAllWriterForDeployement();
-        $this->deployementSearchDto = $deployementSearchDto;
-        $this->deployementRepository = $deployementRepository;
+        $this->users = $userRepository->findAllWriterForAction();
+        $this->actionSearchDto = $actionSearchDto;
+        $this->actionRepository = $actionRepository;
         $this->sendMail=$sendMail;
 
         parent::__construct();
     }
 
-    public function notifyJalonToday(): array
+    public function notifyJalonToday()
     {
         foreach ($this->users as $user) {
-            $i=0;
-            $this->deployementSearchDto
+            $this->actionSearchDto
                 ->setUserWriter($user->getId())
                 ->setJalonFrom((new \DateTime())->format('Y-m-d 00:00:00'))
                 ->setJalonTo((new \DateTime())->format('Y-m-d 23:59:59'));
 
-            /** @var Deployement[] $result */
-            $result = $this->deployementRepository->findAllForDto($this->deployementSearchDto);
+            /** @var Action[] $result */
+            $result = $this->actionRepository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_UNITAIRE);
 
             if (!empty($result)) {
-
                 $this->addMessage(
                     Messagor::TABULTATION.
                     ' Notification à '. $user->getName() .
@@ -65,10 +63,10 @@ class DeployementJalonNotificator extends Messagor
                 $this->sendMail->send(
                     [
                         'user'=>$user,
-                        'deployements'=>$result
+                        'actions'=>$result
                     ],
-                    SendMail::DEPLOYEMENT_JALON_TODAY,
-                    'PAR : Liste des déploiements dont la date de jalon est à aujourd\'hui'
+                    SendMail::ACTION_JALON_TODAY,
+                    'PAR : Liste des actions dont la date de jalon est à aujourd\'hui'
                 );
 
             }

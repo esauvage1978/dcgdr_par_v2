@@ -53,6 +53,23 @@ class UserRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findAllWriterForAction()
+    {
+        return $this->createQueryBuilder(self::ALIAS)
+            ->select(
+                self::ALIAS,
+                CorbeilleRepository::ALIAS,
+            )
+            ->innerJoin(self::ALIAS.'.corbeilles',CorbeilleRepository::ALIAS)
+            ->innerJoin(CorbeilleRepository::ALIAS.'.actionWriters',ActionRepository::ALIAS)
+            ->where(CorbeilleRepository::ALIAS.'.enable=true')
+            ->andWhere(self::ALIAS.'.enable=true')
+            ->orderBy(self::ALIAS . '.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     /**
      * @return User[] Returns an array of User objects
      */

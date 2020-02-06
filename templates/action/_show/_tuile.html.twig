@@ -20,6 +20,19 @@
 
         <div class="info-box bg-light">
             <div class="info-box-content">
+                <span class="info-box-text text-center text-muted">Jalon</span>
+                <span class="info-box-number text-center  text-lg mb-0">
+            {% if action.showAt %}
+                {{ action.showAt | date('d/m/Y') }}
+            {% else %}
+                --/--/----
+            {% endif %}
+        </span>
+            </div>
+        </div>
+
+        <div class="info-box bg-light">
+            <div class="info-box-content">
                 <span class="info-box-text text-center text-muted"><small>Expérimentation</small></span>
                 <span class="info-box-number text-center   mb-0">
                         {% if action.experimental %}

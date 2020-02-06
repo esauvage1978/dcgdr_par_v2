@@ -6,6 +6,7 @@
         <th class="desktop">Plan d'actions</th>
         <th class="all">Action</th>
         <th class="all text-center align-middle">Fin de déploiement</th>
+        <th class="all text-center align-middle">Jalon</th>
         <th class="all text-center">Etat</th>
         <th class="desktop"></th>
         <th class="all" style="width: 20%"></th>
@@ -51,7 +52,9 @@
                     {{ include('action/_view/_regionendat.html.twig',{'regionendat':action.regionendat}) }}
                 {% endif %}
             </td>
-
+            <td class="text-center  align-middle">
+                {{ include('action/_view/_jalon.html.twig') }}
+            </td>
             <td class="text-center align-middle">
                 {{ include('workflow/_state.html.twig' , {'state': action.state} ) }}
             </td>
@@ -84,7 +87,7 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="5">Aucun d'enregistrement</td>
+            <td colspan="8">Aucun d'enregistrement</td>
         </tr>
     {% endfor %}
     </tbody>
