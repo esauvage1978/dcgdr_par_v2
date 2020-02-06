@@ -11,6 +11,7 @@ use Twig\Environment;
 class SendMail
 {
     const DEPLOYEMENT_JALON_TODAY = 'deployementJalonNotificator';
+    const ACTION_JALON_TODAY = 'actionJalonNotificator';
 
     /**
      * @var Environment
@@ -40,7 +41,7 @@ class SendMail
     {
 
         if (is_a($datas['user'], User::class)) {
-            $mail = [[$datas['user']->getEmail() => $datas['user']->getUsername()]];
+            $mail = [$datas['user']->getEmail() => $datas['user']->getName()];
         } else {
             $mail=$datas['user'];
         }

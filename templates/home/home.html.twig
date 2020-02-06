@@ -123,10 +123,10 @@
                                 'url':'my_action',
                                 'filtre':'clotured'}) }}
                         {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'deployement_jalon_to_near',
+                            {   'domaine':'action_jalon_to_near',
                                 'color':'warning',
                                 'titre':'Mes actions avec jalon <=7 jours',
-                                'url':'my_deployement',
+                                'url':'my_action',
                                 'filtre':'jalon_to_near'}) }}
                     </div>
                 <!-- /.card -->
@@ -154,16 +154,16 @@
                                 'url':'my_deployement',
                                 'filtre':'jalon_to_late'}) }}
                         {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'deployement_without_jalon',
+                            {   'domaine':'action_without_jalon',
                                 'color':'warning',
                                 'titre':'Mes actions sans jalon',
-                                'url':'my_deployement',
+                                'url':'my_action',
                                 'filtre':'without_jalon'}) }}
                         {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'deployement_jalon_to_late',
+                            {   'domaine':'action_jalon_to_late',
                                 'color':'danger',
                                 'titre':'Mes actions avec jalon dépassé',
-                                'url':'my_deployement',
+                                'url':'my_action',
                                 'filtre':'jalon_to_late'}) }}
                     </div>
 
@@ -185,9 +185,9 @@
                                 'url':'my_deployement',
                                 'filtre':'jalon_to_come_up'}) }}
                         {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'deployement_jalon_to_come_up',
+                            {   'domaine':'action_jalon_to_come_up',
                                 'titre':'Mes actions avec jalon > 7 jours',
-                                'url':'my_deployement',
+                                'url':'my_action',
                                 'filtre':'jalon_to_come_up'}) }}
                     </div>
 
@@ -226,6 +226,11 @@
 
             searchCount('action_valider_cotech', '{{ path('ajax_my_action_count') }}', 'valider_cotech');
             searchCount('action_valider_codir', '{{ path('ajax_my_action_count') }}', 'valider_codir');
+
+            searchCount('action_without_jalon', '{{ path('ajax_my_action_count') }}', 'without_jalon');
+            searchCount('action_jalon_to_late', '{{ path('ajax_my_action_count') }}', 'jalon_to_late');
+            searchCount('action_jalon_to_near', '{{ path('ajax_my_action_count') }}', 'jalon_to_near');
+            searchCount('action_jalon_to_come_up', '{{ path('ajax_my_action_count') }}', 'jalon_to_come_up');
 
         })
     </script>

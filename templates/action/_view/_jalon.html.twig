@@ -1,8 +1,8 @@
-{% if regionendat %}
-    {% set difference = date("today").diff(date(regionendat)) %}
+{% if action.showAt %}
+    {% set difference = date("today").diff(date(action.showAt)) %}
     {% set leftDays = difference.days %}
-    {% if date("today") > date(regionendat) and leftDays > 0 %}
-        <span class="text-danger font-weight-bold"> -{{ leftDays }} jours </span>
+    {% if date("today") > date(action.showAt) and leftDays > 0 %}
+       <span class="text-danger font-weight-bold"> -{{ leftDays }} jours </span>
     {% elseif leftDays ==0 %}
         <span class="text-warning font-weight-bold"> Aujourd'hui </span>
     {% elseif leftDays ==1 %}
@@ -12,9 +12,9 @@
     {% else %}
         <span class="text-success"> {{ leftDays }} jours </span>
     {% endif %}
-<br/>
+    <br/>
     <small class="text-muted">
-         {{ regionendat | date('d/m/Y') }}
+        {{ action.showAt | date('d/m/Y') }}
     </small>
 {% else %}
     --/--/----

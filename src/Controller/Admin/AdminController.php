@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Command\CalculTauxCommand;
+use App\Command\NotificatorCommand;
 use App\Command\WorkflowCommand;
 use App\Helper\DeployementJalonNotificator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -33,25 +34,25 @@ class AdminController extends AbstractController
      */
     public function calculTauxAction(CalculTauxCommand $calculTauxCommand)
     {
-        $this->addFlash('success', $calculTauxCommand->calcul());
+        $calculTauxCommand->runTraitement();
+
+        $this->addFlash('info', $calculTauxCommand->getMessagesForAlert());
 
         return $this->redirectToRoute('admin_home');
     }
 
     /**
-     * @Route("/command/notificator", name="command_deployement_jalon_notificator", methods={"GET"})
+     * @Route("/command/notificator", name="command_jalon_notificator", methods={"GET"})
      *
      * @IsGranted("ROLE_GESTIONNAIRE")
      *
      * @return Response
      */
-    public function commandDeployementJalonNotificatorAction(DeployementJalonNotificator $deployementJalonNotificator)
+    public function commandJalonNotificatorAction(NotificatorCommand $notificatorCommand)
     {
-        $debut = microtime(true);
-        $deployementJalonNotificator->notifyJalonToday();
-        $fin = microtime(true);
+        $notificatorCommand->runTraitement();
 
-        $this->addFlash('success', 'Traitement effectué en  '.(int) (($fin - $debut) * 1000).' millisecondes.');
+        $this->addFlash('info', $notificatorCommand->getMessagesForAlert());
 
         return $this->redirectToRoute('admin_home');
     }
@@ -65,17 +66,9 @@ class AdminController extends AbstractController
      */
     public function commandWorkflowAction(WorkflowCommand $workflowCommand)
     {
-        $debut = microtime(true);
-        $workflowCommand->calcul();
-        dump($workflowCommand->getMessages());
-        $fin = microtime(true);
+        $workflowCommand->runTraitement();
 
-        $affichage = '';
-        foreach ($workflowCommand->getMessages() as $message) {
-            $affichage = $affichage.'<br/>'.$message;
-        }
-
-        $this->addFlash('success', $affichage);
+        $this->addFlash('info', $workflowCommand->getMessagesForAlert());
 
         return $this->redirectToRoute('admin_home');
     }

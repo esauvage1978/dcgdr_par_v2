@@ -2,29 +2,27 @@
 
 namespace App\Command;
 
+use App\Helper\ActionJalonNotificator;
+use App\Helper\CommandInterface;
+use App\Helper\CommandTool;
 use App\Helper\DeployementJalonNotificator;
-use App\Repository\ActionRepository;
-use App\Repository\AxeRepository;
-use App\Repository\CategoryRepository;
-use App\Repository\DeployementRepository;
-use App\Repository\IndicatorRepository;
-use App\Repository\PoleRepository;
-use App\Repository\ThematiqueRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NotificatorCommand extends Command
+class NotificatorCommand extends CommandTool implements CommandInterface
 {
     protected static $defaultName = 'app:notificator';
 
     private $deployementJalonNotificator;
+    private $actionJalonNotificator;
 
     public function __construct(
-        DeployementJalonNotificator $deployementJalonNotificator)
-    {
+        DeployementJalonNotificator $deployementJalonNotificator,
+        ActionJalonNotificator $actiontJalonNotificator
+    ) {
         $this->deployementJalonNotificator = $deployementJalonNotificator;
+        $this->actionJalonNotificator = $actiontJalonNotificator;
+
         parent::__construct();
     }
 
@@ -37,23 +35,25 @@ class NotificatorCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln($this->notify());
+        $this->runTraitement();
+
+        $this->showMessage($output);
+
         return 0;
     }
 
-    public function notify(): string
+    public function runTraitement(): void
     {
         $debut = microtime(true);
 
-        $this->deployementJalonNotificator->notifyJalonToday();
+        $this->addMessage('Lancement des Notifications pour les actions ');
+        $this->addMessages($this->actionJalonNotificator->notifyJalonToday());
+
+        $this->addMessage('Lancement des Notifications pour les déploiements ');
+        $this->addMessages($this->deployementJalonNotificator->notifyJalonToday());
 
         $fin = microtime(true);
 
-        return 'Traitement effectué en  '.$this->calculTime($fin, $debut).' millisecondes.';
-    }
-
-    private function calculTime($fin, $debut): int
-    {
-        return ($fin - $debut) * 1000;
+        $this->addMessage('Traitement effectué en  '.$this->calculTime($fin, $debut).' millisecondes.');
     }
 }

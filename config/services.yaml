@@ -7,15 +7,15 @@ parameters:
     directory_import : '%kernel.project_dir%/data/importFixtures/'
     mailer.mail: 'emmanuel.sauvage@live.fr'
     mailer.name: '[ DCGDR PAR ] Emmanuel SAUVAGE '
-    mailer.workflow.cotech: true
-    mailer.workflow.codir: true
-    mailer.workflow.rejected: true
-    mailer.workflow.finalised: true
-    mailer.workflow.deployed: true
-    mailer.workflow.measured: true
-    mailer.workflow.clotured: true
-    mailer.workflow.started: true
-    mailer.workflow.abandonned: true
+    mailer.workflow.cotech: false
+    mailer.workflow.codir: false
+    mailer.workflow.rejected: false
+    mailer.workflow.finalised: false
+    mailer.workflow.deployed: false
+    mailer.workflow.measured: false
+    mailer.workflow.clotured: false
+    mailer.workflow.started: false
+    mailer.workflow.abandonned: false
     directory_file_action : '%kernel.project_dir%/public/uploads/actions'
     directory_data_doc : '%kernel.project_dir%/data/doc'
 

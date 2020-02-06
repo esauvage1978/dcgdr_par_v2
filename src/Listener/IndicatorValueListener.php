@@ -68,7 +68,7 @@ class IndicatorValueListener
      */
     public function postPersistHandler(IndicatorValue $indicatorValue)
     {
-        $this->calculTauxCommand->calcul();
+        $this->calculTauxCommand->runTraitement();
 
         $this->iVHistoryCreate->createHistory($indicatorValue);
     }
