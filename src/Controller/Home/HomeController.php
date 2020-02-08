@@ -7,6 +7,7 @@ use App\Dto\DeployementSearchDto;
 use App\Repository\ActionRepository;
 use App\Repository\AxeRepository;
 use App\Repository\DeployementRepository;
+use App\Repository\MessageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,9 +24,16 @@ class HomeController extends AbstractController
      * @return Response
      * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
-    public function homeAction(AxeRepository $axeRepository): Response
+    public function homeAction(
+        AxeRepository $axeRepository,
+        MessageRepository $messageRepository
+    ): Response
     {
-        return $this->render('home/home.html.twig', ['axes' => $axeRepository->findAllForHome()]);
+        return $this->render('home/home.html.twig',
+            [
+                'axes' => $axeRepository->findAllForHome(),
+                'messages'=> $messageRepository->findBy(['name'=>'home'])
+            ]);
     }
 
 

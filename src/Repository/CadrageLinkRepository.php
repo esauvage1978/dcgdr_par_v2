@@ -14,6 +14,9 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CadrageLinkRepository extends ServiceEntityRepository
 {
+    const ALIAS = 'acl';
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CadrageLink::class);

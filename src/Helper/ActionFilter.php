@@ -102,13 +102,23 @@ class ActionFilter
                 $this->actionSearchDto->setState(WorkflowData::STATE_ABANDONNED);
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
-            case 'without_jalon':
+            case 'without_jalon_writer':
                 $this->actionSearchDto
                     ->setUserWriter($user->getId())
-                    ->setJalonNotPresent(true);
+                    ->setJalonNotPresentWriter(true)
+                ->setStates(['started', 'finalised', 'deployed', 'measured']);
 
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
-                $complement = ' - Sans jalon définie';
+                $complement = ' - Sans jalon définie en tant que pilote';
+                break;
+            case 'without_jalon_valider':
+                $this->actionSearchDto
+                    ->setUserValider($user->getId())
+                    ->setJalonNotPresentValider(true)
+                    ->setStates(['cotech', 'codir']);
+
+                $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
+                $complement = ' - Sans jalon définie en tant que valideur';
                 break;
             case 'jalon_to_late':
                 $this->actionSearchDto

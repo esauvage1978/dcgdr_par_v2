@@ -60,7 +60,7 @@ class Corbeille implements EntityInterface
     private $organisme;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="corbeilles")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="corbeilles",fetch="LAZY")
      * @ORM\OrderBy({"name" = "ASC"})
      */
     private $users;

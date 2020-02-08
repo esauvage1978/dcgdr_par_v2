@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} Mes déploiements {% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h1 class="m-0 text-dark"><i class="fas fa-city"></i>
+            {% if  deployements | length==1 %}
+                Le déploiement
+            {% else %}
+                les {{ deployements | length }} déploiements
+            {% endif %}
+            pour {{ organisme.name }}
+            {{ complement | default('') }}
+        </h1>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Accueil</a></li>
+            <li class="breadcrumb-item active">Mes déploiements</li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="row">
+        <div class="col-sm-12 p-4 ">
+            {{ include('deployement/_view/_index_table.html.twig') }}
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('plugins/datatables/jquery.dataTables.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/datatables/mydeployement.js')) }}"></script>
+{% endblock %}

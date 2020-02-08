@@ -1,21 +1,33 @@
-<a href="{{path('action_for_axe',{'id_axe':axe.id})}}">
-<div class="info-box bg-info">
-    <span class="info-box-icon"><i class="fa fa-bolt"></i></span>
+<!-- BOX AXE -->
 
-    <div class="info-box-content">
-        <span class="info-box-text">{{ axe.name }}</span>
-        <span class="info-box-number">
-            {{ include('share/_taux_label.html.twig', {'taux1': axe.taux1,'taux2': axe.taux2,'color':'' }) }}
-        </span>
-
-        <div class="progress">
-            <div class="progress-bar" style="width: {{ axe.taux1 }}%"></div>
-        </div>
-        <span class="progress-description">
-            <span id="axe_{{ axe.id }}" >
-                <i id="overlay_axe_{{ axe.id }}" class=" d-none fas  fa-sync-alt"></i>
-            </span>
-        </span>
-    </div>
+<div class="info-box bg-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<span class="info-box-icon"><i class="fas fa-compress-arrows-alt"></i></span>
+<div class="info-box-content">
+<span class="info-box-text">{{ axe.name }}</span>
+<span class="info-box-number">
+{{ include('share/_taux_label.html.twig', {'taux1': axe.taux1,'taux2': axe.taux2,'color':'' }) }}
+</span>
+<div class="progress">
+<div class="progress-bar" style="width: {{ axe.taux1 }}%"></div>
 </div>
-</a>
+<div class="progress-description">
+<span id="axe_{{ axe.id }}"><i id="overlay_axe_{{ axe.id }}"
+class=" d-none fas  fa-sync-alt"></i></span>
+</div>
+</div>
+</div>
+    <div class="dropdown-menu">
+        <a href="{{ path('actions_for_axe',{'id':axe.id}) }}" data-toggle="tooltip" data-html="true"
+           title="Permet d'afficher la liste des actions de ce plan d'actions" class="dropdown-item">Les actions</a>
+        <div class="dropdown-divider"></div>
+        <h6 class="dropdown-header">Liste des pôles</h6>
+        {% for pole in axe.poles %}
+            <a href="{{ path('actions_for_pole',{'id':pole.id}) }}"
+               class="dropdown-item" >
+                {{ pole.name }}
+                {{ include('share/_taux_label.html.twig', {'taux1': pole.taux1, 'taux2': pole.taux2  }) }}
+            </a>
+        {% endfor %}
+    </div>
+
+<!-- END BOX AXE -->

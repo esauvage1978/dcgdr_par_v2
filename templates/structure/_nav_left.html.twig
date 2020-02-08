@@ -36,7 +36,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    {% if is_granted('ROLE_GESTIONNAIRE_LOCAL') %}
+
                         <li class="nav-item ">
                             <a href="{{path('dashboard')}}" class="nav-link {{  '/dashboard' in app.request.uri ? 'active' :'' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -46,7 +46,7 @@
                             </a>
 
                         </li>
-
+                        {% if is_granted('ROLE_GESTIONNAIRE') %}
                         <li class="nav-item has-treeview ">
                             <a href="#" class="nav-link {{ '/action/' in app.request.uri ? 'active' :'' }}">
                                 <i class="nav-icon fas fa-bolt"></i>
@@ -64,6 +64,7 @@
                                 </li>
                             </ul>
                         </li>
+                            {% endif %}
 
 
                         <li class="nav-item">
@@ -76,7 +77,7 @@
                                 </p>
                             </a>
                         </li>
-                    {% endif %}
+
                     <li class="nav-item">
                         <a href="{{ path('profil_home') }}" class="nav-link
                             {{ '/profil/' in app.request.uri ? 'active' :'' }}

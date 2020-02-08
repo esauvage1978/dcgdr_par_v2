@@ -13,8 +13,27 @@ class DeployementSearchDto
     private $jalonFrom;
     private $jalonTo;
     private $jalonNotPresent;
-    public $actionSearchDto;
     private $search;
+    private $organismeId;
+
+    /**
+     * @return mixed
+     */
+    public function getOrganismeId()
+    {
+        return $this->organismeId;
+    }
+
+    /**
+     * @param mixed $organismeId
+     * @return DeployementSearchDto
+     */
+    public function setOrganismeId($organismeId)
+    {
+        $this->organismeId = $organismeId;
+        return $this;
+    }
+
 
     /**
      * @return mixed
@@ -118,9 +137,9 @@ class DeployementSearchDto
     }
 
     /**
-     * @return string
+     * @return string | null
      */
-    public function getUserWriter(): string
+    public function getUserWriter(): ?string
     {
         return $this->UserWriter;
     }

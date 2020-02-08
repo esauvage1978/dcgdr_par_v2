@@ -221,4 +221,27 @@ class DeployementController extends AppControllerAbstract
             $deploiementFilter->getData($filter)
             );
     }
+
+    /**
+     * @Route("/deployement/organisme/{filter?}", name="deployements_for_organisme", methods={"GET"})
+     *
+     * @return Response
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function deployementForOrganismeAction(
+        OrganismeRepository $repo,
+        DeployementFilter $deploiementFilter,
+        string $filter
+): Response
+    {
+        /** @var Organisme $organisme */
+        $organisme=$repo->find($filter);
+        return $this->render('deployement/index_organisme.html.twig',
+                array_merge(['organisme'=>$organisme],
+                $deploiementFilter->getData('organisme_' . $organisme->getId()))
+        );
+    }
+
+
 }

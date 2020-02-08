@@ -27,7 +27,7 @@ class DeployementVoter extends Voter
     public function __construct(Security $security, ActionVoter $actionVoter)
     {
         $this->security = $security;
-        $this->actionVoter=$actionVoter;
+        $this->actionVoter = $actionVoter;
     }
 
     protected function supports(string $attribute, $subject)
@@ -85,13 +85,7 @@ class DeployementVoter extends Voter
 
     public function canUpdate(Deployement $deploiement, User $user)
     {
-        $states=[
-            WorkflowData::STATE_STARTED,
-            WorkflowData::STATE_FINALISED,
-        ];
-
-        if (!in_array($deploiement->getAction()->getState(),$states))
-        {
+        if (!in_array($deploiement->getAction()->getState(), WorkflowData::STATES_DEPLOYEMENT_UPDATE)) {
             return false;
         }
 
@@ -109,13 +103,8 @@ class DeployementVoter extends Voter
 
     public function canAppendRead(Deployement $deploiement, User $user)
     {
-        $states=[
-            WorkflowData::STATE_DEPLOYED,
-            WorkflowData::STATE_MEASURED,
-            WorkflowData::STATE_CLOTURED
-        ];
-        if (!in_array($deploiement->getAction()->getState(),$states))
-        {
+
+        if (!in_array($deploiement->getAction()->getState(), WorkflowData::STATES_DEPLOYEMENT_READ)) {
             return false;
         }
 
@@ -125,23 +114,26 @@ class DeployementVoter extends Voter
             }
         }
 
-        return $this->actionVoter->canRead($deploiement->getAction(), $user);
+        return $this->canAppendUpdate($deploiement, $user);
     }
 
     public function canAppendUpdate(Deployement $deploiement, User $user)
     {
-        $states=[
-            WorkflowData::STATE_DEPLOYED,
-            WorkflowData::STATE_MEASURED,
-            WorkflowData::STATE_CLOTURED
-        ];
-        if (!in_array($deploiement->getAction()->getState(),$states))
-        {
+
+        if (!in_array($deploiement->getAction()->getState(), WorkflowData::STATES_DEPLOYEMENT_APPEND)) {
             return false;
         }
 
-        if( $deploiement->getAction()->getCategory()->getThematique()->getPole()->getAxe()->getArchiving()) {
+        if ($deploiement->getAction()->getCategory()->getThematique()->getPole()->getAxe()->getArchiving()) {
             return false;
+        }
+
+        if ($this->security->isGranted('ROLE_GESTIONNAIRE_LOCAL')) {
+            foreach ($user->getOrganismes() as $organisme) {
+                if ($organisme->getId() == $deploiement->getOrganisme()->getId()) {
+                    return true;
+                }
+            }
         }
 
         foreach ($deploiement->getWriters() as $corbeille) {

@@ -21,23 +21,16 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-12">
+        <div class="col-sm-12 p-4 ">
                             {{ include('action/_view/_index_table.html.twig') }}
-                        </div>
-                    </div>
 
-                </div>
+
                 {% if is_granted('ROLE_GESTIONNAIRE') %}
                     <div class="card-header">
                         {{ include('share/__btn_new.html.twig',
                             {'url':'action_new'}) }}
                     </div>
                 {% endif %}
-            </div>
         </div>
     </div>
 

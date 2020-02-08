@@ -5,6 +5,10 @@ namespace App\Controller\Action;
 use App\Controller\AppControllerAbstract;
 use App\Dto\ActionSearchDto;
 use App\Entity\Action;
+use App\Entity\Axe;
+use App\Entity\Category;
+use App\Entity\Pole;
+use App\Entity\Thematique;
 use App\Form\Action\ActionCreateType;
 use App\Form\Action\ActionEditType;
 use App\Helper\ActionFilter;
@@ -39,17 +43,69 @@ class ActionController extends AppControllerAbstract
     }
 
     /**
-     * @Route("/actions/axe/{id_axe}", name="action_for_axe", methods={"GET"})
+     * @Route("/actions/axe/{id}", name="actions_for_axe", methods={"GET"})
      * @IsGranted("ROLE_USER")
      */
     public function actionsForAxeAction(
+        Axe $axe,
         ActionRepository $repository,
-        ActionSearchDto $actionSearchDto,
-        string $id_axe
+        ActionSearchDto $actionSearchDto
     ): Response {
-        $actionSearchDto->setAxeId($id_axe);
+        $actionSearchDto->setAxeId($axe->getId());
 
-        return $this->render(self::ENTITY.'/index.html.twig', [
+        return $this->render(self::ENTITY.'/index_axe.html.twig', [
+            'axe'=>$axe,
+            self::ENTITYS => $repository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_TABLEAU),
+        ]);
+    }
+
+    /**
+     * @Route("/actions/pole/{id}", name="actions_for_pole", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function actionsForPoleAction(
+        Pole $pole,
+        ActionRepository $repository,
+        ActionSearchDto $actionSearchDto
+    ): Response {
+        $actionSearchDto->setPoleId($pole->getId());
+
+        return $this->render(self::ENTITY.'/index_pole.html.twig', [
+            'pole'=>$pole,
+            self::ENTITYS => $repository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_TABLEAU),
+        ]);
+    }
+
+    /**
+     * @Route("/actions/thematique/{id}", name="actions_for_thematique", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function actionsForThematiqueAction(
+        Thematique $thematique,
+        ActionRepository $repository,
+        ActionSearchDto $actionSearchDto
+    ): Response {
+        $actionSearchDto->setThematiqueId($thematique->getId());
+
+        return $this->render(self::ENTITY.'/index_thematique.html.twig', [
+            'thematique'=>$thematique,
+            self::ENTITYS => $repository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_TABLEAU),
+        ]);
+    }
+
+    /**
+     * @Route("/actions/category/{id}", name="actions_for_category", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function actionsForCategoryAction(
+        Category $category,
+        ActionRepository $repository,
+        ActionSearchDto $actionSearchDto
+    ): Response {
+        $actionSearchDto->setCategoryId($category->getId());
+
+        return $this->render(self::ENTITY.'/index_category.html.twig', [
+            'category'=>$category,
             self::ENTITYS => $repository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_TABLEAU),
         ]);
     }
@@ -94,9 +150,41 @@ class ActionController extends AppControllerAbstract
         $action = $actionRepository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_UNITAIRE)[0];
 
         $this->denyAccessUnlessGranted(ActionVoter::READ, $action);
-
         return $this->render(self::ENTITY.'/show.html.twig', [
             self::ENTITY => $action,
+        ]);
+    }
+    /**
+     * @Route("/action/{id}/edit", name="action_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function editAction(
+        Request $request,
+        ActionSearchDto $actionSearchDto,
+        ActionRepository $actionRepository,
+        string $id,
+        ActionManager $manager): Response
+    {
+        $actionSearchDto->setId($id);
+        /** @var Action $action */
+        $action = $actionRepository->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_UNITAIRE)[0];
+
+        $this->denyAccessUnlessGranted(ActionVoter::UPDATE, $action);
+
+        $form = $this->createForm(ActionEditType::class, $action);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->save($action);
+            $this->addFlash(self::SUCCESS, self::MSG_MODIFY);
+
+            $this->redirectToRoute('action_edit', ['id' => $action->getId()]);
+        }
+
+        return $this->render('action/edit.html.twig', [
+            'action' => $action,
+            self::FORM => $form->createView(),
         ]);
     }
 
@@ -142,33 +230,7 @@ class ActionController extends AppControllerAbstract
         return $this->file($file, $cadrageFile->getTitle().'.'.$cadrageFile->getFileExtension());
     }
 
-    /**
-     * @Route("/action/{id}/edit", name="action_edit", methods={"GET","POST"})
-     * @IsGranted("ROLE_USER")
-     */
-    public function editAction(
-        Request $request,
-        Action $entity,
-        ActionManager $manager): Response
-    {
-        $this->denyAccessUnlessGranted(ActionVoter::UPDATE, $entity);
 
-        $form = $this->createForm(ActionEditType::class, $entity);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $manager->save($entity);
-            $this->addFlash(self::SUCCESS, self::MSG_MODIFY);
-
-            $this->redirectToRoute('action_edit', ['id' => $entity->getId()]);
-        }
-
-        return $this->render('action/edit.html.twig', [
-            'action' => $entity,
-            self::FORM => $form->createView(),
-        ]);
-    }
 
     /**
      * @Route("/action/{id}", name="action_delete", methods={"DELETE"})

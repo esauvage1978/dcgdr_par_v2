@@ -21,8 +21,9 @@
 {% endblock %}
 
 {% block body %}
+    {{ include('message/_show_messages.html.twig',{'messages':messages}) }}
     <div class="row  justify-content-md-center">
-        <div class="{{ col_primary}}">
+        <div class="{{ col_primary }}">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Gestion des listes de l'application</h3>
@@ -30,7 +31,7 @@
                 <div class="card-body p-0">
                     <table class="table">
                         <tbody>
-                        {%  if is_granted('ROLE_USER') %}
+                        {% if is_granted('ROLE_USER') %}
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Utilisateur', 'domaine':'user'} ) }}
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Organisme', 'domaine':'organisme'} ) }}
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Corbeille', 'domaine':'corbeille'} ) }}
@@ -40,47 +41,53 @@
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Catégorie', 'domaine':'category'} ) }}
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Cible', 'domaine':'cible'} ) }}
                             {{ include('admin/_entree_unitaire.html.twig',{'title':'Vecteur', 'domaine':'vecteur'} ) }}
-                        {%  endif %}
+
+                            {{ include('admin/_entree_unitaire.html.twig',{'title':'Message', 'domaine':'message'} ) }}
+                        {% endif %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="{{ col_secondary}}">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Actions</h3>
+        {% if is_granted('ROLE_GESTIONNAIRE') %}
+            <div class="{{ col_secondary }}">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Actions</h3>
+                    </div>
+                    <div class="card-body ">
+                        <ul class="list-unstyled">
+                            <li>
+                                <h5>
+                                    <a class="btn btn-info" href="{{ path('command_calcul_taux') }}">
+                                        <i class="  fas fa-"></i>
+                                        Lance le calcul des taux
+                                    </a>
+                                </h5>
+                            </li>
+                            <li>
+                                <h5>
+                                    <a class="btn btn-info" href="{{ path('command_jalon_notificator') }}">
+                                        <i class="  fas fa-"></i>
+                                        Lance les notifications des jalons à aujourd'hui
+                                    </a>
+                                </h5>
+                            </li>
+                            <li>
+                                <h5>
+                                    <a class="btn btn-info" href="{{ path('command_workflow') }}">
+                                        <i class="  fas fa-"></i>
+                                        Lance les actions du workflow
+                                    </a>
+                                </h5>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="card-body ">
-                    <ul class="list-unstyled">
-                        <li>
-                            <h5>
-                                <a class="btn btn-info" href="{{ path('command_calcul_taux') }}">
-                                    <i class="  fas fa-"></i>
-                                    Lance le calcul des taux
-                                </a>
-                            </h5>
-                        </li>
-                        <li>
-                            <h5>
-                                <a class="btn btn-info" href="{{ path('command_jalon_notificator') }}">
-                                    <i class="  fas fa-"></i>
-                                    Lance les notifications des jalons à aujourd'hui
-                                </a>
-                            </h5>
-                        </li>
-                        <li>
-                            <h5>
-                                <a class="btn btn-info" href="{{ path('command_workflow') }}">
-                                    <i class="  fas fa-"></i>
-                                    Lance les actions du workflow
-                                </a>
-                            </h5>
-                        </li>
-                    </ul>
-                </div>
+
             </div>
-        </div>
+        {% endif %}
     </div>
 
 

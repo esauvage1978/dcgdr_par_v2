@@ -107,6 +107,8 @@
 <script src="{{ absolute_url( asset('plugins/jquery/jquery.min.js')) }}"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ absolute_url( asset('plugins/jquery-ui/jquery-ui.min.js')) }}"></script>
+
+{% block javascripts %}{% endblock %}
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button)
@@ -119,8 +121,7 @@
 
 <!-- jQuery Knob Chart -->
 <script src="{{ absolute_url( asset('plugins/jquery-knob/jquery.knob.min.js')) }}"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="{{ absolute_url( asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')) }}"></script>
+
 <!-- overlayScrollbars -->
 <script src="{{ absolute_url( asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')) }}"></script>
 <!-- AdminLTE App -->
@@ -149,6 +150,6 @@
         $('[data-toggle="tooltip"]').tooltip();
     })
 </script>
-{% block javascripts %}{% endblock %}
+
 </body>
 </html>

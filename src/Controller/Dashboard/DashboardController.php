@@ -3,6 +3,7 @@
 namespace App\Controller\Dashboard;
 
 use App\Controller\AppControllerAbstract;
+use App\Repository\MessageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +16,10 @@ class DashboardController extends AppControllerAbstract
      * @return Response
      * @IsGranted("ROLE_USER")
      */
-    public function dashboardAction(): Response
+    public function dashboardAction(MessageRepository $messageRepository): Response
     {
         return $this->render('dashboard/home.html.twig'
+            , ['messages'=> $messageRepository->findBy(['name'=>'dashboard'])]
         );
     }
 
