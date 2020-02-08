@@ -14,6 +14,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class AvatarRepository extends ServiceEntityRepository
 {
+    const ALIAS = 'av';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Avatar::class);

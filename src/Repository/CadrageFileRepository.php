@@ -14,6 +14,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CadrageFileRepository extends ServiceEntityRepository
 {
+    const ALIAS = 'acf';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CadrageFile::class);

@@ -6,6 +6,7 @@ use App\Dto\DeployementSearchDto;
 use App\Entity\Deployement;
 use App\Repository\DeployementRepository;
 use App\Repository\UserRepository;
+use App\Workflow\WorkflowData;
 
 class DeployementJalonNotificator extends Messagor
 {
@@ -50,7 +51,8 @@ class DeployementJalonNotificator extends Messagor
             $this->deployementSearchDto
                 ->setUserWriter($user->getId())
                 ->setJalonFrom((new \DateTime())->format('Y-m-d 00:00:00'))
-                ->setJalonTo((new \DateTime())->format('Y-m-d 23:59:59'));
+                ->setJalonTo((new \DateTime())->format('Y-m-d 23:59:59'))
+                ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
 
             /** @var Deployement[] $result */
             $result = $this->deployementRepository->findAllForDto($this->deployementSearchDto);

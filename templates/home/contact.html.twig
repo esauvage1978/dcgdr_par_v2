@@ -25,48 +25,61 @@
 
     <div class="card card-solid">
         <div class="card-body pb-0">
+            <h3 id="anchor_organisme" class="text-purple m-5">
+                <small><i class="fa fa-user-cog"></i></small>
+                {% if usersAdmin | length >0 %}
+                    Les {{ usersAdmin | length }}  administrateurs
+                {% else %}
+                    L'administrateur
+                {% endif %}
+
+            </h3>
             <div class="row ">
                 <div class="card-deck">
-                    {% for user in users %}
-
-                        <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                            <div class="card bg-light">
-                                <div class="card-header border-bottom-0">
-                                    <a href="{{ path('user_show',{'id':user.id }) }}">
-                                        <b>{{ user.name }}</b>
-                                    </a>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <p class="text-muted text-sm">
-                                                {{ user.content }}
-                                            </p>
-                                            <p class="text-muted text-sm">
-                                                <i class="fas fa-envelope"></i>
-                                                {{ user.email }}
-                                            </p>
-                                            <p class="text-muted text-sm">
-                                                <i class="fas fa-phone"></i>
-                                                {{ user.phone }}
-                                            </p>
-                                        </div>
-                                        <div class="col-5 text-center">
-                                            <img src="{{ user.avatar.image }}" alt="" class="img-circle img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="text-right">
-                                        <a href="mailto::{{ user.email }}" class="btn btn-sm bg-teal">
-                                            <i class="fas fa-envelope"></i>
-                                        </a>
-
-                                    </div>
-                                </div>
-                            </div>
+                    {% for user in usersAdmin %}
+                        {{ include('user/_carte_visite.html.twig') }}
+                    {% else %}
+                        <div class="row">
+                            <div class="jumbotron"> Pas d'enregistrements</div>
                         </div>
+                    {% endfor %}
+                </div>
+            </div>
 
+            <h3 id="anchor_organisme" class="text-purple m-5">
+                <small><i class="fa fa-user-astronaut"></i></small>
+
+                {% if usersGestionnaire | length >0 %}
+                    Les {{ usersGestionnaire | length }}  gestionnaires
+                {% else %}
+                    Le gestionnaire
+                {% endif %}
+            </h3>
+            <div class="row ">
+                <div class="card-deck">
+                    {% for user in usersGestionnaire %}
+                        {{ include('user/_carte_visite.html.twig') }}
+                    {% else %}
+                        <div class="row">
+                            <div class="jumbotron"> Pas d'enregistrements</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <h3 id="anchor_organisme" class="text-purple m-5">
+                <small><i class="fa fa-user-secret"></i></small>
+
+                {% if usersGestionnaireLocal | length >0 %}
+                    Les {{ usersGestionnaireLocal | length }}  gestionnaires locaux
+                {% else %}
+                    Le gestionnaire local
+                {% endif %}
+            </h3>
+            <div class="row ">
+                <div class="card-deck">
+                    {% for user in usersGestionnaireLocal %}
+                        {{ include('user/_carte_visite.html.twig') }}
                     {% else %}
                         <div class="row">
                             <div class="jumbotron"> Pas d'enregistrements</div>

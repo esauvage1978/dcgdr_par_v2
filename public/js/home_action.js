@@ -15,7 +15,7 @@ function searchCount(domaine, route, filtre) {
             if (json >  0) {
                 $(selecteurCompletBadge).text(json);
             } else {
-                $(selecteurAll).addClass('d-none');
+                $(selecteurAll).remove();
             }
             $(selecteurCompletOverlay).addClass('d-none');
         }

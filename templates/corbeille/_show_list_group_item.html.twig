@@ -20,6 +20,7 @@
             {% endif %}
         </span>
         <div class="dropdown-menu">
+
             {% for user in corbeille.users %}
                 {{ include('user/_show_item.html.twig') }}
             {% endfor %}

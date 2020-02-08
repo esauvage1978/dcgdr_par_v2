@@ -6,6 +6,9 @@ class ActionSearchDto
 {
     private $id;
     private $axeId;
+    private $poleId;
+    private $thematiqueId;
+    private $categoryId;
     private $actionArchiving;
     private $axeEnable;
     private $thematiqueEnable;
@@ -20,7 +23,28 @@ class ActionSearchDto
     private $jalonOperator;
     private $jalonFrom;
     private $jalonTo;
-    private $jalonNotPresent;
+    private $jalonNotPresentValider;
+    private $states;
+
+    /**
+     * @return mixed
+     */
+    public function getStates()
+    {
+        return $this->states;
+    }
+
+    /**
+     * @param mixed $states
+     * @return ActionSearchDto
+     */
+    public function setStates($states)
+    {
+        $this->states = $states;
+        return $this;
+    }
+
+    private $jalonNotPresentWriter;
     private $UserWriter;
     private $UserValider;
 
@@ -54,6 +78,7 @@ class ActionSearchDto
         $this->id = $id;
         return $this;
     }
+
     /**
      * @return mixed
      */
@@ -69,6 +94,60 @@ class ActionSearchDto
     public function setAxeId($axeId)
     {
         $this->axeId = $axeId;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPoleId()
+    {
+        return $this->poleId;
+    }
+
+    /**
+     * @param mixed $poleId
+     * @return ActionSearchDto
+     */
+    public function setPoleId($poleId)
+    {
+        $this->poleId = $poleId;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThematiqueId()
+    {
+        return $this->thematiqueId;
+    }
+
+    /**
+     * @param mixed $thematiqueId
+     * @return ActionSearchDto
+     */
+    public function setThematiqueId($thematiqueId)
+    {
+        $this->thematiqueId = $thematiqueId;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * @param mixed $categoryId
+     * @return ActionSearchDto
+     */
+    public function setCategoryId($categoryId)
+    {
+        $this->categoryId = $categoryId;
         return $this;
     }
 
@@ -322,21 +401,38 @@ class ActionSearchDto
     /**
      * @return mixed
      */
-    public function getJalonNotPresent()
+    public function getJalonNotPresentWriter()
     {
-        return $this->jalonNotPresent;
+        return $this->jalonNotPresentWriter;
     }
 
     /**
      * @param mixed $jalonNotPresent
      * @return ActionSearchDto
      */
-    public function setJalonNotPresent($jalonNotPresent)
+    public function setJalonNotPresentWriter($jalonNotPresentWriter)
     {
-        $this->jalonNotPresent = $jalonNotPresent;
+        $this->jalonNotPresentWriter = $jalonNotPresentWriter;
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getJalonNotPresentValider()
+    {
+        return $this->jalonNotPresentValider;
+    }
+
+    /**
+     * @param mixed $jalonNotPresent
+     * @return ActionSearchDto
+     */
+    public function setJalonNotPresentValider($jalonNotPresentValider)
+    {
+        $this->jalonNotPresentValider = $jalonNotPresentValider;
+        return $this;
+    }
     /**
      * @return string | null
      */

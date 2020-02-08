@@ -1,0 +1,33 @@
+{% if messages|length > 0 %}
+
+    <div class="card">
+        <!-- timeline time label -->
+
+        {% for message in messages %}
+            {% if message and message.content and message.enable %}
+                <div class="card-body row d-flex align-items-center">
+                    <div >
+                        <img class="img-circle img-bordered-sm img-lg" src="{{ message.user.avatar.image }}" alt="User Image">
+                    </div>
+                    <div class="ml-5 col">
+                        <a class="font-weight-bold" href="{{ path('user_show',{'id':message.user.id }) }}">{{ message.user.name }}</a>
+                        <span class="text-muted float-right">Rédigé le {{ message.modifyat | date('d/m/Y') }}</span>
+                        {{ message.content | raw }}
+                    </div>
+                    <!-- /.user-block -->
+
+                </div>
+                <!-- timeline item -->
+                <!-- END timeline item -->
+            {% endif %}
+        {% endfor %}
+
+    </div>
+
+
+
+
+
+
+
+{% endif %}

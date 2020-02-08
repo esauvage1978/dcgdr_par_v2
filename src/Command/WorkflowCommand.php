@@ -85,8 +85,8 @@ class WorkflowCommand extends CommandTool implements CommandInterface
             if ($actionCheck->checkRegionStartAtBeforeOrEqualNow()) {
                 $info = 'transition ('.WorkflowData::TRANSITION_TO_DEPLOYE.
                     ') : Date de début passée de '.$actionCheck->getDiffRegionStartAtAfterNow().' jours ';
-                $messageBascule = 'L\'action est automatiquement déployée en raison d\une date de début de déploiement au '.
-                    $action->getRegionStartAt()->format('dd/mm/yyyy');
+                $messageBascule = 'L\'action est automatiquement déployée en raison d\'une date de début de déploiement au '.
+                    $action->getRegionStartAt()->format('d/m/Y');
                 $this->bascule($action, WorkflowData::TRANSITION_TO_DEPLOYE, $info, $messageBascule);
             } else {
                 $this->basculeNonConcernee($action);
@@ -104,8 +104,8 @@ class WorkflowCommand extends CommandTool implements CommandInterface
             if ($actionCheck->checkRegionEndAtBeforeOrEqualNow()) {
                 $info = 'transition ('.WorkflowData::TRANSITION_TO_MEASURED.
                     ') Date de fin passée de '.$actionCheck->getDiffRegionEndAtBeforeOrEqualNow().' jours ';
-                $messageBascule = 'Fin automatique du déploiement de l\'action en raison d\une date de fin de déploiement au '.
-                    $action->getRegionEndAt()->format('dd/mm/yyyy');
+                $messageBascule = 'Fin automatique du déploiement de l\'action en raison d\'une date de fin de déploiement au '.
+                    $action->getRegionEndAt()->format('d/m/Y');
                 $this->bascule($action, WorkflowData::TRANSITION_TO_MEASURED, $info, $messageBascule);
             } else {
                 $this->basculeNonConcernee($action);

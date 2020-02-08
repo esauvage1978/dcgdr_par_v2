@@ -5,6 +5,7 @@ namespace App\Helper;
 use App\Dto\DeployementSearchDto;
 use App\Entity\User;
 use App\Repository\DeployementRepository;
+use App\Workflow\WorkflowData;
 use Symfony\Component\Security\Core\Security;
 
 class DeployementFilter
@@ -35,23 +36,17 @@ class DeployementFilter
     {
         $resultRepo = null;
         $complement = '';
-        $dto=$this->deploiementSearchDto;
+        $dto = $this->deploiementSearchDto;
 
         /** @var User $user */
         $user = $this->security->getToken()->getUser();
 
         switch ($filter) {
-            default:
-                $dto
-                    ->setUserWriter($user->getId())
-                    ->actionSearchDto->setState('deployed');
-                $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
-                break;
             case 'without_jalon':
                 $dto
                     ->setUserWriter($user->getId())
                     ->setJalonNotPresent(true)
-                    ->actionSearchDto->setState('deployed');
+                    ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
 
                 $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
                 $complement = ' - Sans jalon définie';
@@ -61,7 +56,7 @@ class DeployementFilter
                     ->setUserWriter($user->getId())
                     ->setJalonFrom((new \DateTime())->format('Y-m-d'))
                     ->setJalonOperator('<')
-                    ->actionSearchDto->setState('deployed');
+                    ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
 
                 $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
                 $complement = ' - Avec jalon dépassé';
@@ -71,7 +66,7 @@ class DeployementFilter
                     ->setUserWriter($user->getId())
                     ->setJalonFrom((new \DateTime())->format('Y-m-d'))
                     ->setJalonTo(date('Y-m-d', strtotime((new \DateTime())->format('Y-m-d').' +8 day')))
-                    ->actionSearchDto->setState('deployed');
+                    ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
 
                 $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
                 $complement = ' -  Avec un jalon à traiter dans moins de 7 jours';
@@ -81,11 +76,25 @@ class DeployementFilter
                     ->setUserWriter($user->getId())
                     ->setJalonFrom(date('Y-m-d', strtotime((new \DateTime())->format('Y-m-d').' +8 day')))
                     ->setJalonOperator('>')
-                    ->actionSearchDto->setState('deployed');
-
+                    ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
 
                 $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
                 $complement = ' - Avec un jalon à traiter dans plus de 7 jours';
+                break;
+            default:
+                if (strstr($filter, 'organisme_')) {
+                    $dto
+                        ->setOrganismeId(substr($filter, strlen('organisme_') - strlen($filter)))
+                        ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
+                    $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
+                    break;
+                }
+                // no break
+            case 'all':
+                $dto
+                    ->setUserWriter($user->getId())
+                    ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
+                $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
                 break;
         }
 

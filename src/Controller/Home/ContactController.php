@@ -21,7 +21,11 @@ class ContactController extends AbstractController
     public function contactAction(UserRepository $userRepository): Response
     {
         return $this->render('home/contact.html.twig',
-            ['users' => $userRepository->findAllForContact()]
+            [
+                'usersAdmin' => $userRepository->findAllForContactAdmin(),
+                'usersGestionnaire' => $userRepository->findAllForContactGestionnaire(),
+                'usersGestionnaireLocal' => $userRepository->findAllForContactGestionnaireLocal()
+            ]
             );
     }
 }

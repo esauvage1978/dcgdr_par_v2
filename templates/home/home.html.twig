@@ -1,22 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %} {{ parent() }} Page d'accueil {% endblock %}
-{% block stylesheets %}
-{% endblock %}
-
-{% block body_header %}
-
-{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-12">
-            <div class="jumbotron text-center">
-                <h1 class="font-weight-bold">DCGDR</h1>
-                <h5>Application de gestion des plans d'actions</h5>
-            </div>
-        </div>
-    </div>
+
     {% if app.user.emailvalidated == false %}
         <div class="alert alert-danger alert-dismissible mt-2">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -31,170 +18,212 @@
         </div>
     {% endif %}
 
-    <div class="row justify-content-center">
 
-        {% for axe in axes %}
-            <div class="col-md-2 col-sm-4 col-12">
-                {{ include('axe/_view/_box.html.twig',{'axe':axe }) }}
+
+    <div class="row bg-white ">
+        <div class="col-sm-4"
+             style="
+                     background-image: url('{{ absolute_url( asset('img/fond_cut.png')) }}') ;
+                     background-repeat: no-repeat;
+                     background-position: 100% 50px;
+                     "
+        >
+
+        </div>
+        <div class="col-sm-8 pr-4 pt-5">
+            <div class="text-center">
+                <h1 class="font-weight-bold">DCGDR PAR</h1>
+                <span class="text-muted">Application de gestion des plans d'actions</span>
             </div>
-        {% endfor %}
+            <br/>
+            {{ include('message/_show_messages.html.twig',{'messages':messages}) }}
+            <br/>
+            <div class="row justify-content-center">
+
+                {% for axe in axes %}
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        {{ include('axe/_view/_box.html.twig',{'axe':axe }) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row justify-content-center card-deck mt-5">
+                <div class="col-lg-6 col-sm-12">
+                    <div class="card card-outline card-warning  bg-light ">
+                        <div class="card-header text-center">
+                            <h3>
+                                EN COURS
+                            </h3>
+                        </div>
+                        <div class="card-body list-group list-group-flush p-1">
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'deployement',
+                                    'titre':'Mes deploiements',
+                                    'url':'my_deployement',
+                                    'filtre':'all'}) }}
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_GESTIONNAIRE_LOCAL') %}
+                                {% for organisme in app.user.organismes %}
+                                    {{ include('home/btn/_home_action.html.twig',
+                                        {   'domaine':'organisme_' ~ organisme.id,
+                                            'titre':'Les deploiements pour ' ~ organisme.name,
+                                            'url':'deployements_for_organisme',
+                                            'filtre':'' ~ organisme.id}) }}
+                                {% endfor %}
+                            {% endif %}
+
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'deployement_jalon_to_near',
+                                    'color':'warning',
+                                    'titre':'Mes deploiements avec jalon <=7 jours',
+                                    'url':'my_deployement',
+                                    'filtre':'jalon_to_near'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_valider_cotech',
+                                    'titre':'Mes actions à traiter lors du COTECH',
+                                    'url':'my_action',
+                                    'filtre':'valider_cotech'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_valider_codir',
+                                    'titre':'Mes actions à traiter lors du CODIR',
+                                    'url':'my_action',
+                                    'filtre':'valider_codir'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action',
+                                    'titre':'Mes actions en tant que pilote',
+                                    'url':'my_action',
+                                    'filtre':'all'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_started',
+                                    'color':'info',
+                                    'titre':'Mes actions dans l\'état ' ~ include('workflow/_state.html.twig',{'state':'started'}),
+                                    'url':'my_action',
+                                    'filtre':'started'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_cotech',
+                                    'color':'info',
+                                    'titre':'Mes actions dans l\'état ' ~ include('workflow/_state.html.twig',{'state':'cotech'}),
+                                    'url':'my_action',
+                                    'filtre':'cotech'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_codir',
+                                    'color':'info',
+                                    'titre':'Mes actions dans l\'état ' ~ include('workflow/_state.html.twig',{'state':'codir'}),
+                                    'url':'my_action',
+                                    'filtre':'codir'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_rejected',
+                                    'color':'info',
+                                    'titre':'Mes actions dans l\'état ' ~ include('workflow/_state.html.twig',{'state':'rejected'}),
+                                    'url':'my_action',
+                                    'filtre':'rejected'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_finalised',
+                                    'color':'info',
+                                    'titre':'Mes actions dans l\'état ' ~ include('workflow/_state.html.twig',{'state':'finalised'}),
+                                    'url':'my_action',
+                                    'filtre':'finalised'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_deployed',
+                                    'color':'info',
+                                    'titre':'Mes actions dans l\'état ' ~ include('workflow/_state.html.twig',{'state':'deployed'}),
+                                    'url':'my_action',
+                                    'filtre':'deployed'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_measured',
+                                    'color':'info',
+                                    'titre':'Mes actions dans l\'état ' ~ include('workflow/_state.html.twig',{'state':'measured'}),
+                                    'url':'my_action',
+                                    'filtre':'measured'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_clotured',
+                                    'color':'info',
+                                    'titre':'Mes actions dans l\'état ' ~ include('workflow/_state.html.twig',{'state':'clotured'}),
+                                    'url':'my_action',
+                                    'filtre':'clotured'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_jalon_to_near',
+                                    'color':'warning',
+                                    'titre':'Mes actions avec jalon <=7 jours',
+                                    'url':'my_action',
+                                    'filtre':'jalon_to_near'}) }}
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-12" id="work">
+                    <div class="card card-outline card-danger bg-light  ">
+                        <div class="card-header text-center">
+                            <h3>
+                                URGENT
+                            </h3>
+                        </div>
+                        <div class="card-body list-group list-group-flush p-1">
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'deployement_without_jalon',
+                                    'color':'warning',
+                                    'titre':'Mes deploiements sans jalon',
+                                    'url':'my_deployement',
+                                    'filtre':'without_jalon'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'deployement_jalon_to_late',
+                                    'color':'danger',
+                                    'titre':'Mes deploiements avec jalon dépassé',
+                                    'url':'my_deployement',
+                                    'filtre':'jalon_to_late'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_without_jalon_writer',
+                                    'color':'warning',
+                                    'titre':'Mes actions sans jalon en tant que pilote',
+                                    'url':'my_action',
+                                    'filtre':'without_jalon_writer'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_without_jalon_valider',
+                                    'color':'warning',
+                                    'titre':'Mes actions sans jalon en tant que valideur',
+                                    'url':'my_action',
+                                    'filtre':'without_jalon_valider'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_jalon_to_late',
+                                    'color':'danger',
+                                    'titre':'Mes actions avec jalon dépassé',
+                                    'url':'my_action',
+                                    'filtre':'jalon_to_late'}) }}
+                        </div>
+
+                        <!-- /.card -->
+                    </div>
+
+                    <div class="card card-outline card-success  bg-light ">
+                        <div class="card-header text-center">
+                            <h3>
+                                A VENIR
+                            </h3>
+                        </div>
+                        <div class="card-body list-group list-group-flush p-1">
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'deployement_jalon_to_come_up',
+                                    'titre':'Mes deploiements avec jalon > 7 jours',
+                                    'url':'my_deployement',
+                                    'filtre':'jalon_to_come_up'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_jalon_to_come_up',
+                                    'titre':'Mes actions avec jalon > 7 jours',
+                                    'url':'my_action',
+                                    'filtre':'jalon_to_come_up'}) }}
+                        </div>
+
+                        <!-- /.card -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row justify-content-center card-deck mt-5">
-        <div class="col-sm-12 col-md-4 col-lg-3">
-            <div class="card card-outline card-success  ">
-                <div class="card-header text-center">
-                    <h3>
-                        EN COURS
-                    </h3>
-                </div>
-                <div class="card-body list-group list-group-flush p-1">
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'deployement',
-                                'titre':'Mes deployements',
-                                'url':'my_deployement',
-                                'filtre':'all'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'deployement_jalon_to_near',
-                                'color':'warning',
-                                'titre':'Mes deployements avec jalon <=7 jours',
-                                'url':'my_deployement',
-                                'filtre':'jalon_to_near'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_valider_cotech',
-                                'titre':'Mes actions à traiter lors du COTECH',
-                                'url':'my_action',
-                                'filtre':'valider_cotech'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_valider_codir',
-                                'titre':'Mes actions à traiter lors du CODIR',
-                                'url':'my_action',
-                                'filtre':'valider_codir'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action',
-                                'titre':'Mes actions en tant que pilote',
-                                'url':'my_action',
-                                'filtre':'all'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_started',
-                                'color':'info',
-                                'titre':'Mes actions en tant que pilote dans l\'état : ' ~ include('workflow/_state.html.twig',{'state':'started'}),
-                                'url':'my_action',
-                                'filtre':'started'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_cotech',
-                                'color':'info',
-                                'titre':'Mes actions en tant que pilote dans l\'état : ' ~ include('workflow/_state.html.twig',{'state':'cotech'}),
-                                'url':'my_action',
-                                'filtre':'cotech'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_codir',
-                                'color':'info',
-                                'titre':'Mes actions en tant que pilote dans l\'état : ' ~ include('workflow/_state.html.twig',{'state':'codir'}),
-                                'url':'my_action',
-                                'filtre':'codir'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_rejected',
-                                'color':'info',
-                                'titre':'Mes actions en tant que pilote dans l\'état : ' ~ include('workflow/_state.html.twig',{'state':'rejected'}),
-                                'url':'my_action',
-                                'filtre':'rejected'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_finalised',
-                                'color':'info',
-                                'titre':'Mes actions en tant que pilote dans l\'état : ' ~ include('workflow/_state.html.twig',{'state':'finalised'}),
-                                'url':'my_action',
-                                'filtre':'finalised'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_deployed',
-                                'color':'info',
-                                'titre':'Mes actions en tant que pilote dans l\'état : ' ~ include('workflow/_state.html.twig',{'state':'deployed'}),
-                                'url':'my_action',
-                                'filtre':'deployed'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_measured',
-                                'color':'info',
-                                'titre':'Mes actions en tant que pilote dans l\'état : ' ~ include('workflow/_state.html.twig',{'state':'measured'}),
-                                'url':'my_action',
-                                'filtre':'measured'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_clotured',
-                                'color':'info',
-                                'titre':'Mes actions en tant que pilote dans l\'état : ' ~ include('workflow/_state.html.twig',{'state':'clotured'}),
-                                'url':'my_action',
-                                'filtre':'clotured'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_jalon_to_near',
-                                'color':'warning',
-                                'titre':'Mes actions avec jalon <=7 jours',
-                                'url':'my_action',
-                                'filtre':'jalon_to_near'}) }}
-                    </div>
-                <!-- /.card -->
-            </div>
-        </div>
 
-        <div class="col-sm-12 col-md-4 col-lg-3">
-            <div class="card card-outline card-danger  ">
-                <div class="card-header text-center">
-                    <h3>
-                        URGENT
-                    </h3>
-                </div>
-                <div class="card-body list-group list-group-flush p-1">
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'deployement_without_jalon',
-                                'color':'warning',
-                                'titre':'Mes deployements sans jalon',
-                                'url':'my_deployement',
-                                'filtre':'without_jalon'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'deployement_jalon_to_late',
-                                'color':'danger',
-                                'titre':'Mes deployements avec jalon dépassé',
-                                'url':'my_deployement',
-                                'filtre':'jalon_to_late'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_without_jalon',
-                                'color':'warning',
-                                'titre':'Mes actions sans jalon',
-                                'url':'my_action',
-                                'filtre':'without_jalon'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_jalon_to_late',
-                                'color':'danger',
-                                'titre':'Mes actions avec jalon dépassé',
-                                'url':'my_action',
-                                'filtre':'jalon_to_late'}) }}
-                    </div>
 
-                <!-- /.card -->
-            </div>
-        </div>
 
-        <div class="col-sm-12 col-md-4 col-lg-3">
-            <div class="card card-outline card-warning  ">
-                <div class="card-header text-center">
-                    <h3>
-                        A VENIR
-                    </h3>
-                </div>
-                <div class="card-body list-group list-group-flush p-1">
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'deployement_jalon_to_come_up',
-                                'titre':'Mes deployements avec jalon > 7 jours',
-                                'url':'my_deployement',
-                                'filtre':'jalon_to_come_up'}) }}
-                        {{ include('home/btn/_home_action.html.twig',
-                            {   'domaine':'action_jalon_to_come_up',
-                                'titre':'Mes actions avec jalon > 7 jours',
-                                'url':'my_action',
-                                'filtre':'jalon_to_come_up'}) }}
-                    </div>
 
-                <!-- /.card -->
-            </div>
-        </div>
-    </div>
+
+
 
 
 {% endblock %}
@@ -204,16 +233,27 @@
     <script src="{{ absolute_url( asset('js/home_action.js')) }}"></script>
     <script type="text/javascript">
         $(function () {
+
             {% for axe in axes %}
-            searchCountAxe('{{ axe.id }}', '{{ path('ajax_action_for_axe_count') }}');
+                searchCountAxe('{{ axe.id }}', '{{ absolute_url(path('ajax_action_for_axe_count')) }}');
             {% endfor %}
 
-            searchCount('deployement', '{{ path('ajax_my_deployement_count') }}', 'all');
-            searchCount('deployement_without_jalon', '{{ path('ajax_my_deployement_count') }}', 'without_jalon');
-            searchCount('deployement_jalon_to_late', '{{ path('ajax_my_deployement_count') }}', 'jalon_to_late');
-            searchCount('deployement_jalon_to_near', '{{ path('ajax_my_deployement_count') }}', 'jalon_to_near');
-            searchCount('deployement_jalon_to_come_up', '{{ path('ajax_my_deployement_count') }}', 'jalon_to_come_up');
+            // URGENT
+            searchCount('deployement_without_jalon', '{{ absolute_url(path('ajax_my_deployement_count')) }}', 'without_jalon');
+            searchCount('deployement_jalon_to_late', '{{ absolute_url(path('ajax_my_deployement_count')) }}', 'jalon_to_late');
+            searchCount('action_without_jalon_writer', '{{ path('ajax_my_action_count') }}', 'without_jalon_writer');
+            searchCount('action_without_jalon_valider', '{{ path('ajax_my_action_count') }}', 'without_jalon_valider');
+            searchCount('action_jalon_to_late', '{{ path('ajax_my_action_count') }}', 'jalon_to_late');
 
+            //ENCOURS
+            {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_GESTIONNAIRE_LOCAL') %}
+                {% for organisme in app.user.organismes %}
+                    searchCount('organisme_{{ organisme.id }}', '{{ absolute_url(path('ajax_my_deployement_count')) }}', 'organisme_{{ organisme.id }}');
+                {% endfor %}
+            {% endif %}
+
+            searchCount('deployement', '{{ absolute_url(path('ajax_my_deployement_count')) }}', 'all');
+            searchCount('deployement_jalon_to_near', '{{ absolute_url(path('ajax_my_deployement_count')) }}', 'jalon_to_near');
             searchCount('action', '{{ path('ajax_my_action_count') }}', 'all');
             searchCount('action_started', '{{ path('ajax_my_action_count') }}', 'started');
             searchCount('action_cotech', '{{ path('ajax_my_action_count') }}', 'cotech');
@@ -223,15 +263,13 @@
             searchCount('action_deployed', '{{ path('ajax_my_action_count') }}', 'deployed');
             searchCount('action_measured', '{{ path('ajax_my_action_count') }}', 'measured');
             searchCount('action_clotured', '{{ path('ajax_my_action_count') }}', 'clotured');
-
             searchCount('action_valider_cotech', '{{ path('ajax_my_action_count') }}', 'valider_cotech');
             searchCount('action_valider_codir', '{{ path('ajax_my_action_count') }}', 'valider_codir');
-
-            searchCount('action_without_jalon', '{{ path('ajax_my_action_count') }}', 'without_jalon');
-            searchCount('action_jalon_to_late', '{{ path('ajax_my_action_count') }}', 'jalon_to_late');
             searchCount('action_jalon_to_near', '{{ path('ajax_my_action_count') }}', 'jalon_to_near');
-            searchCount('action_jalon_to_come_up', '{{ path('ajax_my_action_count') }}', 'jalon_to_come_up');
 
-        })
+            //A VENIR
+            searchCount('deployement_jalon_to_come_up', '{{ absolute_url(path('ajax_my_deployement_count')) }}', 'jalon_to_come_up');
+            searchCount('action_jalon_to_come_up', '{{ path('ajax_my_action_count') }}', 'jalon_to_come_up');
+        });
     </script>
 {% endblock %}

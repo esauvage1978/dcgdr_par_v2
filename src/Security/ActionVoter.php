@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\Action;
 use App\Entity\User;
+use App\Workflow\WorkflowData;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -23,7 +24,7 @@ class ActionVoter extends Voter
     protected function supports(string $attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::READ,self::UPDATE])) {
+        if (!in_array($attribute, [self::READ, self::UPDATE])) {
             return false;
         }
 
@@ -62,7 +63,7 @@ class ActionVoter extends Voter
             return true;
         }
 
-        if($action->getShowAll()) {
+        if ($action->getShowAll()) {
             return true;
         }
 
@@ -72,12 +73,12 @@ class ActionVoter extends Voter
             }
         }
 
-        return $this->canUpdate($action,$user);
+        return $this->canUpdate($action, $user);
     }
 
     public function canUpdate(Action $action, User $user)
     {
-        if( $action->getCategory()->getThematique()->getPole()->getAxe()->getArchiving()) {
+        if ($action->getCategory()->getThematique()->getPole()->getAxe()->getArchiving()) {
             return false;
         }
 
@@ -85,15 +86,19 @@ class ActionVoter extends Voter
             return true;
         }
 
-        foreach ($action->getWriters() as $corbeille) {
-            if (in_array($user, $corbeille->getUsers()->toArray())) {
-                return true;
+        if (in_array($action->getState(), WorkflowData::STATES_ACTION_UPDATE_PILOTES)) {
+            foreach ($action->getWriters() as $corbeille) {
+                if (in_array($user, $corbeille->getUsers()->toArray())) {
+                    return true;
+                }
             }
         }
 
-        foreach ($action->getValiders() as $corbeille) {
-            if (in_array($user, $corbeille->getUsers()->toArray())) {
-                return true;
+        if (in_array($action->getState(), WorkflowData::STATES_ACTION_UPDATE_VALIDER)) {
+            foreach ($action->getValiders() as $corbeille) {
+                if (in_array($user, $corbeille->getUsers()->toArray())) {
+                    return true;
+                }
             }
         }
 

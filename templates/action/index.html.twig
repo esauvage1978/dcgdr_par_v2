@@ -10,7 +10,7 @@
 
 {% block body_header %}
     <div class="col">
-            <h1 class="m-0 text-dark">Liste des {{ actions | length }} actions actives </h1>
+        <h1 class="m-0 text-dark">Liste des {{ actions | length }} actions actives </h1>
     </div>
     <div class="col">
         <ol class="breadcrumb float-sm-right">
@@ -21,23 +21,15 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            {{ include('action/_view/_index_table.html.twig') }}
-                        </div>
-                    </div>
+        <div class="col-sm-12 p-4 ">
+            {{ include('action/_view/_index_table.html.twig') }}
 
+            {% if is_granted('ROLE_GESTIONNAIRE') %}
+                <div class="card-header">
+                    {{ include('share/__btn_new.html.twig',
+                        {'url':'action_new'}) }}
                 </div>
-                {% if is_granted('ROLE_GESTIONNAIRE') %}
-                    <div class="card-header">
-                        {{ include('share/__btn_new.html.twig',
-                            {'url':'action_new'}) }}
-                    </div>
-                {% endif %}
-            </div>
+            {% endif %}
         </div>
     </div>
 

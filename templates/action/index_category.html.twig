@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} Plan d'actions {% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')) }}">
+    <link rel="stylesheet"
+          href="{{ absolute_url( asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')) }}">
+{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h3 class="m-0 text-dark">Liste des {{ actions | length }} actions de la catégorie
+            <strong>{{ category.name }}</strong>
+        </h3>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Accueil</a></li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-2">
+            <div class="sticky-top mb-3 ">
+                <div class="row mt-5">
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <h5>
+                            <a href="{{ path('actions_for_thematique',{'id':category.thematique.id}) }}"
+                               title="Retour au pôle">
+                                Retour à la thématique
+                            </a>
+                        </h5>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-md-10  ">
+            {{ include('action/_view/_index_table.html.twig') }}
+
+            {% if is_granted('ROLE_GESTIONNAIRE') %}
+                <div class="card-header">
+                    {{ include('share/__btn_new.html.twig',
+                        {'url':'action_new'}) }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('plugins/datatables/jquery.dataTables.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/datatables/action.js')) }}"></script>
+{% endblock %}

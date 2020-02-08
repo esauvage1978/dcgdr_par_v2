@@ -29,6 +29,13 @@ class WorkflowData
     const TRANSITION_UN_CLOTURED = 'unClotured';
     const TRANSITION_TO_ABANDONNED = 'toAbandonned';
 
+    const STATES_ACTION_UPDATE_PILOTES=['started','rejected','abandonned','deployed','measured','clotured'];
+    const STATES_ACTION_UPDATE_VALIDER=['cotech','codir'];
+
+    const STATES_DEPLOYEMENT_UPDATE=['started','finalised'];
+    const STATES_DEPLOYEMENT_READ=['deployed','measured','clotured','abandonned'];
+    const STATES_DEPLOYEMENT_APPEND=['deployed'];
+
     public static function getTransitionsForState($state)
     {
         $transitions = [];
