@@ -28,7 +28,11 @@
                             </tr>
                             <tr>
                                 <th>Email</th>
-                                <td colspan="2">{{ user.email }}</td>
+                                <td colspan="2">
+                                    <a href="mailto::{{ user.email }}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-envelope mr-1"></i> {{ user.email }}
+                                    </a>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Téléphone</th>

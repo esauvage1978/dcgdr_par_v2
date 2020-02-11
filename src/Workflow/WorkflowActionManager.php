@@ -85,6 +85,8 @@ class WorkflowActionManager
             $this->historisation($user, $action, $stateOld);
 
             return true;
+        } else {
+            dump('not apply' . $action->getState() . ' ' . $transition);
         }
 
         return false;

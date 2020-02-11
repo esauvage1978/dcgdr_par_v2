@@ -6,7 +6,7 @@
 
 {% block body_header %}
     <div class="col">
-        <h1 class="m-0 text-dark">Listes des contacts <span class="text-muted text-sm">Administrateur et gestionnaire de l'application</span></h1>
+        <h1 class="m-0 text-dark">Listes des contacts </h1>
     </div>
     <div class="col">
 
@@ -23,8 +23,6 @@
 
 
 
-    <div class="card card-solid">
-        <div class="card-body pb-0">
             <h3 id="anchor_organisme" class="text-purple m-5">
                 <small><i class="fa fa-user-cog"></i></small>
                 {% if usersAdmin | length >0 %}
@@ -32,10 +30,10 @@
                 {% else %}
                     L'administrateur
                 {% endif %}
-
             </h3>
-            <div class="row ">
-                <div class="card-deck">
+
+            <div class="row " >
+
                     {% for user in usersAdmin %}
                         {{ include('user/_carte_visite.html.twig') }}
                     {% else %}
@@ -43,7 +41,7 @@
                             <div class="jumbotron"> Pas d'enregistrements</div>
                         </div>
                     {% endfor %}
-                </div>
+
             </div>
 
             <h3 id="anchor_organisme" class="text-purple m-5">
@@ -56,7 +54,6 @@
                 {% endif %}
             </h3>
             <div class="row ">
-                <div class="card-deck">
                     {% for user in usersGestionnaire %}
                         {{ include('user/_carte_visite.html.twig') }}
                     {% else %}
@@ -64,7 +61,6 @@
                             <div class="jumbotron"> Pas d'enregistrements</div>
                         </div>
                     {% endfor %}
-                </div>
             </div>
 
             <h3 id="anchor_organisme" class="text-purple m-5">
@@ -77,7 +73,6 @@
                 {% endif %}
             </h3>
             <div class="row ">
-                <div class="card-deck">
                     {% for user in usersGestionnaireLocal %}
                         {{ include('user/_carte_visite.html.twig') }}
                     {% else %}
@@ -85,10 +80,7 @@
                             <div class="jumbotron"> Pas d'enregistrements</div>
                         </div>
                     {% endfor %}
-                </div>
             </div>
-        </div>
-    </div>
 {% endblock %}
 
 

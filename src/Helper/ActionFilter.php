@@ -106,7 +106,7 @@ class ActionFilter
                 $this->actionSearchDto
                     ->setUserWriter($user->getId())
                     ->setJalonNotPresentWriter(true)
-                ->setStates(['started', 'finalised', 'deployed', 'measured']);
+                    ->setStates(['started', 'finalised', 'deployed', 'measured']);
 
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 $complement = ' - Sans jalon définie en tant que pilote';
@@ -120,29 +120,62 @@ class ActionFilter
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 $complement = ' - Sans jalon définie en tant que valideur';
                 break;
-            case 'jalon_to_late':
+            case 'jalon_to_late_valider':
                 $this->actionSearchDto
-                    ->setUserWriter($user->getId())
+                    ->setUserValider($user->getId())
                     ->setJalonFrom((new \DateTime())->format('Y-m-d'))
-                    ->setJalonOperator('<');
+                    ->setJalonOperator('<')
+                    ->setStates(['cotech', 'codir']);
 
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 $complement = ' - Avec jalon dépassé';
                 break;
-            case 'jalon_to_near':
+            case 'jalon_to_late_writer':
                 $this->actionSearchDto
                     ->setUserWriter($user->getId())
                     ->setJalonFrom((new \DateTime())->format('Y-m-d'))
-                    ->setJalonTo(date('Y-m-d', strtotime((new \DateTime())->format('Y-m-d') . ' +8 day')));
+                    ->setJalonOperator('<')
+                    ->setStates(['started', 'finalised', 'deployed', 'measured']);
+
+                $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
+                $complement = ' - Avec jalon dépassé';
+                break;
+            case 'jalon_to_near_writer':
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setJalonFrom((new \DateTime())->format('Y-m-d'))
+                    ->setJalonTo(date('Y-m-d', strtotime((new \DateTime())->format('Y-m-d') . ' +8 day')))
+                    ->setStates(['started', 'finalised', 'deployed', 'measured']);
 
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 $complement = ' -  Avec un jalon à traiter dans moins de 7 jours';
                 break;
-            case 'jalon_to_come_up':
+            case 'jalon_to_near_valider':
+                $this->actionSearchDto
+                    ->setUserValider($user->getId())
+                    ->setJalonFrom((new \DateTime())->format('Y-m-d'))
+                    ->setJalonTo(date('Y-m-d', strtotime((new \DateTime())->format('Y-m-d') . ' +8 day')))
+                    ->setStates(['cotech', 'codir']);
+
+                $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
+                $complement = ' -  Avec un jalon à traiter dans moins de 7 jours';
+                break;
+            case 'jalon_to_come_up_writer':
                 $this->actionSearchDto
                     ->setUserWriter($user->getId())
                     ->setJalonFrom(date('Y-m-d', strtotime((new \DateTime())->format('Y-m-d') . ' +8 day')))
-                    ->setJalonOperator('>');
+                    ->setJalonOperator('>')
+                    ->setStates(['started', 'finalised', 'deployed', 'measured']);
+
+                $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
+                $complement = ' - Avec un jalon à traiter dans plus de 7 jours';
+                break;
+            case 'jalon_to_come_up_valider':
+                $this->actionSearchDto
+                    ->setUserValider($user->getId())
+                    ->setJalonFrom(date('Y-m-d', strtotime((new \DateTime())->format('Y-m-d') . ' +8 day')))
+                    ->setJalonOperator('>')
+                    ->setStates(['cotech', 'codir']);
 
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 $complement = ' - Avec un jalon à traiter dans plus de 7 jours';

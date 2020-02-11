@@ -31,7 +31,6 @@ class DeployementRepositoryDto extends ServiceEntityRepository
 
     public function __construct(ManagerRegistry $registry)
     {
-        $params = [];
         parent::__construct($registry, Deployement::class);
     }
 
@@ -89,6 +88,7 @@ class DeployementRepositoryDto extends ServiceEntityRepository
 
     private function initialise_where()
     {
+        $this->params=[];
         $dto = $this->dto;
 
         $this->builder
@@ -178,11 +178,20 @@ class DeployementRepositoryDto extends ServiceEntityRepository
         $builder = $this->builder;
         if (!empty($dto->getSearch())) {
             $builder
-                ->andwhere(IndicatorValueRepository::ALIAS . '.content like :search')
-                ->orWhere(IndicatorValueRepository::ALIAS . '.goal like :search')
-                ->orWhere(IndicatorValueRepository::ALIAS . '.value like :search');
+                ->andwhere(
+                    IndicatorValueRepository::ALIAS . '.content like :search'.
+                ' OR ' . IndicatorValueRepository::ALIAS . '.goal like :search'.
+                ' OR ' . IndicatorValueRepository::ALIAS . '.value like :search');
 
             $this->addParams('search', '%' . $dto->getSearch() . '%');
+        }
+
+        if (!empty($dto->getSearchDate())) {
+            $builder
+                ->andWhere(
+                    self::ALIAS . '.showAt = :search'.
+                ' OR ' . self::ALIAS . '.endAt = :search');
+            $this->addParams('search',  $dto->getSearchDate() );
         }
     }
 

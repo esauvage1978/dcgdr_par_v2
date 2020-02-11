@@ -22,6 +22,9 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse ">
+<script src="{{ absolute_url( asset('plugins/popper/popper.min.js')) }}"></script>
+<script src="{{ absolute_url( asset('plugins/popper/popper-utils.min.js')) }}"></script>
+
 <div class="wrapper">
 
 
@@ -114,8 +117,7 @@
     $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Tootip -->
-<script src="{{ absolute_url( asset('plugins/popper/popper.min.js')) }}"></script>
-<script src="{{ absolute_url( asset('plugins/popper/popper-utils.min.js')) }}"></script>
+
 <!-- Bootstrap 4 -->
 <script src="{{ absolute_url( asset('plugins/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js')) }}"></script>
 
@@ -126,19 +128,28 @@
 <script src="{{ absolute_url( asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')) }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ absolute_url( asset('dist/js/adminlte.js')) }}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ absolute_url( asset('dist/js/pages/dashboard.js')) }}"></script>
 
-<!-- AdminLTE for demo purposes -->
 <!-- Summernote -->
 <script src="{{ absolute_url( asset('plugins/summernote/summernote-bs4.min.js')) }}"></script>
+<script src="{{ absolute_url( asset('plugins/summernote/lang/summernote-fr-FR.js')) }}"></script>
+
 <script src="{{ absolute_url( asset('js/switch_sidebar.js')) }}"></script>
+<link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
+<link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
+
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
 <script>
     $(function () {
         // Summernote
-        $('.textarea').summernote();
+        $('.textarea').summernote({
+            lang: 'fr-FR'
+        });
 
-        $('div.form-check').addClass('icheck-primary d-inline');
+        //$('div.form-check').addClass('icheck-primary d-inline');
+        $('div.form-check').addClass('custom-switch custom-switch-off-danger custom-switch-on-success');
+        $('input.form-check-input').addClass('custom-control-input');
+        $('label.form-check-label').addClass('custom-control-label');
 
         //Initialize Select2 Elements
         $('.select2').select2({

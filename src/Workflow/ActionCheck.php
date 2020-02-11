@@ -68,6 +68,25 @@ class ActionCheck
         }
     }
 
+
+
+    public function getDiffRegionStartAtAfterNow()
+    {
+        return $this->getNbrDayBeetwenDates( new \DateTime(), $this->action->getRegionStartAt());
+    }
+    public function getDiffRegionEndAtBeforeOrEqualNow()
+    {
+        return $this->getNbrDayBeetwenDates( new \DateTime(), $this->action->getRegionEndAt());
+    }
+    public function getDiffRegionStartAtBeforeOrEqualNow()
+    {
+        return $this->getNbrDayBeetwenDates(  $this->action->getRegionStarAt(),new \DateTime());
+    }
+    public function getDiffRegionEndAtAfterNow()
+    {
+        return $this->getNbrDayBeetwenDates($this->action->getRegionEndAt(), new \DateTime());
+    }
+
     public function checkRegionStartAtBeforeOrEqualNow()
     {
         if (!empty($this->action->getRegionStartAt()) ) {
@@ -78,21 +97,6 @@ class ActionCheck
         }
         return false;
     }
-    public function checkRegionStartAtAfterNow()
-    {
-        if (!empty($this->action->getRegionStartAt()) ) {
-            if (new \DateTime() <= $this->action->getRegionStartAt()) {
-                $this->actionCheckMessage->addMessageError('La date de début est à venir.');
-                return true;
-            }
-        }
-        return false;
-    }
-    public function getDiffRegionStartAtAfterNow()
-    {
-        return $this->getNbrDayBeetwenDates( new \DateTime(), $this->action->getRegionStartAt());
-    }
-
     public function checkRegionEndAtBeforeOrEqualNow()
     {
         if (!empty($this->action->getRegionEndAt()) ) {
@@ -104,16 +108,21 @@ class ActionCheck
         return false;
     }
 
-    public function getDiffRegionEndAtBeforeOrEqualNow()
+    public function checkRegionStartAtAfterNow()
     {
-        return $this->getNbrDayBeetwenDates( new \DateTime(), $this->action->getRegionEndAt());
+        if (!empty($this->action->getRegionStartAt()) ) {
+            if (new \DateTime() < $this->action->getRegionStartAt()) {
+                $this->actionCheckMessage->addMessageError('La date de début est à venir.');
+                return true;
+            }
+        }
+        return false;
     }
-
     public function checkRegionEndAtAfterNow() : bool
     {
         if (!empty($this->action->getRegionEndAt()) ) {
             if (new \DateTime() < $this->action->getRegionEndAt()) {
-                $this->actionCheckMessage->addMessageError('La date de début n\'est pas passée.');
+                $this->actionCheckMessage->addMessageError('La date de fin n\'est pas passée.');
                 return true;
             }
         }
@@ -125,10 +134,7 @@ class ActionCheck
         return $this->getNbrDayBeetwenDates( new \DateTime(), $this->action->getStateAt());
     }
 
-    public function getDiffRegionEndAtAfterNow()
-    {
-        return $this->getNbrDayBeetwenDates($this->action->getRegionEndAt(), new \DateTime());
-    }
+
 
     private function getNbrDayBeetwenDates(\DateTime $date1,\DateTime $date2)
     {

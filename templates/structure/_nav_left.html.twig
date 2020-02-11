@@ -35,7 +35,7 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if is_granted('ROLE_USER') %}
 
                         <li class="nav-item ">
                             <a href="{{path('dashboard')}}" class="nav-link {{  '/dashboard' in app.request.uri ? 'active' :'' }}">
