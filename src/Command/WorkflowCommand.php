@@ -43,7 +43,8 @@ class WorkflowCommand extends CommandTool implements CommandInterface
         ActionRepository $actionRepository,
         WorkflowActionManager $workflowManager,
         ActionSearchDto $actionSearchDto
-    ) {
+    )
+    {
         $this->managerRegistry = $registry;
         $this->actionRepository = $actionRepository;
         $this->workflowManager = $workflowManager;
@@ -69,67 +70,111 @@ class WorkflowCommand extends CommandTool implements CommandInterface
 
     public function runTraitement(): void
     {
-        $dto = $this->actionSearchDto;
-        $repo = $this->actionRepository;
+
         $debut = microtime(true);
 
-        $dto->setState(WorkflowData::STATE_FINALISED);
+        $this->checkState(WorkflowData::TRANSITION_TO_DEPLOYE);
+        $this->checkState(WorkflowData::TRANSITION_TO_MEASURED);
 
-        $actions = $repo->findAllForDto($dto, ActionRepository::FILTRE_DTO_INIT_TABLEAU);
-        $this->addMessage(
-            '# Nombre d\'actions dans l\'état '.WorkflowData::STATE_FINALISED.' : '.count($actions)
-            );
-
-        foreach ($actions as $action) {
-            $actionCheck = new ActionCheck($action);
-            if ($actionCheck->checkRegionStartAtBeforeOrEqualNow()) {
-                $info = 'transition ('.WorkflowData::TRANSITION_TO_DEPLOYE.
-                    ') : Date de début passée de '.$actionCheck->getDiffRegionStartAtAfterNow().' jours ';
-                $messageBascule = 'L\'action est automatiquement déployée en raison d\'une date de début de déploiement au '.
-                    $action->getRegionStartAt()->format('d/m/Y');
-                $this->bascule($action, WorkflowData::TRANSITION_TO_DEPLOYE, $info, $messageBascule);
-            } else {
-                $this->basculeNonConcernee($action);
-            }
-        }
-
-        $dto->setState(WorkflowData::STATE_DEPLOYED);
-
-        $actions = $repo->findAllForDto($dto, ActionRepository::FILTRE_DTO_INIT_TABLEAU);
-
-        $this->addMessage('# Nombre d\'actions dans l\'état '.WorkflowData::STATE_DEPLOYED.' : '.count($actions));
-
-        foreach ($actions as $action) {
-            $actionCheck = new ActionCheck($action);
-            if ($actionCheck->checkRegionEndAtBeforeOrEqualNow()) {
-                $info = 'transition ('.WorkflowData::TRANSITION_TO_MEASURED.
-                    ') Date de fin passée de '.$actionCheck->getDiffRegionEndAtBeforeOrEqualNow().' jours ';
-                $messageBascule = 'Fin automatique du déploiement de l\'action en raison d\'une date de fin de déploiement au '.
-                    $action->getRegionEndAt()->format('d/m/Y');
-                $this->bascule($action, WorkflowData::TRANSITION_TO_MEASURED, $info, $messageBascule);
-            } else {
-                $this->basculeNonConcernee($action);
-            }
-        }
+        $this->checkState(WorkflowData::TRANSITION_UN_DEPLOYED);
+        $this->checkState(WorkflowData::TRANSITION_UN_MEASURED);
 
         $fin = microtime(true);
 
-        $this->addMessage('Traitement effectué en  '.$this->calculTime($fin, $debut).' millisecondes.');
+        $this->addMessage('Traitement effectué en  ' . $this->calculTime($fin, $debut) . ' millisecondes.');
     }
 
+    private function checkState(string $transitionTo)
+    {
+        $dto = $this->actionSearchDto;
+        $repo = $this->actionRepository;
+
+        switch ($transitionTo) {
+            case WorkflowData::TRANSITION_TO_DEPLOYE:
+                $stateFrom = WorkflowData::STATE_FINALISED;
+                break;
+            case WorkflowData::TRANSITION_UN_DEPLOYED:
+                $stateFrom = WorkflowData::STATE_DEPLOYED;
+                break;
+            case WorkflowData::TRANSITION_TO_MEASURED:
+                $stateFrom = WorkflowData::STATE_DEPLOYED;
+                break;
+            case WorkflowData::TRANSITION_UN_MEASURED:
+                $stateFrom = WorkflowData::STATE_MEASURED;
+                break;
+        }
+        $dto->setState($stateFrom);
+
+        $actions = $repo->findAllForDto($dto, ActionRepository::FILTRE_DTO_INIT_TABLEAU);
+        $this->addMessage(
+            '# ' . count($actions) . ' actions dans l\'état ' . $stateFrom . ' pour la transition ' . $transitionTo
+        );
+
+        $actionNonConcerne = 0;
+
+        foreach ($actions as $action) {
+            $actionCheck = new ActionCheck($action);
+            $check = false;
+
+            switch ($transitionTo) {
+                case WorkflowData::TRANSITION_TO_DEPLOYE:
+                    $check = $actionCheck->checkRegionStartAtBeforeOrEqualNow()
+                    && $actionCheck->checkRegionEndAtAfterNow();
+                    $info = 'transition (' . $transitionTo .
+                        ') Date de début passée de ' . $actionCheck->getDiffRegionStartAtAfterNow() . ' jours ';
+                    $messageBascule = 'Début automatique de déploiement, déploiement du ' .
+                        $action->getRegionStartAt()->format('d/m/Y')
+                    .' au  '  .$action->getRegionEndAt()->format('d/m/Y');
+                    break;
+                case WorkflowData::TRANSITION_TO_MEASURED:
+                    $check =  $actionCheck->checkRegionEndAtBeforeOrEqualNow();
+                    $info = 'transition (' . $transitionTo .
+                        ') Date de Fin passée de ' . $actionCheck->getDiffRegionEndAtBeforeOrEqualNow() . ' jours ';
+                    $messageBascule = 'Fin automatique de déploiement, déploiement du ' .
+                        $action->getRegionStartAt()->format('d/m/Y')
+                        .' au  '  .$action->getRegionEndAt()->format('d/m/Y');
+                    break;
+                case WorkflowData::TRANSITION_UN_DEPLOYED:
+                    $check =  $actionCheck->checkRegionStartAtAfterNow();
+                    $info = 'transition (' . $transitionTo .
+                        ') Date de début au delà de ' . $actionCheck->getDiffRegionStartAtAfterNow() . ' jours ';
+                    $messageBascule = 'Fin automatique de déploiement, déploiement du ' .
+                        $action->getRegionStartAt()->format('d/m/Y')
+                        .' au  '  .$action->getRegionEndAt()->format('d/m/Y');
+                    break;
+                case WorkflowData::TRANSITION_UN_MEASURED:
+                    $check =  $actionCheck->checkRegionEndAtAfterNow();
+                    $info = 'transition (' . $transitionTo .
+                        ') Date de fin au delà de ' . $actionCheck->getDiffRegionStartAtAfterNow() . ' jours ';
+                    $messageBascule = 'remise automatique de déploiement, déploiement du ' .
+                        $action->getRegionStartAt()->format('d/m/Y')
+                        .' au  '  .$action->getRegionEndAt()->format('d/m/Y');
+                    break;
+
+            }
+
+            if ($check) {
+                $this->bascule($action, $transitionTo, $info, $messageBascule);
+            } else {
+                $actionNonConcerne = $actionNonConcerne + 1;
+            }
+        }
+        $this->basculeNonConcernee($actionNonConcerne);
+
+    }
 
 
     private function bascule(Action $action, string $transition, string $info, string $messageBascule)
     {
-        $this->addMessage(CommandTool::TABULTATION .'Action : '.$action->getId().' '.$info);
+        $this->addMessage(CommandTool::TABULTATION . 'Action : ' . $action->getId() . ' ' . $info);
         if (!$this->workflowManager->applyTransition($action, $transition, $messageBascule, true)) {
-            $this->addMessage('KO');
+            $this->addMessage('KO de ' . $action->getState() . ' vers ' . $transition);
         }
     }
 
-    private function basculeNonConcernee(Action $action)
+    private function basculeNonConcernee(int $nbr)
     {
-        $this->addMessage(CommandTool::TABULTATION .'Action : '.$action->getId().' : non concernée');
+        $this->addMessage(CommandTool::TABULTATION . $nbr . ' Actions non concernées');
     }
 
 

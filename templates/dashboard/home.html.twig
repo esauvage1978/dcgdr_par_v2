@@ -13,10 +13,12 @@
 
     <!-- MESSAGE -->
     {{ include('message/_show_messages.html.twig',{'messages':messages}) }}
-    <h5>Cycle de vie des actions</h5>
+    <h4 class="text-purple">
+        <small><i class="fas fa-project-diagram"></i></small> Cycle de vie des actions
+    </h4>
 
 
-    <div class="p-5"
+    <div class="p-5 shadow bg-white"
          style="background-image: url('{{ absolute_url( asset('img/fond.png')) }}'); background-repeat: no-repeat;width: 950px   ">
         <div class="row">
 

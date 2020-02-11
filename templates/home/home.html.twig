@@ -47,7 +47,84 @@
                 {% endfor %}
             </div>
             <div class="row justify-content-center card-deck mt-5">
-                <div class="col-lg-6 col-sm-12">
+
+                <div class="col-lg-6 col-sm-12" id="work">
+                    <div class="card card-outline card-danger bg-light  ">
+                        <div class="card-header text-center">
+                            <h3>
+                                URGENT
+                            </h3>
+                        </div>
+                        <div class="card-body list-group list-group-flush p-1">
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'deployement_without_jalon',
+                                    'color':'warning',
+                                    'titre':'Mes deploiements sans jalon',
+                                    'url':'my_deployement',
+                                    'filtre':'without_jalon'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'deployement_jalon_to_late',
+                                    'color':'danger',
+                                    'titre':'Mes deploiements avec jalon dépassé',
+                                    'url':'my_deployement',
+                                    'filtre':'jalon_to_late'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_without_jalon_writer',
+                                    'color':'warning',
+                                    'titre':'Mes actions sans jalon en tant que pilote',
+                                    'url':'my_action',
+                                    'filtre':'without_jalon_writer'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_without_jalon_valider',
+                                    'color':'warning',
+                                    'titre':'Mes actions sans jalon en tant que valideur',
+                                    'url':'my_action',
+                                    'filtre':'without_jalon_valider'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_jalon_to_late_valider',
+                                    'color':'danger',
+                                    'titre':'Mes actions en tant que valideur avec jalon dépassé',
+                                    'url':'my_action',
+                                    'filtre':'jalon_to_late_valider'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_jalon_to_late_writer',
+                                    'color':'danger',
+                                    'titre':'Mes actions en tant que pilote avec jalon dépassé',
+                                    'url':'my_action',
+                                    'filtre':'jalon_to_late_writer'}) }}
+                        </div>
+
+                        <!-- /.card -->
+                    </div>
+
+                    <div class="card card-outline card-success  bg-light ">
+                        <div class="card-header text-center">
+                            <h3>
+                                A VENIR
+                            </h3>
+                        </div>
+                        <div class="card-body list-group list-group-flush p-1">
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'deployement_jalon_to_come_up',
+                                    'titre':'Mes deploiements avec jalon > 7 jours',
+                                    'url':'my_deployement',
+                                    'filtre':'jalon_to_come_up'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_jalon_to_come_up_valider',
+                                    'titre':'Mes actions en tant que valideur avec jalon > 7 jours',
+                                    'url':'my_action',
+                                    'filtre':'jalon_to_come_up_valider'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_jalon_to_come_up_writer',
+                                    'titre':'Mes actions en tant que pilote avec jalon > 7 jours',
+                                    'url':'my_action',
+                                    'filtre':'jalon_to_come_up_writer'}) }}
+                        </div>
+
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12 ">
                     <div class="card card-outline card-warning  bg-light ">
                         <div class="card-header text-center">
                             <h3>
@@ -140,81 +217,23 @@
                                     'url':'my_action',
                                     'filtre':'clotured'}) }}
                             {{ include('home/btn/_home_action.html.twig',
-                                {   'domaine':'action_jalon_to_near',
+                                {   'domaine':'action_jalon_to_near_valider',
                                     'color':'warning',
-                                    'titre':'Mes actions avec jalon <=7 jours',
+                                    'titre':'Mes actions en tant que valideur avec jalon <=7 jours',
                                     'url':'my_action',
-                                    'filtre':'jalon_to_near'}) }}
+                                    'filtre':'jalon_to_near_valider'}) }}
+                            {{ include('home/btn/_home_action.html.twig',
+                                {   'domaine':'action_jalon_to_near_writer',
+                                    'color':'warning',
+                                    'titre':'Mes actions en tant que pilote avec jalon <=7 jours',
+                                    'url':'my_action',
+                                    'filtre':'jalon_to_near_writer'}) }}
                         </div>
                         <!-- /.card -->
                     </div>
                 </div>
 
-                <div class="col-lg-6 col-sm-12" id="work">
-                    <div class="card card-outline card-danger bg-light  ">
-                        <div class="card-header text-center">
-                            <h3>
-                                URGENT
-                            </h3>
-                        </div>
-                        <div class="card-body list-group list-group-flush p-1">
-                            {{ include('home/btn/_home_action.html.twig',
-                                {   'domaine':'deployement_without_jalon',
-                                    'color':'warning',
-                                    'titre':'Mes deploiements sans jalon',
-                                    'url':'my_deployement',
-                                    'filtre':'without_jalon'}) }}
-                            {{ include('home/btn/_home_action.html.twig',
-                                {   'domaine':'deployement_jalon_to_late',
-                                    'color':'danger',
-                                    'titre':'Mes deploiements avec jalon dépassé',
-                                    'url':'my_deployement',
-                                    'filtre':'jalon_to_late'}) }}
-                            {{ include('home/btn/_home_action.html.twig',
-                                {   'domaine':'action_without_jalon_writer',
-                                    'color':'warning',
-                                    'titre':'Mes actions sans jalon en tant que pilote',
-                                    'url':'my_action',
-                                    'filtre':'without_jalon_writer'}) }}
-                            {{ include('home/btn/_home_action.html.twig',
-                                {   'domaine':'action_without_jalon_valider',
-                                    'color':'warning',
-                                    'titre':'Mes actions sans jalon en tant que valideur',
-                                    'url':'my_action',
-                                    'filtre':'without_jalon_valider'}) }}
-                            {{ include('home/btn/_home_action.html.twig',
-                                {   'domaine':'action_jalon_to_late',
-                                    'color':'danger',
-                                    'titre':'Mes actions avec jalon dépassé',
-                                    'url':'my_action',
-                                    'filtre':'jalon_to_late'}) }}
-                        </div>
 
-                        <!-- /.card -->
-                    </div>
-
-                    <div class="card card-outline card-success  bg-light ">
-                        <div class="card-header text-center">
-                            <h3>
-                                A VENIR
-                            </h3>
-                        </div>
-                        <div class="card-body list-group list-group-flush p-1">
-                            {{ include('home/btn/_home_action.html.twig',
-                                {   'domaine':'deployement_jalon_to_come_up',
-                                    'titre':'Mes deploiements avec jalon > 7 jours',
-                                    'url':'my_deployement',
-                                    'filtre':'jalon_to_come_up'}) }}
-                            {{ include('home/btn/_home_action.html.twig',
-                                {   'domaine':'action_jalon_to_come_up',
-                                    'titre':'Mes actions avec jalon > 7 jours',
-                                    'url':'my_action',
-                                    'filtre':'jalon_to_come_up'}) }}
-                        </div>
-
-                        <!-- /.card -->
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -243,7 +262,8 @@
             searchCount('deployement_jalon_to_late', '{{ absolute_url(path('ajax_my_deployement_count')) }}', 'jalon_to_late');
             searchCount('action_without_jalon_writer', '{{ path('ajax_my_action_count') }}', 'without_jalon_writer');
             searchCount('action_without_jalon_valider', '{{ path('ajax_my_action_count') }}', 'without_jalon_valider');
-            searchCount('action_jalon_to_late', '{{ path('ajax_my_action_count') }}', 'jalon_to_late');
+            searchCount('action_jalon_to_late_writer', '{{ path('ajax_my_action_count') }}', 'jalon_to_late_writer');
+            searchCount('action_jalon_to_late_valider', '{{ path('ajax_my_action_count') }}', 'jalon_to_late_valider');
 
             //ENCOURS
             {% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_GESTIONNAIRE_LOCAL') %}
@@ -265,11 +285,13 @@
             searchCount('action_clotured', '{{ path('ajax_my_action_count') }}', 'clotured');
             searchCount('action_valider_cotech', '{{ path('ajax_my_action_count') }}', 'valider_cotech');
             searchCount('action_valider_codir', '{{ path('ajax_my_action_count') }}', 'valider_codir');
-            searchCount('action_jalon_to_near', '{{ path('ajax_my_action_count') }}', 'jalon_to_near');
+            searchCount('action_jalon_to_near_writer', '{{ path('ajax_my_action_count') }}', 'jalon_to_near_writer');
+            searchCount('action_jalon_to_near_valider', '{{ path('ajax_my_action_count') }}', 'jalon_to_near_valider');
 
             //A VENIR
             searchCount('deployement_jalon_to_come_up', '{{ absolute_url(path('ajax_my_deployement_count')) }}', 'jalon_to_come_up');
-            searchCount('action_jalon_to_come_up', '{{ path('ajax_my_action_count') }}', 'jalon_to_come_up');
+            searchCount('action_jalon_to_come_up_valider', '{{ path('ajax_my_action_count') }}', 'jalon_to_come_up_valider');
+            searchCount('action_jalon_to_come_up_writer', '{{ path('ajax_my_action_count') }}', 'jalon_to_come_up_writer');
         });
     </script>
 {% endblock %}

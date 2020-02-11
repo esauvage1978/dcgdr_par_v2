@@ -34,7 +34,7 @@ class ActionRepositoryDto extends ServiceEntityRepository
 
     public function __construct(ManagerRegistry $registry)
     {
-        $params = [];
+
         parent::__construct($registry, Action::class);
     }
 
@@ -132,6 +132,7 @@ class ActionRepositoryDto extends ServiceEntityRepository
 
     public function findAllForDto(ActionSearchDto $dto, string $filtre)
     {
+        $this->params = [];
         $this->dto = $dto;
 
         switch ($filtre) {
@@ -218,8 +219,8 @@ class ActionRepositoryDto extends ServiceEntityRepository
 
     private function initialise_where_jalon()
     {
-        $dto=$this->dto;
-        $builder=$this->builder;
+        $dto = $this->dto;
+        $builder = $this->builder;
 
         if ($dto->getJalonNotPresentValider() || $dto->getJalonNotPresentWriter()) {
             $builder->andWhere(self::ALIAS . '.showAt is null ');
@@ -264,6 +265,7 @@ class ActionRepositoryDto extends ServiceEntityRepository
             $this->addParams('axeid', $this->dto->getAxeId());
         }
     }
+
     private function initialise_where_pole()
     {
         if (!empty($this->dto->getPoleId())) {
@@ -271,6 +273,7 @@ class ActionRepositoryDto extends ServiceEntityRepository
             $this->addParams('poleid', $this->dto->getPoleId());
         }
     }
+
     private function initialise_where_thematique()
     {
         if (!empty($this->dto->getThematiqueId())) {
@@ -278,6 +281,7 @@ class ActionRepositoryDto extends ServiceEntityRepository
             $this->addParams('thematiqueid', $this->dto->getThematiqueId());
         }
     }
+
     private function initialise_where_category()
     {
         if (!empty($this->dto->getCategoryId())) {
@@ -303,19 +307,32 @@ class ActionRepositoryDto extends ServiceEntityRepository
                 $builder->andwhere(ThematiqueRepository::ALIAS . '.ref = :thematiqueref');
                 $this->addParams('thematiqueref', $dto->getThematiqueRef());
             }
-        } elseif (!empty($dto->getSearch())) {
+        }
+        if (!empty($dto->getSearch())) {
             $builder
-                ->andwhere(self::ALIAS . '.name like :search')
-                ->orWhere(self::ALIAS . '.content like :search')
-                ->orWhere(self::ALIAS . '.cadrage like :search')
-                ->orWhere(IndicatorRepository::ALIAS . '.name like :search')
-                ->orWhere(IndicatorRepository::ALIAS . '.content like :search')
-                ->orWhere(CategoryRepository::ALIAS . '.name like :search')
-                ->orWhere(ThematiqueRepository::ALIAS . '.name like :search')
-                ->orWhere(PoleRepository::ALIAS . '.name like :search')
-                ->orWhere(AxeRepository::ALIAS . '.name like :search');
+                ->andwhere(
+                    self::ALIAS . '.name like :search'.
+                    ' OR ' . self::ALIAS . '.content like :search'.
+                ' OR ' . self::ALIAS . '.contentState like :search'.
+                ' OR ' . self::ALIAS . '.cadrage like :search'.
+                ' OR ' . IndicatorRepository::ALIAS . '.name like :search'.
+                ' OR ' . IndicatorRepository::ALIAS . '.content like :search'.
+                ' OR ' . CategoryRepository::ALIAS . '.name like :search'.
+                ' OR ' . ThematiqueRepository::ALIAS . '.name like :search'.
+                ' OR ' . PoleRepository::ALIAS . '.name like :search'.
+                ' OR ' . AxeRepository::ALIAS . '.name like :search');
 
             $this->addParams('search', '%' . $dto->getSearch() . '%');
+        }
+
+        if (!empty($dto->getSearchDate())) {
+            $builder
+                ->andWhere(
+                    self::ALIAS . '.showAt = :search ' .
+                    ' OR ' . self::ALIAS . '.stateAt = :search' .
+                    ' OR ' . self::ALIAS . '.regionStartAt = :search' .
+                    ' OR ' . self::ALIAS . '.regionEndAt = :search');
+            $this->addParams('search', $dto->getSearchDate());
         }
     }
 

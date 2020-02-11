@@ -15,6 +15,26 @@ class ActionSearchDto
     private $poleEnable;
     private $categoryEnable;
     private $search;
+    private $searchDate;
+
+    /**
+     * @return mixed
+     */
+    public function getSearchDate()
+    {
+        return $this->searchDate;
+    }
+
+    /**
+     * @param mixed $searchDate
+     * @return ActionSearchDto
+     */
+    public function setSearchDate($searchDate)
+    {
+        $this->searchDate = $searchDate;
+        return $this;
+    }
+
     private $thematiqueRef;
     private $categoryRef;
     private $actionRef;
@@ -50,12 +70,13 @@ class ActionSearchDto
 
     public function __construct()
     {
-        $this->axeEnable=true;
-        $this->poleEnable=true;
-        $this->thematiqueEnable=true;
-        $this->categoryEnable=true;
-        $this->actionArchiving=false;
+        $this->axeEnable = true;
+        $this->poleEnable = true;
+        $this->thematiqueEnable = true;
+        $this->categoryEnable = true;
+        $this->actionArchiving = false;
     }
+
     /**
      * @return mixed
      */
@@ -70,11 +91,11 @@ class ActionSearchDto
      */
     public function setId($id)
     {
-        $this->axeEnable=null;
-        $this->poleEnable=null;
-        $this->thematiqueEnable=null;
-        $this->categoryEnable=null;
-        $this->actionArchiving=null;
+        $this->axeEnable = null;
+        $this->poleEnable = null;
+        $this->thematiqueEnable = null;
+        $this->categoryEnable = null;
+        $this->actionArchiving = null;
         $this->id = $id;
         return $this;
     }
@@ -257,19 +278,49 @@ class ActionSearchDto
     {
         $this->search = $search;
 
-        $this->SearchReference();
+        $this->searchReference();
+
+        $this->searchDate();
+
         return $this;
     }
 
-    private function SearchReference()
+    private function searchReference()
     {
-        if (mb_substr_count($this->search,'-')==2) {
-            $temp=explode('-',$this->search);
-            $this->setThematiqueRef($temp[0]);
-            $this->setCategoryRef($temp[1]);
-            $this->setActionRef($temp[2]);
-            $this->search=null;
+        if (!empty($this->search)) {
+            if (mb_substr_count($this->search, '-') == 2) {
+                $temp = explode('-', $this->search);
+                $this->setThematiqueRef($temp[0]);
+                $this->setCategoryRef($temp[1]);
+                $this->setActionRef($temp[2]);
+                $this->search = null;
+            }
         }
+    }
+
+    private function searchDate()
+    {
+        if (!empty($this->search)) {
+            $d = $this->validateDate($this->search);
+            if (!empty($d)) {
+                $this->setSearchDate($d);
+                $this->search = null;
+            }
+        }
+    }
+
+    function validateDate($date)
+    {
+        if (mb_substr_count($this->search, '/') == 2) {
+            $d = explode('/', $date);
+            return
+                (strlen($d[2]) == 2 ? '20' . $d[2]:$d[2])
+                . '-' .
+                (strlen($d[1]) == 2 ? $d[1] : '0' . $d[1])
+                . '-' .
+                (strlen($d[0]) == 2 ? $d[0] : '0' . $d[0]);
+        }
+        return null;
     }
 
     /**
@@ -433,6 +484,7 @@ class ActionSearchDto
         $this->jalonNotPresentValider = $jalonNotPresentValider;
         return $this;
     }
+
     /**
      * @return string | null
      */

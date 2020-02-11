@@ -83,7 +83,7 @@ class ActionEditType extends AppTypeAbstract
             ])
             ->add('showall', CheckboxType::class,
                 [
-                    self::LABEL => ' ',
+                    self::LABEL => '  Visible par tous',
                     self::REQUIRED => false,
                 ])
             ->add('cibles', EntityType::class, [
