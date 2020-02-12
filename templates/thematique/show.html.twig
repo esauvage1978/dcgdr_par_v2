@@ -95,7 +95,14 @@
                 {% for category in thematique.categories %}
                     {{ include('category/_show_item.html.twig') }}
                 {% else %}
-                    <a class="text-success" href="{{ path('category_new') }}">Créer une catégorie</a>
+                    {% if is_granted('ROLE_GESTIONNAIRE') %}
+                        <div class="list-group-item">
+                            <a class="text-success" href="{{ path('category_new') }}">Créer une catégorie</a>
+                        </div>
+                    {%  else %}
+                        <span class="text-info" >Aucune catégorie pour le moment</span>
+                    {% endif %}
+
                 {% endfor %}
             </div>
         </div>

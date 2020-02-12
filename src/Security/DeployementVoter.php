@@ -108,11 +108,20 @@ class DeployementVoter extends Voter
             return false;
         }
 
+        if ($this->security->isGranted('ROLE_GESTIONNAIRE')) {
+            return true;
+        }
+
         foreach ($deploiement->getReaders() as $corbeille) {
             if (in_array($user, $corbeille->getUsers()->toArray())) {
                 return true;
             }
         }
+
+        if( $this->actionVoter->canUpdate($deploiement->getAction(), $user)) {
+            return true;
+        }
+
 
         return $this->canAppendUpdate($deploiement, $user);
     }

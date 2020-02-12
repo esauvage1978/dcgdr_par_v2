@@ -44,11 +44,11 @@
         </a>
     </li>
 
-        <li class="nav-item ">
-            <a class="nav-link" href="#anchor_measure">
-                <i class="fa fa-balance-scale"></i> Mesure d'efficacité
-            </a>
-        </li>
+    <li class="nav-item ">
+        <a class="nav-link" href="#anchor_measure">
+            <i class="fa fa-balance-scale"></i> Mesure d'efficacité
+        </a>
+    </li>
     <li class="nav-item ">
         <a class="nav-link" href="#anchor_cadrage">
             <i class="fas fa-crop-alt"></i> Cadrage
@@ -80,7 +80,7 @@
     {% if action | actionCanUpdate %}
         {{ include('share/__btn_save_onclick.html.twig') }}
     {% endif %}
-        <span class="mb-3"></span>
+    <span class="mb-3"></span>
 
     {% if is_granted('ROLE_GESTIONNAIRE') %}
         <span class="btn btn-danger " onclick="$('#delete').click();">
@@ -105,62 +105,86 @@
         <div class="row col-12 ">
             <div id="col1"
                  class="col-sm-12  order-sm-second  col-md-12 order-sm-second col-lg-6 order-lg-second col-xl-2 order-xl-first ">
-                {%  if action.state in ['abandonned','rejected','clotured'] %}
-                    {{ include('action/_show/_jalon.html.twig') }}
-                {% else %}
-                    {{ include('action/_edit/_jalon.html.twig') }}
-                {% endif %}
-                {%  if action.state in ['cotech','rejected','codir','deployed'] %}
-                    {{ include('action/_show/_tuile.html.twig') }}
-                {% else %}
-                    {{ include('action/_edit/_reference.html.twig') }}
-                    {{ include('action/_edit/_experimentation.html.twig') }}
-                    {{ include('action/_edit/_date.html.twig') }}
-                {% endif %}
+                <div class="bg-white">
+                    {% if action.state in ['started','cotech','codir','finalised', 'deployed','measured'] %}
+                        {{ include('action/_edit/_jalon.html.twig') }}
+                    {% else %}
+                        {{ include('action/_show/_jalon.html.twig') }}
+                    {% endif %}
 
+                    {{ include('action/_show/_taux.html.twig') }}
+
+                    {% if action.state in ['started','finalised'] %}
+                        {{ include('action/_edit/_experimentation.html.twig') }}
+                        {{ include('action/_edit/_reference.html.twig') }}
+                    {% else %}
+                        {{ include('action/_show/_experimentation.html.twig') }}
+                    {% endif %}
+
+                    {% if action.state in ['started','finalised','deployed','measured'] %}
+                        {{ include('action/_edit/_date.html.twig') }}
+                    {% else %}
+                        {{ include('action/_show/_date.html.twig') }}
+                    {% endif %}
+
+                </div>
             </div>
             <div id="col2"
                  class=" col-sm-12  order-sm-first  col-md-12 order-md-first col-lg-12  order-lg-first col-xl-7 order-xl-second bg-white p-5">
-                {%  if action.state in ['cotech','rejected','codir','deployed'] %}
-                    {{ include('action/_show/_classement.html.twig') }}
-                    {{ include('action/_show/_cadrage.html.twig') }}
-                    {{ include('action/_show/_info_part.html.twig') }}
-                {% else %}
+                {% if action.state in ['started','finalised'] %}
                     {{ include('action/_edit/_name.html.twig') }}
                     {{ include('action/_edit/_classement.html.twig') }}
-                    {{ include('action/_edit/_measure.html.twig') }}
-                    {{ include('action/_edit/_cadrage.html.twig') }}
-                    {{ include('action/_edit/_info_part.html.twig') }}
+                {% else %}
+                    {{ include('action/_show/_classement.html.twig') }}
                 {% endif %}
+
+                {% if action.state in ['measured'] %}
+                    {{ include('action/_edit/_measure.html.twig') }}
+                {% elseif action.state in ['clotured'] %}
+                    {{ include('action/_show/_measure.html.twig') }}
+                {% endif %}
+
+                {% if action.state in ['started','finalised'] %}
+                    {{ include('action/_edit/_cadrage.html.twig') }}
+                {% else %}
+                    {{ include('action/_show/_cadrage.html.twig') }}
+                {% endif %}
+
+                {% if action.state in ['started','cotech','codir','finalised','deployed'] %}
+                    {{ include('action/_edit/_info_part.html.twig') }}
+                {% else %}
+                    {{ include('action/_show/_info_part.html.twig') }}
+                {% endif %}
+
             </div>
             <div id="col3" class="col-sm-12 col-md-12 col-lg-6 col-xl-3 ">
-                {%  if action.state in ['cotech','rejected','codir','deployed'] %}
-                    {{ include('action/_show/_cibles.html.twig') }}
-                    {{ include('action/_show/_vecteurs.html.twig') }}
-                    {{ include('action/_show/_intervenant.html.twig') }}
-                    {{ include('action/_show/_actionFile.html.twig') }}
-                {% else %}
+                {% if action.state in ['started','finalised'] %}
                     {{ include('action/_edit/_cibles.html.twig') }}
                     {{ include('action/_edit/_vecteurs.html.twig') }}
                     {{ include('action/_edit/_intervenant.html.twig') }}
                     {{ include('action/_edit/_actionFile.html.twig') }}
+                {% else %}
+                    {{ include('action/_show/_cibles.html.twig') }}
+                    {{ include('action/_show/_vecteurs.html.twig') }}
+                    {{ include('action/_show/_intervenant.html.twig') }}
+                    {{ include('action/_show/_actionFile.html.twig') }}
                 {% endif %}
             </div>
 
         </div>
 
         <div class="col-12 bg-white  p-5 mt-5">
-            {%  if action.state in ['cotech','rejected','codir','deployed'] %}
-                {{ include('action/_show/_organisme.html.twig') }}
-            {% else %}
+            {% if action.state in ['started','finalised'] %}
                 {{ include('action/_edit/_organisme.html.twig') }}
+            {% else %}
+                {{ include('action/_show/_organisme.html.twig') }}
             {% endif %}
         </div>
         <div class="col-12 bg-white  p-5 mt-5">
-            {%  if action.state in ['cotech','rejected','codir','deployed'] %}
-                {{ include('action/_show/_indicator.html.twig') }}
-            {% else %}
+            {% if action.state in ['started','finalised'] %}
                 {{ include('action/_edit/_indicator.html.twig') }}
+            {% else %}
+                {{ include('action/_show/_indicator.html.twig') }}
             {% endif %}
         </div>
         <div class="d-none">

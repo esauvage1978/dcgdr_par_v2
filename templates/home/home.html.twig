@@ -18,6 +18,19 @@
         </div>
     {% endif %}
 
+    {% if app.user.organismes | length == 0 %}
+        <div class="alert alert-danger alert-dismissible mt-2">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-ban"></i> Aucun organisme associé à votre compte !</h5>
+            <p>
+                Attention vous n'avez aucun organisme associé à votre compte.
+                Merci de contacter un gestionnaire
+            </p>
+            <p>
+                <a href="{{ path('contact') }}#anchor_gestionnaire">Cliquer ici</a> pour consulter la liste des gestionnaires.
+            </p>
+        </div>
+    {% endif %}
 
 
     <div class="row bg-white ">

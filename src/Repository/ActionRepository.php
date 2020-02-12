@@ -61,8 +61,7 @@ class ActionRepository extends ActionRepositoryDto
             .' on '.self::ALIAS.'.id='.$alias_distante.'.'.$table_source.'_id '
             .' set '.self::ALIAS.'.taux1='.$alias_distante.'.taux1, '
             .self::ALIAS.'.taux2='.$alias_distante.'.taux2 '
-            .' where '.self::ALIAS.'.enable=true '
-            .' and '.self::ALIAS.'.state in ( \'started\',\'cotech\',\'codir\',\'finalised\',\'deployed\',\'measured\',\'clotured\')';
+            .' where '.self::ALIAS.'.state in ( \'started\',\'cotech\',\'codir\',\'finalised\',\'deployed\',\'measured\',\'clotured\')';
 
         try {
             $stmt = $this->getEntityManager()->getConnection()->prepare($sql);

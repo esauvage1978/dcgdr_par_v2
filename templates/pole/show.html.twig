@@ -81,9 +81,14 @@
                         {% for thematique in pole.thematiques %}
                             {{ include('thematique/_show_item.html.twig') }}
                         {% else %}
-                            <div class="list-group-item">
-                                <a class="text-success" href="{{ path('thematique_new') }}">Créer une thématique</a>
-                            </div>
+                            {% if is_granted('ROLE_GESTIONNAIRE') %}
+                                <div class="list-group-item">
+                                    <a class="text-success" href="{{ path('thematique_new') }}">Créer une thématique</a>
+                                </div>
+                            {%  else %}
+                                <span class="text-info" >Aucune thématique pour le moment</span>
+                            {% endif %}
+
                         {% endfor %}
                     </div>
                 </div>

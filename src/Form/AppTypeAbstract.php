@@ -47,6 +47,20 @@ abstract class AppTypeAbstract extends AbstractType
                 self::ATTR => [self::ROWS => 3, self::CSS_CLASS => 'textarea'],
             ]);
     }
+    public function buildFormNameContent(FormBuilderInterface $builder): FormBuilderInterface
+    {
+        return $builder
+            ->add('name', TextType::class, [
+                self::LABEL => 'Nom',
+                self::REQUIRED => true,
+            ])
+
+            ->add('content', TextareaType::class, [
+                self::LABEL => 'Description',
+                self::REQUIRED => false,
+                self::ATTR => [self::ROWS => 3, self::CSS_CLASS => 'textarea'],
+            ]);
+    }
 
     public function buildFormOrganismes(FormBuilderInterface $builder): FormBuilderInterface
     {

@@ -2,9 +2,7 @@
     <a href="{{ url('action_show',{id:action.id}) }}">
         <h3>{{ action.name }}</h3>
     </a>
-
-    <div style="padding-top: 30px">
-        <p>
+    <div >
             <em>Classement : </em>
         <ul>
             <li>{{ action.category.thematique.pole.axe.name }}</li>
@@ -12,7 +10,6 @@
             <li>{{ action.category.thematique.name }}</li>
             <li>{{ action.category.name }}</li>
         </ul>
-        </p>
         <p>
             <em>R&eacute;f&eacute;rence : </em><strong>{{ action.category.thematique.ref }}
                 -{{ action.category.ref }}
@@ -39,7 +36,7 @@
                 </strong>
             </p>
         {% endif %}
-        <p>Commentaire :</p>
+        Commentaire :
         <p><strong>{{ action.contentState | raw }}</strong></p>
 
     </div>

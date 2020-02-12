@@ -88,9 +88,8 @@ class CategoryRepository extends ServiceEntityRepository
 
         $sql = ' update '.$table_source.' '.self::ALIAS
             .' inner join ( '
-            .' select '.$table_source.'_id, avg(taux1) as taux1, avg(taux2) as taux2, enable '
-            .' from '.$table_distante.' where enable=true '
-            .' and state in ( \'started\',\'cotech\',\'codir\',\'finalised\',\'deployed\',\'measured\',\'clotured\')'
+            .' select '.$table_source.'_id, avg(taux1) as taux1, avg(taux2) as taux2 '
+            .' from '.$table_distante.' where state in ( \'started\',\'cotech\',\'codir\',\'finalised\',\'deployed\',\'measured\',\'clotured\')'
             . ' group by '.$table_source.'_id ) '.$alias_distante.' '
             .' on '.self::ALIAS.'.id='.$alias_distante.'.'.$table_source.'_id '
             .' set '.self::ALIAS.'.taux1='.$alias_distante.'.taux1, '

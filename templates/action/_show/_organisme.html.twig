@@ -41,7 +41,7 @@
                                     }) }}
                             {% endif %}
 
-                            {% if deployement | deployementCanAppendUpdate %}
+                            {% if deployement | deployementCanAppendRead %}
                             {{ include('share/__btn_show.html.twig',
                                 {   'url':'deployement_append',
                                     'id':deployement.id,

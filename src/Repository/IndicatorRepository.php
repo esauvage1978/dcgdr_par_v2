@@ -80,7 +80,6 @@ class IndicatorRepository extends ServiceEntityRepository
             ->andwhere(PoleRepository::ALIAS . '.enable=true')
             ->andwhere(ThematiqueRepository::ALIAS . '.enable=true')
             ->andwhere(CategoryRepository::ALIAS . '.enable=true')
-            ->andwhere(ActionRepository::ALIAS . '.enable=true')
             ->andwhere(self::ALIAS . '.enable=true')
             ->andwhere(self::ALIAS . '.indicatorType=\'contributif\'')
             ->orderBy(AxeRepository::ALIAS . '.name', 'ASC')
