@@ -8,7 +8,7 @@ class TransitionToClotured extends TransitionAbstract
 {
     public function getExplains(): array
     {
-        return ['L\'action est en attente de clôture depuis  ' . $this->actionCheck->getDiffDateOfState() . ' jour(s)'];
+        return ['L\'action peut être clôturé.'];
     }
 
     public function check()
