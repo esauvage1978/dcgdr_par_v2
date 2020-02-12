@@ -86,6 +86,10 @@ class WorkflowMailerSubscriber implements EventSubscriberInterface
             $user = $this->getUserWriter($action);
         }
 
+        if (empty($user)) {
+            return -1;
+        }
+
         $datas = [
             'user' => $user,
             'action' => $action,

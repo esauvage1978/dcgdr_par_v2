@@ -94,7 +94,6 @@ class Step1090_ActionFixtures extends Fixture implements FixtureGroupInterface
             ->setId($data['n0_num'])
             ->setName($data['nom'])
             ->setRef(null === $data['num_action'] ? '00' : $data['num_action'])
-            ->setEnable($data['afficher'])
             ->setExperimental($data['experimentation'])
             ->setContent($data['description'])
             ->setCadrage($data['cadrage'])

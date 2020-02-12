@@ -84,9 +84,13 @@
                     {% for pole in axe.poles %}
                         {{ include('pole/_show_item.html.twig') }}
                     {% else %}
+                        {% if is_granted('ROLE_GESTIONNAIRE') %}
                         <div class="list-group-item">
                             <a class="text-success" href="{{ path('pole_new') }}">Créer un pôle</a>
                         </div>
+                        {%  else %}
+                            <span class="text-info" >Aucun pôle pour le moment</span>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

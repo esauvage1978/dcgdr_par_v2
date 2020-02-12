@@ -25,11 +25,6 @@ class Action implements EntityInterface
     private $name;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $enable;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $content;
@@ -217,18 +212,6 @@ class Action implements EntityInterface
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getEnable(): ?bool
-    {
-        return $this->enable;
-    }
-
-    public function setEnable(bool $enable): self
-    {
-        $this->enable = $enable;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 $(function () {
     $('#tableAdministration').DataTable({
-        stateSave: false,
+        stateSave: true,
         responsive:true,
         scrollCollapse: true,
         paging: false,

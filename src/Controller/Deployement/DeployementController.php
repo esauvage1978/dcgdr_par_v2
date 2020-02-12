@@ -128,27 +128,14 @@ class DeployementController extends AppControllerAbstract
         CorbeilleRepository $corbeilleRepository,
         DeployementManager $deployementManager): Response
     {
-        /** @var Organisme $organisme */
-        $organisme = $organismeRepository->findOneBy(['id' => $organismeid]);
 
-        if (!is_a($organisme, Organisme::class)) {
-            $this->addFlash(self::DANGER, 'L\'organisme '.$organismeid.' n\'a pas été trouvé : ');
-
-            return $this->redirectToRoute('deployement_liste_edit', ['id' => $action->getId()]);
-        }
-
-        $corbeilles = $corbeilleRepository->findBy(['organisme' => $organisme, 'showDefault' => true]);
-
-        $deployement = new Deployement();
-        $deployement
-            ->setAction($action)
-            ->setOrganisme($organisme);
-
-        foreach ($corbeilles as $corbeille) {
-            $deployement->addWriter($corbeille);
-        }
-
-        $deployementManager->save($deployement);
+        $deployement= $deployementManager->createDeployement(
+            new Deployement(),
+            $action,
+            $organismeRepository,
+            $organismeid,
+            $corbeilleRepository
+        );
 
         return $this->redirectToRoute('deployement_edit', ['id' => $deployement->getId()]);
     }

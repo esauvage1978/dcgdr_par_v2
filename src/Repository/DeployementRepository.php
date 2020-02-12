@@ -42,7 +42,7 @@ class DeployementRepository extends DeployementRepositoryDto
     public function tauxRaz()
     {
         $queryBuilder = $this->createQueryBuilder(self::ALIAS);
-        $queryBuilder->update(Action::class, self::ALIAS)
+        $queryBuilder->update(Deployement::class, self::ALIAS)
             ->set(self::ALIAS . '.taux1 ', 0)
             ->set(self::ALIAS . '.taux2 ', 0);
 

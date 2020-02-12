@@ -100,7 +100,14 @@
                         {% for action in category.actions %}
                             {{ include('action/_view/_show_item.html.twig') }}
                         {% else %}
-                            <div class="list-group-item">En attente d'ajout</div>
+                            {% if is_granted('ROLE_GESTIONNAIRE') %}
+                                <div class="list-group-item">
+                                    <a class="text-success" href="{{ path('action_new') }}">Créer une action</a>
+                                </div>
+                            {%  else %}
+                                <span class="text-info" >Aucune action pour le moment</span>
+                            {% endif %}
+
                         {% endfor %}
             </div>
         </div>

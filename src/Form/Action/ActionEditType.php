@@ -25,7 +25,7 @@ class ActionEditType extends AppTypeAbstract
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder = $this->buildFormNameEnableContent($builder);
+        $builder = $this->buildFormNameContent($builder);
         $builder = $this->buildFormCategory($builder, false);
         $builder = $this->buildFormReaders($builder);
         $builder = $this->buildFormWriters($builder);
