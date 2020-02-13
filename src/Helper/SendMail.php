@@ -13,6 +13,22 @@ class SendMail
     const DEPLOYEMENT_JALON_TODAY = 'deployementJalonNotificator';
     const ACTION_JALON_TODAY = 'actionJalonNotificator';
 
+    const MailerAction = 'mailerAction';
+    const MailerDeployement = 'mailerDeployement';
+
+    const USERS_TO = 'user';
+    const USERS_FROM = 'user_from';
+
+    /**
+     * @var array
+     */
+    private $usersTo;
+
+    /**
+     * @var array
+     */
+    private $userFrom;
+
     /**
      * @var Environment
      */
@@ -37,25 +53,51 @@ class SendMail
         $this->params = $params;
     }
 
+
     public function send(array $datas, string $context, string $objet = null): int
     {
+        $this->getUserFrom($datas);
 
-        if (is_a($datas['user'], User::class)) {
-            $mail = [$datas['user']->getEmail() => $datas['user']->getName()];
-        } else {
-            $mail=$datas['user'];
-        }
+        $this->getUsersTo($datas);
 
         $message = (new Swift_Message())
             ->setSubject($objet ? $objet : $context)
-            ->setFrom([
-                $this->params->get('mailer.mail') => $this->params->get('mailer.name'), ])
-            ->setTo($mail)
+            ->setFrom($this->userFrom)
+            ->setTo($this->usersTo)
             ->setBody(
-                $this->twig->render('mail/'.$context.'.html.twig', $datas),
+                $this->twig->render('mail/' . $context . '.html.twig', $datas),
                 'text/html'
             );
 
         return $this->mailer->send($message, $failures);
+    }
+
+    private function getUsersTo(array $datas)
+    {
+        $dataUserTo = $datas[self::USERS_TO];
+        if (is_a($dataUserTo, User::class)) {
+            $this->usersTo = [$dataUserTo->getEmail() => $dataUserTo->getName()];
+        } else {
+            $this->usersTo = $dataUserTo;
+        }
+    }
+
+    private function getUserFrom(array $datas)
+    {
+
+        if (array_key_exists(self::USERS_FROM, $datas)) {
+            $dataUserFrom = $datas[self::USERS_FROM];
+            if (is_a($dataUserFrom, User::class)) {
+                $this->userFrom = [$dataUserFrom->getEmail() => $dataUserFrom->getName()];
+            } else {
+                $this->userFrom = $dataUserFrom;
+            }
+        } else {
+            $this->userFrom = [
+                $this->params->get('mailer.mail')
+                =>
+                    $this->params->get('mailer.name')
+            ];
+        }
     }
 }

@@ -11,7 +11,7 @@
     </div>
     <div class="col">
         <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Page d'accueil</a></li>
             <li class="breadcrumb-item"><a href="{{ path('action_index') }}">Liste</a></li>
             <li class="breadcrumb-item active">Action {{ action.id }}</li>
         </ol>
@@ -82,6 +82,26 @@
     <a href="{{ path('workflow_action_history',{'id': action.id }) }}" class="btn btn-link bg-yellow">
         <i class="fa fa-history"></i> Historique des états
     </a>
+    <span class="mb-3"></span>
+    <div class="btn-group show">
+        <button type="button" onclick="gotoComposer();" class="btn btn-primary">
+            <i class="far fa-envelope"></i> Message
+        </button>
+        <button type="button" onclick="gotoHistory();" class="btn bg-yellow">
+            <i class="fa fa-history"></i>
+        </button>
+    </div>
+    <script>
+        function gotoComposer()
+        {
+            window.location='{{ path('mailer_action_composer',{'id': action.id }) }}';
+        }
+        function gotoHistory()
+        {
+            window.location='{{ path('mailer_action_history',{'id': action.id }) }}';
+        }
+    </script>
+
 
 {% endblock %}
 
@@ -124,10 +144,10 @@
 {% block javascripts %}
     <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
 
-<script type="text/javascript">
-    $(function () {
+    <script type="text/javascript">
+        $(function () {
 
-        $('[data-toggle="tooltip"]').tooltip();
-    });
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 {% endblock %}

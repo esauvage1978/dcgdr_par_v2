@@ -169,6 +169,11 @@ class Action implements EntityInterface
      */
     private $showAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Mailer", mappedBy="action")
+     */
+    private $mailers;
+
     public function __construct()
     {
         $this->setState(WorkflowData::STATE_STARTED);
@@ -190,6 +195,7 @@ class Action implements EntityInterface
         $this->cadrageLinks = new ArrayCollection();
         $this->cadrageFiles = new ArrayCollection();
         $this->actionStates = new ArrayCollection();
+        $this->mailers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -758,6 +764,37 @@ class Action implements EntityInterface
     public function setShowAt(?\DateTimeInterface $showAt): self
     {
         $this->showAt = $showAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Mailer[]
+     */
+    public function getMailers(): Collection
+    {
+        return $this->mailers;
+    }
+
+    public function addMailer(Mailer $mailer): self
+    {
+        if (!$this->mailers->contains($mailer)) {
+            $this->mailers[] = $mailer;
+            $mailer->setAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMailer(Mailer $mailer): self
+    {
+        if ($this->mailers->contains($mailer)) {
+            $this->mailers->removeElement($mailer);
+            // set the owning side to null (unless already changed)
+            if ($mailer->getAction() === $this) {
+                $mailer->setAction(null);
+            }
+        }
 
         return $this;
     }
