@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Détail d'une action{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h1 class="m-0 text-dark">Action </h1>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Page d'accueil</a></li>
+            <li class="breadcrumb-item "><a
+                        href="{{ path('action_show',{'id':action.id }) }}">Action {{ action.id }}</a></li>
+            <li class="breadcrumb-item active">Historique des messages</li>
+        </ol>
+    </div>
+
+{% endblock %}
+
+{% block sidebar_sommaire %}
+    {% if action.mailers | length > 0 %}
+        <li class="nav-item ">
+            <a class="nav-link" href="#action">
+                <i class="fa fa-clock"></i> L'action
+            </a>
+        </li>
+    {% endif %}
+    {% for deployement in action.deployements %}
+        {% if deployement.mailers | length > 0 %}
+            <li class="nav-item ">
+                <a class="nav-link" href="#{{ deployement.id }}">
+                    <i class="fa fa-clock"></i> {{ deployement.organisme.fullname }}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+{% block sidebar_button %}
+    {{ include('share/__btn_show.html.twig',
+        {   'url':'action_show',
+            'id':action.id,
+            'titre':'Consulter l\'action'
+        }) }}
+
+    <span class="mb-3"></span>
+
+    {% if action | actionCanUpdate %}
+        {{ include('share/__btn_edit.html.twig',
+            {   'url':'action_edit',
+                'id':action.id,
+                'titre':'Editer l\'action'
+            }) }}
+    {% endif %}
+
+{% endblock %}
+
+    {% block body %}
+
+        <div class="row justify-content-start ">
+            {{ include('action/_show/_name.html.twig') }}
+
+            {% if action.mailers | length > 0 %}
+            <h5 class="text-purple ">
+                l'action
+            </h5>
+            <div class="card  col-12">
+
+                <div class="card-body">
+
+                    <div class="timeline " id="action">
+                        <!-- timeline time label -->
+                        <div class="time-label">
+                            <span class="bg-secondary">Création</span>
+                        </div>
+                        <!-- /.timeline-label -->
+                        {% for mailer in action.mailers %}
+
+                            <!-- timeline item -->
+                            {{ include('mailer/_view/_mailer.html.twig') }}
+                            <!-- END timeline item -->
+
+                        {% endfor %}
+                        <!-- timeline item -->
+
+                        <!-- END timeline item -->
+                        <div>
+                            <i class="fas fa-clock bg-gray"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% for deployement in action.deployements %}
+                {% if deployement.mailers | length > 0 %}
+                    <h5 class="text-purple " id=" {{ deployement.id }}">
+                        le déploiement pour {{ deployement.organisme.fullname }}
+                    </h5>
+                    <div class="card  col-12">
+
+                        <div class="card-body">
+
+                            <div class="timeline">
+                                <!-- timeline time label -->
+                                <div class="time-label">
+                                    <span class="bg-secondary">Création</span>
+                                </div>
+                                <!-- /.timeline-label -->
+                                {% for mailer in deployement.mailers %}
+
+                                    <!-- timeline item -->
+                                    {{ include('mailer/_view/_mailer.html.twig') }}
+                                    <!-- END timeline item -->
+
+                                {% endfor %}
+                                <!-- timeline item -->
+
+                                <!-- END timeline item -->
+                                <div>
+                                    <i class="fas fa-clock bg-gray"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+
+
+    {% endblock %}
+
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
+{% endblock %}

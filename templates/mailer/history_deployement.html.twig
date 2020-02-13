@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Détail d'une action{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h1 class="m-0 text-dark">Action </h1>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Page d'accueil</a></li>
+            <li class="breadcrumb-item "><a
+                        href="{{ path('deployement_append',{'id':deployement.id }) }}">Deploiement {{ deployement.id }}</a></li>
+            <li class="breadcrumb-item active">Historique des messages</li>
+        </ol>
+    </div>
+
+{% endblock %}
+
+{% block sidebar_sommaire %}
+
+    {% for mailer in deployement.mailers %}
+        <li class="nav-item ">
+            <a class="nav-link" href="#{{ mailer.sentat | date('d-m-Y') }}">
+                <i class="fa fa-clock"></i> {{ mailer.sentat | date('d-m-Y') }}
+            </a>
+        </li>
+    {% endfor %}
+{% endblock %}
+{% block sidebar_button %}
+    <div class="btn-group show">
+        <button class="btn btn-primary"
+                onclick="gotoAction()">
+            Action
+        </button>
+        <button class="btn btn-primary"
+                onclick="gotoDeployement()">
+            Déploiement
+        </button>
+    </div>
+    <script>
+        function gotoAction()
+        {
+            window.location='{{ path('action_show', {'id': deployement.action.id}) }}#anchor_organisme';
+        }
+        function gotoDeployement()
+        {
+            window.location='{{ path('deployement_append', {'id': deployement.id}) }}';
+        }
+    </script>
+
+    {% if deployement | deployementCanAppendUpdate %}
+        <span class="mb-3"></span>
+        {{ include('share/__btn_edit.html.twig',
+            {   'url':'deployement_append_edit',
+                'id':deployement.id,
+                'titre':'Modifier le déploiement'
+            }) }}
+    {% endif %}
+
+{% endblock %}
+
+    {% block body %}
+
+        <div class="row justify-content-start ">
+            {{ include('deployement/_show/_name.html.twig') }}
+            <div class="card  col-12">
+
+                <div class="card-body">
+
+                    <div class="timeline">
+                        <!-- timeline time label -->
+                        <div class="time-label">
+                            <span class="bg-secondary">Création</span>
+                        </div>
+                        <!-- /.timeline-label -->
+                        {% for mailer in deployement.mailers %}
+
+                            <!-- timeline item -->
+                            {{ include('mailer/_view/_mailer.html.twig') }}
+                            <!-- END timeline item -->
+
+                        {% endfor %}
+                        <!-- timeline item -->
+
+                        <!-- END timeline item -->
+                        <div>
+                            <i class="fas fa-clock bg-gray"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    {% endblock %}
+
+
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
+{% endblock %}

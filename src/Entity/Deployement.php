@@ -77,6 +77,11 @@ class Deployement implements EntityInterface
      */
     private $deployementFiles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Mailer", mappedBy="deployement")
+     */
+    private $mailers;
+
     public function __construct()
     {
         $this->setTaux1('0');
@@ -86,6 +91,7 @@ class Deployement implements EntityInterface
         $this->readers = new ArrayCollection();
         $this->deployementLinks = new ArrayCollection();
         $this->deployementFiles = new ArrayCollection();
+        $this->mailers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -317,6 +323,37 @@ class Deployement implements EntityInterface
             // set the owning side to null (unless already changed)
             if ($deployementFile->getDeployement() === $this) {
                 $deployementFile->setDeployement(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Mailer[]
+     */
+    public function getMailers(): Collection
+    {
+        return $this->mailers;
+    }
+
+    public function addMailer(Mailer $mailer): self
+    {
+        if (!$this->mailers->contains($mailer)) {
+            $this->mailers[] = $mailer;
+            $mailer->setDeployement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMailer(Mailer $mailer): self
+    {
+        if ($this->mailers->contains($mailer)) {
+            $this->mailers->removeElement($mailer);
+            // set the owning side to null (unless already changed)
+            if ($mailer->getDeployement() === $this) {
+                $mailer->setDeployement(null);
             }
         }
 

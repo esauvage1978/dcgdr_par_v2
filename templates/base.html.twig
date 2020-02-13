@@ -18,7 +18,9 @@
     <link rel="stylesheet" href="{{ absolute_url( asset('dist/css/adminlte.min.css')) }}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ absolute_url( asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')) }}">
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
 
+    <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse ">
@@ -132,10 +134,10 @@
 <!-- Summernote -->
 <script src="{{ absolute_url( asset('plugins/summernote/summernote-bs4.min.js')) }}"></script>
 <script src="{{ absolute_url( asset('plugins/summernote/lang/summernote-fr-FR.js')) }}"></script>
-
+<script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
+<script src="{{ absolute_url( asset('plugins/select2/js/i18n/fr.js')) }}"></script>
 <script src="{{ absolute_url( asset('js/switch_sidebar.js')) }}"></script>
-<link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
-<link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
+
 
 <!-- iCheck for checkboxes and radio inputs -->
 <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
@@ -153,6 +155,7 @@
 
         //Initialize Select2 Elements
         $('.select2').select2({
+            language: "fr",
             theme: 'bootstrap4'
         });
 

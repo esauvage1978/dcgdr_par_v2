@@ -1,0 +1,27 @@
+<div>
+    <i class="fas fa-external-link-alt " id="{{ mailer.sentat | date('d-m-Y') }}"></i>
+    <div class="timeline-item  bg-gray">
+
+        <div class="timeline-body mt-1">
+            <div class="mailbox-read-info">
+                <h5 class="mb-3"><strong>Sujet du message :</strong> {{ mailer.subject }}
+
+                    <span class="mailbox-read-time float-right">{{ mailer.sentat | date('d-m-Y h:m:s') }}</span>
+                </h5>
+
+                <h6><strong>De :</strong> {{ mailer.userFrom }}</h6>
+
+                <h6><strong>A :</strong> {{ mailer.usersTo }}</h6>
+            </div>
+
+            <div class="mailbox-read-message bg-white">
+                <div class=" p-3">
+                    <small>
+                        {{ mailer.content | raw }}
+                    </small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

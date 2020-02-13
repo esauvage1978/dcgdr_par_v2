@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Composez votre message{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body_header %}
+    <div class="col">
+        <h2 class="m-0 text-dark">Composez votre message </h2>
+    </div>
+    <div class="col">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Page d'accueil</a></li>
+            <li class="breadcrumb-item active">Deploiement {{ deployement.id }}</li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block sidebar_sommaire %}
+{% endblock %}
+{% block sidebar_button %}
+    <div class="btn-group show">
+        <button class="btn btn-primary"
+                onclick="gotoAction()">
+            Action
+        </button>
+        <button class="btn btn-primary"
+                onclick="gotoDeployement()">
+            Déploiement
+        </button>
+    </div>
+    <script>
+        function gotoAction()
+        {
+            window.location='{{ path('action_show', {'id': deployement.action.id}) }}#anchor_organisme';
+        }
+        function gotoDeployement()
+        {
+            window.location='{{ path('deployement_append', {'id': deployement.id}) }}';
+        }
+    </script>
+
+    {% if deployement | deployementCanAppendUpdate %}
+        <span class="mb-3"></span>
+        {{ include('share/__btn_edit.html.twig',
+            {   'url':'deployement_append_edit',
+                'id':deployement.id,
+                'titre':'Modifier le déploiement'
+            }) }}
+    {% endif %}
+
+
+
+    <span class="mb-3"></span>
+
+    <a href="{{ path('mailer_deployement_history',{'id': deployement.id }) }}" class="btn btn-link bg-yellow">
+        <i class="fa fa-history"></i> Historique des messages
+    </a>
+{% endblock %}
+
+{% block body %}
+
+    <div class="row justify-content-center">
+
+        <div class="{{ col_primary }}">
+            {{ form_start(form) }}
+            <div class="card ">
+                <div class="card-body">
+
+                    <h6 class="text-purple ">
+                        Pilotes des déploiements
+                    </h6>
+                    <div class="card-body pt-0">
+                        <div class="form-group row">
+                            {{ form_widget(form.deployementwriter) }}
+                        </div>
+                    </div>
+
+                    <h6 class="text-purple ">
+                        Mail
+                    </h6>
+                    <div class="card-body pt-0">
+                        <div class="form-group row">
+                            {{ form_widget(form.subject) }}
+                        </div>
+                        <div class="form-group row">
+                            {{ form_widget(form.content) }}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card ">
+                <div class="card-footer">
+                    <div class="float-right">
+                        <button type="submit" class="btn btn-primary"><i class="far fa-envelope"></i> Envoyer</button>
+                    </div>
+                    <a href="{{ path("mailer_deployement_composer",{'id':deployement.id}) }}" class="btn btn-default">
+                        <i class="fas fa-times"></i> Annuler
+                    </a>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
+{% endblock %}
