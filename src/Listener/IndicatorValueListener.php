@@ -44,10 +44,10 @@ class IndicatorValueListener
     /**
      * @param IndicatorValue $indicatorValue
      *
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
+     * @ORM\PreUpdate()
+     * @ORM\PrePersist()
      */
-    public function prePersistHandler(IndicatorValue $indicatorValue)
+    public function preUpdateHandler(IndicatorValue $indicatorValue)
     {
         $indicatorValue
             ->setTaux1(
@@ -58,18 +58,18 @@ class IndicatorValueListener
             );
     }
 
+
+
     /**
      * @param IndicatorValue $indicatorValue
      *
-     * @ORM\PostPersist()
+     * @ORM\PrePersist()
      * @ORM\PostUpdate()
      *
      * @throws Exception
      */
-    public function postPersistHandler(IndicatorValue $indicatorValue)
+    public function postUpdateHandler(IndicatorValue $indicatorValue)
     {
-        $this->calculTauxCommand->runTraitement();
-
         $this->iVHistoryCreate->createHistory($indicatorValue);
     }
 }

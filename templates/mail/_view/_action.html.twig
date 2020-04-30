@@ -36,8 +36,9 @@
                 </strong>
             </p>
         {% endif %}
-        Commentaire :
-        <p><strong>{{ action.contentState | raw }}</strong></p>
-
+        {%  if action.contentState %}
+            Commentaire :
+            <p><strong>{{ action.contentState | raw }}</strong></p>
+        {% endif %}
     </div>
 </div>

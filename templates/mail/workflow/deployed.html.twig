@@ -1,7 +1,11 @@
-Bonjour,
-<br/><br/>
-L'action ci-dessous est déployée.
-<br/><br/>
-{{ include('mail/_view/_action.html.twig') }}
-<br/><br/>
-L'équipe de l'application DCGDR PAR
+{% extends './mail/template.html.twig' %}
+
+{% block title %} Action déployée {% endblock %}
+{% block title_content %} Action déployée {% endblock %}
+
+{% block body %}
+    <p>L'action ci-dessous est déployée.</p>
+    <p>
+        {{ include('mail/_view/_action.html.twig') }}
+    </p>
+{% endblock %}

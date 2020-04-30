@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\EntityInterface;
+use App\Helper\IndicatorValueHistoryCreate;
 use App\Validator\LocalValidatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -18,8 +19,11 @@ abstract class ManagerAbstract implements ManagerInterface
      */
     protected $validator;
 
-    public function __construct(EntityManagerInterface $manager, LocalValidatorInterface $validator)
-    {
+
+    public function __construct(
+        EntityManagerInterface $manager,
+        LocalValidatorInterface $validator
+) {
         $this->manager = $manager;
         $this->validator = $validator;
     }
@@ -34,6 +38,8 @@ abstract class ManagerAbstract implements ManagerInterface
 
         $this->manager->persist($entity);
         $this->manager->flush();
+
+
 
         return true;
     }
@@ -53,4 +59,6 @@ abstract class ManagerAbstract implements ManagerInterface
         $this->manager->remove($entity);
         $this->manager->flush();
     }
+
+
 }

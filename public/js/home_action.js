@@ -1,9 +1,6 @@
-function searchCount(domaine, route, filtre) {
-    var selecteurCompletOverlay="#overlay_" + domaine;
-    var selecteurCompletBadge="#badge_" + domaine;
-    var selecteurAll='#' + domaine;
 
-    $(selecteurCompletOverlay).removeClass('d-none');
+function searchCount(domaine, route, filtre) {
+    $("#overlay_" + domaine).removeClass('d-none');
 
     $.ajax({
         method: "POST",
@@ -11,21 +8,19 @@ function searchCount(domaine, route, filtre) {
         data: {},
         dataType: 'json',
         success: function (json) {
-
+            $("#overlay_" + domaine).addClass('d-none');
             if (json >  0) {
-                $(selecteurCompletBadge).text(json);
+                $("#badge_" + domaine).text(json);
             } else {
-                $(selecteurAll).remove();
+                $('#' + domaine).remove();
             }
-            $(selecteurCompletOverlay).addClass('d-none');
+
         }
     });
 }
 
-function searchCountAxe(axeId, route,) {
-    var selecteurCompletOverlay="#overlay_axe_" + axeId;
-    var selecteurCompletBadge="#axe_" + axeId;
-    $(selecteurCompletOverlay).removeClass('d-none');
+function searchCountAxe(axeId, route) {
+    $("#overlay_axe_" + axeId).removeClass('d-none');
 
     $.ajax({
         method: "POST",
@@ -33,18 +28,13 @@ function searchCountAxe(axeId, route,) {
         data: {},
         dataType: 'json',
         success: function (json) {
-
+            $("#overlay_axe_" + axeId).addClass('d-none');
             if (json ===  0) {
-
-                $(selecteurCompletBadge).text(json + ' action');
-
+                $("#axe_" + axeId).text(json + ' action');
             } else if (json >  0) {
-
-                $(selecteurCompletBadge).text(json + ' actions');
-
+                $("#axe_" + axeId).text(json + ' actions');
             }
-
-            $(selecteurCompletOverlay).addClass('d-none');
         }
     });
 }
+

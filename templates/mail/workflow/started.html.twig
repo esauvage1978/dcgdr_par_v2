@@ -1,8 +1,11 @@
-Bonjour,
-<br/><br/>
-Une action dont vous êtes le pilote est réouverte.
-<br/><br/>
-{{ include('mail/_view/_action.html.twig') }}
-<br/><br/>
+{% extends './mail/template.html.twig' %}
 
-L'équipe de l'application DCGDR PAR
+{% block title %} Action réouverte{% endblock %}
+{% block title_content %} Action réouverte {% endblock %}
+
+{% block body %}
+    <p>Une action dont vous êtes le pilote est réouverte.</p>
+    <p>
+        {{ include('mail/_view/_action.html.twig') }}
+    </p>
+{% endblock %}

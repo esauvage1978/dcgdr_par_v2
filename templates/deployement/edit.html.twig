@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} Détail d'une action{% endblock %}
+{% block title %}{{ parent() }} Déploiement pour l'organisme : {{ deployement.organisme.fullname }}{% endblock %}
 
 {% block stylesheets %}
     <!-- Select2 -->
@@ -13,10 +13,10 @@
 {% endblock %}
 
 {% block body_header %}
-    <div class="col-xs-12 col-md-4">
-        <h1 class="m-0 text-dark">Détail de l'action </h1>
+    <div class="col-xs-12 col-md-8">
+        <h1 class="m-0 text-dark">Déploiement pour l'organisme : {{ deployement.organisme.fullname }} </h1>
     </div>
-    <div class="col-xs-12  col-md-8">
+    <div class="col-xs-12  col-md-4">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
             <li class="breadcrumb-item ">
@@ -30,6 +30,38 @@
 
 {% endblock %}
 
+{% block sidebar_sommaire %}
+{% endblock %}
+{% block sidebar_button %}
+    {% if deployement | deployementCanUpdate %}
+        {{ include('share/__btn_save_onclick.html.twig') }}
+    {% endif %}
+    <span class="mb-3"></span>
+    {% if deployement | deployementCanAppendUpdate %}
+        {{ include('share/__btn_append.html.twig',
+            {   'url':'deployement_append_edit',
+                'id':deployement.id,
+                'sm':true
+            }) }}
+    {% endif %}
+    <span class="mb-3"></span>
+    {% if deployement | deployementCanDelete %}
+        <span class="btn btn-danger " onclick="$('#delete').click();">
+            <i class="fas fa-trash"></i> Supprimer
+        </span>
+    {% endif %}
+    <span class="mb-3"></span>
+    <a class="btn btn-link text-primary "
+       href="{{ path('deployements_for_action', {'id': deployement.action.id}) }}">
+        <i class="fas fa-step-backward"></i> Liste des organismes
+    </a>
+    <span class="mb-3"></span>
+    <a class="btn btn-link text-primary"
+       href="{{ path('action_edit',{'id':deployement.action.id}) }}#anchor_organisme">
+        <i class="fas fa-step-backward"></i>
+        Retour à l'action
+    </a>
+{% endblock %}
     {% block body %}
 
         <div class="d-none">
@@ -37,80 +69,61 @@
         </div>
         {{ form_start(form) }}
         <div class="row justify-content-center">
-            <div class="col-sm-12 col-md-12 col-lg-6  ">
-                <div class="card ">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6 ">
-                                <h5 class="text-purple p-1  text-center ">
+            <div class="col-sm-12 col-md-12 col-lg-8  ">
+                <div class="row ">
+                    <div class="col-sm-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <h5 class="text-purple p-1 pb-4 text-center ">
                                     Données générales
                                 </h5>
                                 <div class="form-group row ">
-                                    <label class="col-sm-6 col-form-label">
+                                    <label class="col-sm-3 col-form-label">
                                         Organisme
                                     </label>
                                     <div class="col mt-1">
-                                        {{ deployement.organisme.name }}
+                                        {{ deployement.organisme.fullname }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-6 col-form-label" for="{{ form.showat.vars.id }}">
+                                    <label class="col-sm-3 col-form-label" for="{{ form.showat.vars.id }}">
                                         Jalon
                                     </label>
                                     <div>
                                         {{ form_widget(form.showat) }}
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-6 col-form-label" for="{{ form.endat.vars.id }}">
+
+                                    <label class="col-sm-3 col-form-label" for="{{ form.endat.vars.id }}">
                                         Date de fin
                                     </label>
                                     <div>
                                         {{ form_widget(form.endat) }}
                                     </div>
                                 </div>
-
                                 <div class="d-none">
                                     <button name="update" id="update">{{ button_label|default('Save') }}</button>
                                 </div>
                             </div>
-                            <div class="col-sm-6 ">
-                                {{ include('deployement/_edit/_intervenant.html.twig') }}
-                                {{ include('deployement/_edit/_deployementFile.html.twig',{'deployement':deployement}) }}
-                            </div>
-
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col  d-flex justify-content-between align-items-center">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                {{ include('deployement/_edit/_intervenant.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
 
-                                <a class="btn btn-secondary"
-                                   href="{{ path('action_edit',{'id':deployement.action.id}) }}#anchor_organisme">
-                                    <i class="fas fa-step-backward"></i>
-                                    Action
-                                </a>
-
-                                <a class="btn btn-secondary "
-                                   href="{{ path('deployements_for_action', {'id': deployement.action.id}) }}">
-                                    <i class="fas fa-step-backward"></i> Liste des organismes
-                                </a>
-
-                                {% if deployement | deployementCanUpdate %}
-                                    {{ include('share/__btn_save.html.twig') }}
-                                {% endif %}
-
-                                {% if deployement | deployementCanDelete %}
-                                    <span class="btn btn-danger " onclick="$('#delete').click();">
-                                        <i class="fas fa-trash"></i> Supprimer
-                                    </span>
-                                {% endif %}
+                                {{ include('deployement/_edit/_deployementFile.html.twig',{'deployement':deployement}) }}
 
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="col-sm-12 col-md-12 col-lg-4 ">
                 <div class="card ">
@@ -138,6 +151,7 @@
 
         </div>
         <div class="d-none">
+            {{ include('share/__btn_save.html.twig') }}
             {{ form_rest(form) }}
         </div>
         {{ form_end(form) }}
@@ -149,6 +163,7 @@
     <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
     <script src="{{ absolute_url( asset('js/indicatorvalue.js')) }}"></script>
     <script src="{{ absolute_url( asset('js/file/deployement_file.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
     <script type="text/javascript">
         $(function () {
             $('.indicatorvalue').click(function () {
@@ -164,4 +179,6 @@
             });
         });
     </script>
+
 {% endblock %}
+

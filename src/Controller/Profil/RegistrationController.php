@@ -79,7 +79,7 @@ class RegistrationController extends AppControllerAbstract
     public function sendmailActivationAction(UserSendMail $mail): Response
     {
         $user = $this->getUser();
-        $mail->send($user, UserSendmail::VALIDATE, 'Snowtrick : Validation de l\'email');
+        $mail->send($user, UserSendmail::VALIDATE, 'DCGDR PAR : Validation de l\'email');
         $this->addFlash('success', 'Le mail est envoyé, merci de consulter votre messagerie.');
 
         return $this->redirectToRoute('home');

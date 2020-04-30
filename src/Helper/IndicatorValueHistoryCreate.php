@@ -40,6 +40,9 @@ class IndicatorValueHistoryCreate
         if (null === $this->securityContext->getToken()) {
             return;
         }
+        if (!$indicatorValue->getId()) {
+            return;
+        }
         /** @var User $user */
         $user = $this->securityContext->getToken()->getUser();
 
@@ -62,6 +65,8 @@ class IndicatorValueHistoryCreate
 
     private function entryPresente(IndicatorValue $indicatorValue, User $user)
     {
+
+
         $ivh = $this->repository->getLastEntry($indicatorValue->getId());
 
         if (empty($ivh)) {

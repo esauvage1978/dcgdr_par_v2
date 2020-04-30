@@ -1,9 +1,12 @@
-Bonjour,
-<br/><br/>
-Une action dont vous êtes le pilote est abandonnée.
-<br/><br/>
-{{ include('mail/_view/_action.html.twig') }}
+{% extends './mail/template.html.twig' %}
 
-<br/><br/>
+{% block title %} Action abandonnée {% endblock %}
+{% block title_content %} Action abandonnée {% endblock %}
 
-L'équipe de l'application DCGDR PAR
+{% block body %}
+    <p>Une action dont vous êtes le pilote est abandonnée.</p>
+    <p>
+        {{ include('mail/_view/_action.html.twig') }}
+    </p>
+{% endblock %}
+

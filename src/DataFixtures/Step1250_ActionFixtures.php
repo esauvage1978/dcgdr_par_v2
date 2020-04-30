@@ -9,6 +9,7 @@ use App\Manager\ActionManager;
 use App\Workflow\WorkflowActionManager;
 use App\Validator\ActionValidator;
 use App\Workflow\WorkflowData;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -129,7 +130,7 @@ class Step1250_ActionFixtures extends Fixture implements FixtureGroupInterface
             return null;
         }
 
-        return new \DateTime(str_replace('/', '-', $date));
+        return new DateTime(str_replace('/', '-', $date));
     }
 
     public static function getGroups(): array

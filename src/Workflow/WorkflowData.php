@@ -35,7 +35,6 @@ class WorkflowData
     const STATES_DEPLOYEMENT_UPDATE=['started','finalised'];
     const STATES_DEPLOYEMENT_READ=['deployed','measured','clotured','abandonned'];
     const STATES_DEPLOYEMENT_APPEND=['deployed'];
-
     public static function getTransitionsForState($state)
     {
         $transitions = [];

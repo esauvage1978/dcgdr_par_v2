@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Dto\ActionSearchDto;
+use App\Dto\DeployementSearchDto;
 use App\Entity\Action;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -111,7 +112,6 @@ class ActionRepositoryDto extends ServiceEntityRepository
     private function initialise_select_for_table()
     {
         $this->initialise_select();
-        $this->initialise_select();
         $this->builder
             ->addSelect(CorbeilleRepository::ALIAS_ACTION_WRITERS)
             ->leftJoin(self::ALIAS . '.writers', CorbeilleRepository::ALIAS_ACTION_WRITERS);
@@ -177,6 +177,8 @@ class ActionRepositoryDto extends ServiceEntityRepository
         $this->initialise_where_pole();
         $this->initialise_where_thematique();
         $this->initialise_where_category();
+
+        $this->initialise_where_has_writers();
 
         $this->initialise_where_search();
 
@@ -290,6 +292,15 @@ class ActionRepositoryDto extends ServiceEntityRepository
         }
     }
 
+    private function initialise_where_has_writers()
+    {
+        if ($this->dto->getHasWriters()==ActionSearchDto::WRITERS_PRESENT) {
+            $qBLu = $this->createQueryBuilder('id')
+                ->innerJoin( 'id.writers', 'cordw');
+
+            $this->builder->andwhere(self::ALIAS. '.id NOT IN (' . $qBLu->getDQL() . ')');
+        }
+    }
     private function initialise_where_search()
     {
         $dto = $this->dto;

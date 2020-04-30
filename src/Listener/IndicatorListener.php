@@ -15,7 +15,6 @@ class IndicatorListener
      * @param Indicator $indicator
      *
      * @ORM\PrePersist
-     * @ORM\PreUpdate
      */
     public function prePersistHandler(Indicator $indicator)
     {

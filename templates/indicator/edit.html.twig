@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
 {% endblock %}
 
+
+
 {% block body_header %}
     <div class="col">
         <h1 class="m-0 text-dark">Indicateurs de l'action {{ indicator.action.id }}</h1>
@@ -19,12 +21,31 @@
     <div class="col">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
-            <li class="breadcrumb-item "><a href="{{ path('action_edit',{'id':indicator.action.id}) }}#anchor_indicateur">Action</a></li>
+            <li class="breadcrumb-item "><a
+                        href="{{ path('action_edit',{'id':indicator.action.id}) }}#anchor_indicateur">Action</a></li>
             <li class="breadcrumb-item active">Modification</li>
         </ol>
     </div>
 {% endblock %}
 
+{% block sidebar_sommaire %}
+{% endblock %}
+{% block sidebar_button %}
+    {% if indicator | indicatorCanUpdate %}
+        {{ include('share/__btn_save_onclick.html.twig') }}
+    {% endif %}
+    <span class="mb-3"></span>
+    {% if is_granted('ROLE_GESTIONNAIRE') %}
+        <span class="btn btn-danger " onclick="$('#delete').click();">
+             <i class="fas fa-trash"></i> Supprimer
+        </span>
+    {% endif %}
+    <span class="mb-3"></span>
+    <a class="btn btn-link text-primary "
+       href="{{ path('action_edit', {'id': indicator.action.id}) }}#anchor_indicateur">
+        <i class="fas fa-step-backward"></i> Retour à l'action
+    </a>
+{% endblock %}
 
 {% block body %}
 
@@ -34,29 +55,10 @@
             <div class="card ">
 
                 {{ include('indicator/_form.html.twig') }}
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col  d-flex justify-content-between align-items-center">
-
-                            <a class="btn btn-secondary " href="{{ path('action_edit', {'id': indicator.action.id}) }}#anchor_indicateur">
-                                <i class="fas fa-step-backward"></i> Retour à l'action
-                            </a>
-
-                            {{ include('share/__btn_save.html.twig') }}
-
-                            {% if is_granted('ROLE_GESTIONNAIRE') %}
-                                <span class="btn btn-danger " onclick="$('#delete').click();">
-                                 <i class="fas fa-trash"></i> Supprimer
-                            </span>
-                            {% endif %}
-
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="col-sm-12 col-md-12 col-lg-4 ">
-            <div class="card" >
+            <div class="card">
                 <div class="card-footer">
                     Déploiement de l'indicateur
                 </div>
@@ -76,7 +78,10 @@
             </div>
         </div>
     </div>
-    {{ form_rest(form) }}
+    <div class="d-none">
+        {{ include('share/__btn_save.html.twig') }}
+        {{ form_rest(form) }}
+    </div>
     {{ form_end(form) }}
 
     <div class="d-none">
@@ -95,15 +100,15 @@
             });
         });
     </script>
-
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
     <script src="{{ absolute_url( asset('js/indicatorvalue.js')) }}"></script>
     <script type="text/javascript">
         $(function () {
             $('.indicatorvalue').click(function () {
-                var selecteur=$(this).attr("id");
-                var route="{{ path('ajax_create_deployement') }}";
+                var selecteur = $(this).attr("id");
+                var route = "{{ path('ajax_create_deployement') }}";
 
-                create_deployement(selecteur,route);
+                create_deployement(selecteur, route);
             });
         });
     </script>

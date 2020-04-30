@@ -4,7 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Message;
 use App\Form\Admin\MessageType;
+use App\Manager\MessageManager;
 use App\Repository\MessageRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +19,7 @@ class MessageController extends AbstractController
 {
     /**
      * @Route("/", name="message_index", methods={"GET"})
+     * @IsGranted("ROLE_GESTIONNAIRE")
      */
     public function index(MessageRepository $messageRepository): Response
     {
@@ -27,8 +30,9 @@ class MessageController extends AbstractController
 
     /**
      * @Route("/new", name="message_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_GESTIONNAIRE")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, MessageManager $manager): Response
     {
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message);
@@ -36,13 +40,10 @@ class MessageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $message
-                ->setUser($this->getUser())
-                ->setModifyAt(new \DateTime());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($message);
-            $entityManager->flush();
+                ->setUser($this->getUser());
+            $manager->save($message);
 
-            return $this->redirectToRoute('message_index');
+            return $this->redirectToRoute('message_edit',['id'=>$message->getId()]);
         }
 
         return $this->render('message/new.html.twig', [
@@ -52,19 +53,10 @@ class MessageController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="message_show", methods={"GET"})
-     */
-    public function show(Message $message): Response
-    {
-        return $this->render('message/show.html.twig', [
-            'message' => $message,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="message_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_GESTIONNAIRE")
      */
-    public function edit(Request $request, Message $message): Response
+    public function edit(Request $request, Message $message, MessageManager $messageManager): Response
     {
         $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
@@ -72,10 +64,10 @@ class MessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $message
                 ->setUser($this->getUser())
-                ->setModifyAt(new \DateTime());
-            $this->getDoctrine()->getManager()->flush();
+                ;
+            $messageManager->save($message);
 
-            return $this->redirectToRoute('message_index');
+            return $this->redirectToRoute('message_edit',['id'=>$message->getId()]);
         }
 
         return $this->render('message/edit.html.twig', [
@@ -86,13 +78,12 @@ class MessageController extends AbstractController
 
     /**
      * @Route("/{id}", name="message_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_GESTIONNAIRE")
      */
-    public function delete(Request $request, Message $message): Response
+    public function delete(Request $request, Message $message, MessageManager $messageManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$message->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($message);
-            $entityManager->flush();
+            $messageManager->remove($message);
         }
 
         return $this->redirectToRoute('message_index');

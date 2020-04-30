@@ -6,6 +6,7 @@ use App\Dto\DeployementSearchDto;
 use App\Entity\User;
 use App\Repository\DeployementRepository;
 use App\Workflow\WorkflowData;
+use DateTime;
 use Symfony\Component\Security\Core\Security;
 
 class DeployementFilter
@@ -45,6 +46,7 @@ class DeployementFilter
             case 'without_jalon':
                 $dto
                     ->setUserWriter($user->getId())
+                    ->setHasDateEndOfDeployement(DeployementSearchDto::DATE_STATUS_NULL)
                     ->setJalonNotPresent(true)
                     ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
 
@@ -54,7 +56,8 @@ class DeployementFilter
             case 'jalon_to_late':
                 $dto
                     ->setUserWriter($user->getId())
-                    ->setJalonFrom((new \DateTime())->format('Y-m-d'))
+                    ->setHasDateEndOfDeployement(DeployementSearchDto::DATE_STATUS_NULL)
+                    ->setJalonFrom((new DateTime())->format('Y-m-d'))
                     ->setJalonOperator('<')
                     ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
 
@@ -64,8 +67,9 @@ class DeployementFilter
             case 'jalon_to_near':
                 $dto
                     ->setUserWriter($user->getId())
-                    ->setJalonFrom((new \DateTime())->format('Y-m-d'))
-                    ->setJalonTo(date('Y-m-d', strtotime((new \DateTime())->format('Y-m-d').' +8 day')))
+                    ->setHasDateEndOfDeployement(DeployementSearchDto::DATE_STATUS_NULL)
+                    ->setJalonFrom((new DateTime())->format('Y-m-d'))
+                    ->setJalonTo(date('Y-m-d', strtotime((new DateTime())->format('Y-m-d').' +8 day')))
                     ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
 
                 $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
@@ -74,7 +78,8 @@ class DeployementFilter
             case 'jalon_to_come_up':
                 $dto
                     ->setUserWriter($user->getId())
-                    ->setJalonFrom(date('Y-m-d', strtotime((new \DateTime())->format('Y-m-d').' +8 day')))
+                    ->setHasDateEndOfDeployement(DeployementSearchDto::DATE_STATUS_NULL)
+                    ->setJalonFrom(date('Y-m-d', strtotime((new DateTime())->format('Y-m-d').' +8 day')))
                     ->setJalonOperator('>')
                     ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
 
@@ -82,23 +87,43 @@ class DeployementFilter
                 $complement = ' - Avec un jalon à traiter dans plus de 7 jours';
                 break;
             default:
-                if (strstr($filter, 'organisme_')) {
+                if (strstr($filter, 'piloteorganisme_')) {
+                    $dto
+                        ->setOrganismeId(substr($filter, strlen('piloteorganisme_') - strlen($filter)))
+                        ->setHasDateEndOfDeployement(DeployementSearchDto::DATE_STATUS_NULL)
+                        ->setHasWriters(DeployementSearchDto::WRITERS_PRESENT)
+                        ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
+
+                    $resultRepo=$this->repository->findAllForDto($this->deploiementSearchDto);
+                    break;
+                } elseif (strstr($filter, 'organisme_')) {
                     $dto
                         ->setOrganismeId(substr($filter, strlen('organisme_') - strlen($filter)))
+                        ->setHasDateEndOfDeployement(DeployementSearchDto::DATE_STATUS_ALL)
                         ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
+
                     $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
                     break;
                 }
-                // no break
+            // no break
             case 'all':
                 $dto
                     ->setUserWriter($user->getId())
+                    ->setHasDateEndOfDeployement(DeployementSearchDto::DATE_STATUS_NULL)
                     ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
                 $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
                 break;
+            case 'allterminated':
+                $dto
+                    ->setUserWriter($user->getId())
+                    ->setHasDateEndOfDeployement(DeployementSearchDto::DATE_STATUS_NOT_NULL)
+                    ->actionSearchDto->setStates(WorkflowData::STATES_DEPLOYEMENT_APPEND);
+                $resultRepo = $this->repository->findAllForDto($this->deploiementSearchDto);
+                $complement = ' - L\'organisme a terminé d\'enrichir ce déploiement';
+                break;
         }
 
-        return  [
+        return [
             'deployements' => $resultRepo,
             'complement' => $complement,
             'nbr' => count($resultRepo),

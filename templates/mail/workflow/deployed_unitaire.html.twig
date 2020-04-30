@@ -1,7 +1,11 @@
-Bonjour,
-<br/><br/>
-L'action ci-dessous est déployée. Merci de compléter les indicateurs associés à votre organisme.
-<br/><br/>
-{{ include('mail/_view/_deployement.html.twig') }}
-<br/><br/>
-L'équipe de l'application DCGDR PAR
+{% extends './mail/template.html.twig' %}
+
+{% block title %} Déploiement déployé {% endblock %}
+{% block title_content %} Déploiement déployé {% endblock %}
+
+{% block body %}
+    <p>L'action ci-dessous est déployée. Merci de compléter les indicateurs associés à votre organisme.</p>
+    <p>
+        {{ include('mail/_view/_deployement.html.twig') }}
+    </p>
+{% endblock %}

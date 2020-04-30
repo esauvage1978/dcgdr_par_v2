@@ -4,6 +4,11 @@ namespace App\Dto;
 
 class DeployementSearchDto
 {
+    const DATE_STATUS_NULL='null';
+    const DATE_STATUS_NOT_NULL='notnull';
+    const DATE_STATUS_ALL='all';
+
+    const WRITERS_PRESENT='writers';
 
     private $UserWriter;
     private $indicatorEnable;
@@ -15,7 +20,64 @@ class DeployementSearchDto
     private $jalonNotPresent;
     private $search;
     private $organismeId;
+    private $organismesId;
+
+    /**
+     * @return mixed
+     */
+    public function getOrganismesId()
+    {
+        return $this->organismesId;
+    }
+
+    /**
+     * @param mixed $organismesId
+     * @return DeployementSearchDto
+     */
+    public function setOrganismesId($organismesId)
+    {
+        $this->organismesId = $organismesId;
+        return $this;
+    }
     private $searchDate;
+    private $hasDateEndOfDeployement;
+    private $hasWriters;
+
+    /**
+     * @return mixed
+     */
+    public function getHasWriters()
+    {
+        return $this->hasWriters;
+    }
+
+    /**
+     * @param mixed $hasWriters
+     * @return DeployementSearchDto
+     */
+    public function setHasWriters($hasWriters)
+    {
+        $this->hasWriters = $hasWriters;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHasDateEndOfDeployement()
+    {
+        return $this->hasDateEndOfDeployement;
+    }
+
+    /**
+     * @param mixed $hasDateEndOfDeploiement
+     * @return DeployementSearchDto
+     */
+    public function setHasDateEndOfDeployement($hasDateEndOfDeployement)
+    {
+        $this->hasDateEndOfDeployement = $hasDateEndOfDeployement;
+        return $this;
+    }
 
     /**
      * @return mixed

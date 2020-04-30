@@ -1,71 +1,11 @@
-﻿Bonjour {{ user.name }},
-<br/><br/>
-Voici la liste des déploiements dont le jalon est positionné à aujourd'hui.
-<br/><br/>
-<table style="width:100%;border:1px solid black" >
-    <thead>
-    <tr>
-        <th >#</th>
-        <th >Plan d'actions</th>
-        <th >Action</th>
-        <th >Organisme</th>
-        <th >Nombre d'indicateurs associés</th>
-        <th >Taux</th>
-        <th ></th>
-    </tr>
-    </thead>
-    <tbody>
+﻿{% extends './mail/template.html.twig' %}
+
+{% block title %} Jalon pour les déploiements {% endblock %}
+{% block title_content %} Jalon pour les déploiements {% endblock %}
+
+{% block body %}
+    <p>Voici la liste des déploiements dont le jalon est positionné à aujourd'hui.</p>
     {% for deployement in deployements %}
-        <tr>
-            <td >
-                {{ deployement.action.category.thematique.ref }}
-                -{{ deployement.action.category.ref }}-{{ deployement.action.ref }}
-                <br/>
-                {{ deployement.id }}
-            </td>
-            <td >
-                {{ deployement.action.category.thematique.pole.axe.name }}
-                <br/>
-                {{ deployement.action.category.thematique.pole.name }}
-                <br/>
-                {{ deployement.action.category.thematique.name }}
-                <br/>
-                {{ deployement.action.category.name }}
-            </td>
-            <td>
-                {% if deployement.action | actionCanRead %}
-                    <a href="{{ path('action_show', {'id': deployement.action.id}) }}">
-                        {{ deployement.action.name }}
-                    </a>
-                {% else %}
-                    {{ deployement.action.name }}
-                {% endif %}
-            </td>
-            <td>
-                {{ deployement.organisme.name }}
-            </td>
-            <td >
-
-                {% set nbr=deployement.indicatorValues | sumEnable %}
-                {{ nbr }}
-            </td>
-            <td >
-                {{ deployement.taux1 }} %
-            </td>
-            <td >
-
-
-                {{ include('share/__btn_append.html.twig',
-                    {   'url':'deployement_append_edit',
-                        'id':deployement.id,
-                        'sm':true
-                    }) }}
-
-            </td>
-        </tr>
+        {{ include('mail/_view/_deployement.html.twig') }}
     {% endfor %}
-    </tbody>
-</table>
-
-<br/><br/>
-Merci d'utiliser DCGDR PAR et à bientôt
+{% endblock %}

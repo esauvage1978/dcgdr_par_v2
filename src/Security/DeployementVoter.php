@@ -128,6 +128,9 @@ class DeployementVoter extends Voter
 
     public function canAppendUpdate(Deployement $deploiement, User $user)
     {
+        if (!in_array($deploiement->getAction()->getState(), WorkflowData::STATES_DEPLOYEMENT_UPDATE)) {
+            return true;
+        }
 
         if (!in_array($deploiement->getAction()->getState(), WorkflowData::STATES_DEPLOYEMENT_APPEND)) {
             return false;

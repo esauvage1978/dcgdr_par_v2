@@ -1,6 +1,6 @@
 <div style="padding:10px; border-radius: 10px;border: 1px solid lightskyblue">
     <a href="{{ url('deployement_append_edit',{id:deployement.id}) }}">
-        <h3>{{ deployement.action.name }}</h3>
+        <h3>{{ deployement.organisme.fullname }} : {{ deployement.action.name }}</h3>
     </a>
 
     <div >
@@ -45,7 +45,8 @@
     </div>
 </div>
 
-<div style="padding:10px; border-radius: 10px;border: 1px solid lightskyblue">
+<div style="padding:10px; border-radius: 10px;border: 1px solid lightgrey">
+    Indicateurs :<br/>
     {% for indicatorValue in deployement.indicatorValues %}
         {% if indicatorValue.enable and indicatorValue.indicator.enable %}
             <p>

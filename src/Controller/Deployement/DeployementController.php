@@ -9,6 +9,7 @@ use App\Entity\Organisme;
 use App\Form\Deployement\DeployementAppendType;
 use App\Form\Deployement\DeployementEditType;
 use App\Helper\DeployementFilter;
+use App\Helper\IndicatorValueHistoryCreate;
 use App\Manager\DeployementManager;
 use App\Repository\CorbeilleRepository;
 use App\Repository\DeployementFileRepository;
@@ -159,7 +160,10 @@ class DeployementController extends AppControllerAbstract
      *
      * @IsGranted("ROLE_USER")
      */
-    public function appendEditAction(Request $request, Deployement $entity, DeployementManager $manager): Response
+    public function appendEditAction(
+        Request $request,
+        Deployement $entity,
+        DeployementManager $manager): Response
     {
         $this->denyAccessUnlessGranted(DeployementVoter::APPEND_UPDATE, $entity);
 
@@ -227,6 +231,27 @@ class DeployementController extends AppControllerAbstract
         return $this->render('deployement/index_organisme.html.twig',
                 array_merge(['organisme'=>$organisme],
                 $deploiementFilter->getData('organisme_' . $organisme->getId()))
+        );
+    }
+
+    /**
+     * @Route("/deployement/organisme/pilote/{filter?}", name="deployements_for_organisme_pilote", methods={"GET"})
+     *
+     * @return Response
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function deployementForOrganismePilote(
+        OrganismeRepository $repo,
+        DeployementFilter $deploiementFilter,
+        string $filter
+    ): Response
+    {
+        /** @var Organisme $organisme */
+        $organisme=$repo->find($filter);
+        return $this->render('deployement/index_organisme.html.twig',
+            array_merge(['organisme'=>$organisme],
+                $deploiementFilter->getData('piloteorganisme_' . $organisme->getId()))
         );
     }
 

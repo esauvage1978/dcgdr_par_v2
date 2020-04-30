@@ -1,33 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} Messages{% endblock %}
+{% set title='Messages' %}
+{% set route_index='message_index' %}
+{% set entityName='message' %}
+{% set entity = message %}
+
+{% block title %}{{ parent() }} {{ title }}{% endblock %}
 
 {% block stylesheets %}
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ absolute_url( asset('plugins/select2/css/select2.min.css')) }}">
     <link rel="stylesheet"
           href="{{ absolute_url( asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')) }}">
-
-    <!-- iCheck for checkboxes and radio inputs -->
     <link rel="stylesheet" href="{{ absolute_url( asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')) }}">
 {% endblock %}
 
 {% block body_header %}
-    {{ include('admin/_body_header.html.twig', {'domaine': 'Messages' , 'index' : 'message_index'}) }}
+    {{ include('admin/_body_header.html.twig', {domaine: title , id : entity.id, index : route_index}) }}
+{% endblock %}
+
+{% block sidebar_sommaire %}
+
+{% endblock %}
+
+{% block sidebar_button %}
+    {% if is_granted('ROLE_GESTIONNAIRE') %}
+        {{ include('share/__btn_save_onclick.html.twig') }}
+        <span class="mb-3"></span>
+        <span class="btn btn-danger " onclick="$('#delete').click();">
+            <i class="fas fa-trash"></i> Supprimer
+        </span>
+    {% endif %}
+    <span class="mb-3"></span>
+    {{ include('share/__btn_return_list.html.twig',
+        {   url:route_index
+        }) }}
 {% endblock %}
 
 {% block body %}
-
-
     {{ form_start(form) }}
     <div class="row justify-content-center">
         <div class="col-xs-12 col-sm-6  ">
             <div class="card ">
-                <div class="card-footer">
-                    Les informations du message
-                </div>
                 <div class="card-body">
-
                     <div class="form-group row">
                         {{ form_label(form.name,'', { 'label_attr': {'class':'col-sm-3 col-form-label' }}) }}
                         <div class="col">
@@ -44,39 +59,22 @@
                         </div>
                     </div>
                     {{ form_row(form.content) }}
-
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col  d-flex justify-content-between align-items-center">
-
-                            <a class="btn btn-secondary " href="{{ path('message_show', {'id': message.id}) }}">
-                                <i class="fas fa-folder"></i> Retour à la liste
-                            </a>
-
-                            <button class="btn btn-success " name="update" id="update">
-                                <i class="fas fa-pencil-alt"></i> Enregistrer
-                            </button>
-
-                            <span class="btn btn-danger " onclick="$('#delete').click();">
-                                 <i class="fas fa-trash"></i> Supprimer
-                            </span>
-
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-
+    </div>
+    <div class="d-none">
+        {{ include('share/__btn_save.html.twig') }}
+        {{ form_rest(form) }}
     </div>
     {{ form_end(form) }}
     <div class="d-none">
-        {{ include('share/_delete_form.html.twig',{'domaine': 'message','id':message.id}) }}
+        {{ include('share/_delete_form.html.twig',{domaine: entityName,id:entity.id}) }}
     </div>
 {% endblock %}
 
-{% block javascripts %}
-    <!-- Select2 -->
-    <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
 
+{% block javascripts %}
+    <script src="{{ absolute_url( asset('plugins/select2/js/select2.full.min.js')) }}"></script>
+    <script src="{{ absolute_url( asset('js/add_sidebar.js')) }}"></script>
 {% endblock %}

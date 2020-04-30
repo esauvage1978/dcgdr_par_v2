@@ -28,7 +28,7 @@ class CorbeilleController extends AppControllerAbstract
      */
     public function indexAction(CorbeilleRepository $repository): Response
     {
-        return $this->render(self::ENTITY.'/index.html.twig', [
+        return $this->render(self::ENTITY . '/index.html.twig', [
             self::ENTITYS => $repository->findAllForAdmin(),
         ]);
     }
@@ -39,7 +39,6 @@ class CorbeilleController extends AppControllerAbstract
      */
     public function newAction(Request $request, CorbeilleManager $manager): Response
     {
-        $this->denyAccessUnlessGranted(CorbeilleVoter::CREATE, null);
         return $this->editAction($request, new Corbeille(), $manager, self::MSG_CREATE);
     }
 
@@ -49,7 +48,7 @@ class CorbeilleController extends AppControllerAbstract
      */
     public function showAction(Corbeille $entity): Response
     {
-        return $this->render(self::ENTITY.'/show.html.twig', [
+        return $this->render(self::ENTITY . '/show.html.twig', [
             self::ENTITY => $entity,
         ]);
     }
@@ -60,7 +59,7 @@ class CorbeilleController extends AppControllerAbstract
      */
     public function showUseAction(Corbeille $entity): Response
     {
-        return $this->render(self::ENTITY.'/showuse.html.twig', [
+        return $this->render(self::ENTITY . '/showuse.html.twig', [
             self::ENTITY => $entity,
         ]);
     }
@@ -75,11 +74,14 @@ class CorbeilleController extends AppControllerAbstract
         CorbeilleManager $manager,
         string $message = self::MSG_MODIFY): Response
     {
-        $this->denyAccessUnlessGranted(CorbeilleVoter::UPDATE, $entity);
+        if (!empty($entity->getId())) {
+            $this->denyAccessUnlessGranted(CorbeilleVoter::UPDATE, $entity);
+        }
 
         if ($this->isgranted('ROLE_GESTIONNAIRE')) {
             $form = $this->createForm(CorbeilleType::class, $entity);
         } else {
+
             $form = $this->createForm(CorbeilleGestLocalType::class, $entity);
         }
 
@@ -89,13 +91,13 @@ class CorbeilleController extends AppControllerAbstract
             if ($manager->save($entity)) {
                 $this->addFlash(self::SUCCESS, $message);
 
-                return $this->redirectToRoute(self::ENTITY.'_index');
+                return $this->redirectToRoute(self::ENTITY . '_index');
             }
-            $this->addFlash(self::DANGER, self::MSG_ERROR.$manager->getErrors($entity));
+            $this->addFlash(self::DANGER, self::MSG_ERROR . $manager->getErrors($entity));
         }
 
-        return $this->render(self::ENTITY.'/'.
-            (self::MSG_CREATE === $message ? 'new' : 'edit').'.html.twig', [
+        return $this->render(self::ENTITY . '/' .
+            (self::MSG_CREATE === $message ? 'new' : 'edit') . '.html.twig', [
             self::ENTITY => $entity,
             self::FORM => $form->createView(),
         ]);

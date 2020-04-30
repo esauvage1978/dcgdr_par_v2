@@ -38,7 +38,7 @@ class MailerController extends AppControllerAbstract
                         SendMail::USERS_FROM => [$this->getUser()->getEmail() => $this->getUser()->getName()],
                         SendMail::USERS_TO => $manager->getUsersEmailTo(),
                         'action' => $action,
-                        'content' => $mailer->getContent()
+                        'content' =>'<p> de <b>' .$mailer->getUserFrom() .'</b></p><p>' .$mailer->getContent() . '</p>'
                     ],
                     SendMail::MailerAction,
                     'DCGDR PAR - ' . $mailer->getSubject()
@@ -96,7 +96,7 @@ class MailerController extends AppControllerAbstract
                         SendMail::USERS_FROM => [$this->getUser()->getEmail() => $this->getUser()->getName()],
                         SendMail::USERS_TO => $manager->getUsersEmailTo(),
                         'deployement' => $deployement,
-                        'content' => $mailer->getContent()
+                        'content' =>'<p> de <b>' .$mailer->getUserFrom() .'</b></p><p>' .$mailer->getContent() . '</p>'
                     ],
                     SendMail::MailerDeployement,
                     'DCGDR PAR - ' . $mailer->getSubject()

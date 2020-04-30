@@ -62,7 +62,7 @@ class IndicatorValue implements EntityInterface
     private $enable;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\IndicatorValueHistory", mappedBy="indicatorValue")
+     * @ORM\OneToMany(targetEntity="App\Entity\IndicatorValueHistory", mappedBy="indicatorValue", orphanRemoval=true)
      */
     private $indicatorValueHistories;
 

@@ -22,7 +22,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="home", methods={"GET"})
      * @return Response
-     * @IsGranted("IS_AUTHENTICATED_FULLY")
+
      */
     public function homeAction(
         AxeRepository $axeRepository,
@@ -32,7 +32,7 @@ class HomeController extends AbstractController
         return $this->render('home/home.html.twig',
             [
                 'axes' => $axeRepository->findAllForHome(),
-                'messages'=> $messageRepository->findBy(['name'=>'home'])
+                'messages' => $messageRepository->findBy(['name' => 'home'])
             ]);
     }
 
@@ -51,16 +51,27 @@ class HomeController extends AbstractController
     {
 
         $actionSearchDto->setSearch($request->request->get('search'));
-        $deployementSearchDto
-            ->setSearch($request->request->get('search'))
-            ->setUserWriter($this->getUser()->getId());
+        $deployementSearchDto->setSearch($request->request->get('search'));
+
+        if (!$this->isGranted('ROLE_GESTIONNAIRE')) {
+            if ($this->isGranted('ROLE_GESTIONNAIRE_LOCAL')) {
+                $organismes = [];
+                foreach ($this->getUser()->getOrganismes() as $organisme) {
+                    $organismes = array_merge($organismes, [$organisme->getId()]);
+                }
+
+                $deployementSearchDto->setOrganismesId($organismes);
+            } else {
+                $deployementSearchDto->setUserWriter($this->getUser()->getId());
+            }
+        }
 
         return $this->render(
             'home/search.html.twig',
             [
                 'actions'
                 =>
-                    $actionrepo->findAllForDto($actionSearchDto,ActionRepository::FILTRE_DTO_INIT_SEARCH),
+                    $actionrepo->findAllForDto($actionSearchDto, ActionRepository::FILTRE_DTO_INIT_SEARCH),
                 'deployements'
                 =>
                     $depRepo->findAllForDto($deployementSearchDto),

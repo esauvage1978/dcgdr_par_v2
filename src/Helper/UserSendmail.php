@@ -47,7 +47,7 @@ class UserSendmail
          $this->params->get('mailer.mail') => $this->params->get('mailer.name'), ])
          ->setTo([$user->getEmail() => $user->getUsername()])
          ->setBody(
-             $this->twig->render('mail/'.$context.'.html.twig', ['user' => $user]),
+             $this->twig->render('mail/user/'.$context.'.html.twig', ['user' => $user]),
              'text/html'
          );
 

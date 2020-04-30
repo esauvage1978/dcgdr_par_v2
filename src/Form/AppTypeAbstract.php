@@ -28,6 +28,8 @@ abstract class AppTypeAbstract extends AbstractType
     const GROUP_BY = 'group_by';
     const QUERY_BUILDER = 'query_builder';
     const DISABLED = 'disabled';
+    const MAXLENGTH = 'maxlength';
+    const PLACEHOLDER = 'placeholder';
 
     public function buildFormNameEnableContent(FormBuilderInterface $builder): FormBuilderInterface
     {
@@ -35,6 +37,7 @@ abstract class AppTypeAbstract extends AbstractType
             ->add('name', TextType::class, [
                 self::LABEL => 'Nom',
                 self::REQUIRED => true,
+                self::ATTR => [self::MAXLENGTH => 255],
             ])
             ->add('enable', CheckboxType::class,
                 [
@@ -47,6 +50,7 @@ abstract class AppTypeAbstract extends AbstractType
                 self::ATTR => [self::ROWS => 3, self::CSS_CLASS => 'textarea'],
             ]);
     }
+
     public function buildFormNameContent(FormBuilderInterface $builder): FormBuilderInterface
     {
         return $builder
@@ -54,7 +58,6 @@ abstract class AppTypeAbstract extends AbstractType
                 self::LABEL => 'Nom',
                 self::REQUIRED => true,
             ])
-
             ->add('content', TextareaType::class, [
                 self::LABEL => 'Description',
                 self::REQUIRED => false,
@@ -163,6 +166,7 @@ abstract class AppTypeAbstract extends AbstractType
                 },
             ]);
     }
+
     public function buildFormWriters(FormBuilderInterface $builder): FormBuilderInterface
     {
         return $builder
@@ -183,6 +187,7 @@ abstract class AppTypeAbstract extends AbstractType
                 },
             ]);
     }
+
     public function buildFormValiders(FormBuilderInterface $builder): FormBuilderInterface
     {
         return $builder

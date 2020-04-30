@@ -1,10 +1,13 @@
-﻿Bonjour {{ user.name }},
-<br/><br/>
-Voici la liste des actions dont le jalon est positionné à aujourd'hui.
-<br/><br/>
-    {% for action in actions %}
-        {{ include('mail/_view/_action.html.twig') }}
-    {% endfor %}
+﻿{% extends './mail/template.html.twig' %}
 
-<br/><br/>
-Merci d'utiliser DCGDR PAR et à bientôt
+{% block title %} Jalon pour les actions {% endblock %}
+{% block title_content %} Jalon pour les actions {% endblock %}
+
+{% block body %}
+    <p>Voici la liste des actions dont le jalon est positionné à aujourd'hui.</p>
+    <p>
+        {% for action in actions %}
+            {{ include('mail/_view/_action.html.twig') }}
+        {% endfor %}
+    </p>
+{% endblock %}

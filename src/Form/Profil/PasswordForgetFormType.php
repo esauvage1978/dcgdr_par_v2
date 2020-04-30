@@ -15,13 +15,13 @@ class PasswordForgetFormType extends AppTypeAbstract
     {
         $builder
             ->add('email', TextType::class, [
-                self::LABEL=>'Email',
+                self::ATTR => [self::PLACEHOLDER => 'Email'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Merci de saisir l\'adresse mail de l\'utilisateur',
+                        'message' => 'Merci de saisir votre adresse mail ',
                     ]),
-                    ],
-                   ])
+                ],
+            ])
         ;
     }
 

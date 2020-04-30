@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MessageRepository")
  */
-class Message
+class Message implements EntityInterface
 {
     /**
      * @ORM\Id()
@@ -45,6 +45,13 @@ class Message
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getContent(): ?string

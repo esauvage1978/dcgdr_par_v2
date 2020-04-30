@@ -43,63 +43,94 @@ class ActionFilter
 
         switch ($filter) {
             default:
-                $this->actionSearchDto->setUserWriter($user->getId());
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId());
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
 
             case WorkflowData::STATE_STARTED:
-                $this->actionSearchDto->setUserWriter($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_STARTED);
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setState(WorkflowData::STATE_STARTED);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case WorkflowData::STATE_COTECH:
-                $this->actionSearchDto->setUserWriter($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_COTECH);
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setState(WorkflowData::STATE_COTECH);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case WorkflowData::STATE_CODIR:
-                $this->actionSearchDto->setUserWriter($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_CODIR);
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setState(WorkflowData::STATE_CODIR);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case 'valider_'.WorkflowData::STATE_COTECH:
-                $this->actionSearchDto->setUserValider($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_COTECH);
+                $this->actionSearchDto
+                    ->setUserValider($user->getId())
+                    ->setState(WorkflowData::STATE_COTECH);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case 'valider_'.WorkflowData::STATE_CODIR:
-                $this->actionSearchDto->setUserValider($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_CODIR);
+                $this->actionSearchDto
+                    ->setUserValider($user->getId())
+                    ->setState(WorkflowData::STATE_CODIR);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case WorkflowData::STATE_REJECTED:
-                $this->actionSearchDto->setUserWriter($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_REJECTED);
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setState(WorkflowData::STATE_REJECTED);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case WorkflowData::STATE_FINALISED:
-                $this->actionSearchDto->setUserWriter($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_FINALISED);
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setState(WorkflowData::STATE_FINALISED);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case WorkflowData::STATE_DEPLOYED:
-                $this->actionSearchDto->setUserWriter($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_DEPLOYED);
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setState(WorkflowData::STATE_DEPLOYED);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case WorkflowData::STATE_MEASURED:
-                $this->actionSearchDto->setUserWriter($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_MEASURED);
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setState(WorkflowData::STATE_MEASURED);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case WorkflowData::STATE_CLOTURED:
-                $this->actionSearchDto->setUserWriter($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_CLOTURED);
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setState(WorkflowData::STATE_CLOTURED);
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case WorkflowData::STATE_ABANDONNED:
-                $this->actionSearchDto->setUserWriter($user->getId());
-                $this->actionSearchDto->setState(WorkflowData::STATE_ABANDONNED);
+                $this->actionSearchDto
+                    ->setUserWriter($user->getId())
+                    ->setState(WorkflowData::STATE_ABANDONNED);
+
+                $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
+                break;
+            case 'without_writers':
+                $this->actionSearchDto
+                    ->setHasWriters(ActionSearchDto::WRITERS_PRESENT)
+                    ->setStates(['started', 'finalised']);;
+
                 $resultRepo = $this->repository->findAllForDto($this->actionSearchDto, ActionRepository::FILTRE_DTO_INIT_AJAX);
                 break;
             case 'without_jalon_writer':

@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\IndicatorValueHistory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * @method IndicatorValueHistory|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,16 +25,26 @@ class IndicatorValueHistoryRepository extends ServiceEntityRepository
 
     public function getLastEntry(string $indicatorValueId)
     {
-        $builder = $this->createQueryBuilder(self::ALIAS)
-            ->select(
-                self::ALIAS
-            )
-            ->leftjoin(self::ALIAS.'.indicatorValue', IndicatorValueRepository::ALIAS)
-            ->where(IndicatorValueRepository::ALIAS.'.id = :id')
-            ->setParameter('id', $indicatorValueId)
-            ->orderBy(self::ALIAS.'.id', 'desc')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getResult();
+        try
+        {
+            return $builder = $this->createQueryBuilder(self::ALIAS)
+                ->select(
+                    self::ALIAS
+                )
+                ->leftjoin(self::ALIAS.'.indicatorValue', IndicatorValueRepository::ALIAS)
+                ->where(IndicatorValueRepository::ALIAS.'.id = :id')
+                ->setParameter('id', $indicatorValueId)
+                ->orderBy(self::ALIAS.'.id', 'desc')
+                ->setMaxResults(1)
+                ->getQuery()->getSingleResult()
+                ;
+        } catch (NoResultException $e)
+        {
+            return null;
+        } catch (NonUniqueResultException $e)
+        {
+            return null;
+        }
+
     }
 }

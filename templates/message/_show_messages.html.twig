@@ -1,33 +1,37 @@
+<!--
+/* VERSION 1.0.0 */
+/* EMMANUEL SAUVAGE */
+-->
 {% if messages|length > 0 %}
-
     <div class="card">
-        <!-- timeline time label -->
+        <div class="card-body">
+            <div class="direct-chat-messages">
+                {% for message in messages %}
+                {% if message and message.content and message.enable %}
+                <div class="direct-chat-msg showOver"  id="message_{{ message.id }}">
+                    <div class="direct-chat-infos clearfix">
+                        <span class="direct-chat-name float-left">{{ message.user.name }}</span>
 
-        {% for message in messages %}
-            {% if message and message.content and message.enable %}
-                <div class="card-body row d-flex align-items-center">
-                    <div >
-                        <img class="img-circle img-bordered-sm img-lg" src="{{ message.user.avatar.image }}" alt="User Image">
+                        <span class="direct-chat-timestamp float-right">{{ message.modifyat | date('d/m/Y H:i:s') }}</span>
+
+                        {% if is_granted('ROLE_GESTIONNAIRE') %}
+                            <div class=" float-right text-xs hide mr-5" id="message_{{ message.id }}_span">
+                                <a href="{{ path('message_edit',{id:message.id}) }}" class="text-indigo">
+                                    <i class="fa fa-cog"></i> modifier
+                                </a>
+                            </div>
+                        {% endif %}
+
+
                     </div>
-                    <div class="ml-5 col">
-                        <a class="font-weight-bold" href="{{ path('user_show',{'id':message.user.id }) }}">{{ message.user.name }}</a>
-                        <span class="text-muted float-right">Rédigé le {{ message.modifyat | date('d/m/Y') }}</span>
+                    <img class="direct-chat-img" src="{{ message.user.avatar.image }}" alt="message user image">
+                    <div class="direct-chat-text">
                         {{ message.content | raw }}
                     </div>
-                    <!-- /.user-block -->
-
                 </div>
-                <!-- timeline item -->
-                <!-- END timeline item -->
-            {% endif %}
-        {% endfor %}
-
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
-
-
-
-
-
-
-
 {% endif %}

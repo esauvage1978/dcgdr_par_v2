@@ -1,7 +1,11 @@
-Bonjour,
-<br/><br/>
-Une action dont vous êtes le valideur est envoyée pour validation au CODIR.
-<br/><br/>
-{{ include('mail/_view/_action.html.twig') }}
-<br/><br/>
-L'équipe de l'application DCGDR PAR
+{% extends './mail/template.html.twig' %}
+
+{% block title %} Action envoyée au CODIR {% endblock %}
+{% block title_content %} Action envoyée au CODIR {% endblock %}
+
+{% block body %}
+    <p>Une action dont vous êtes le valideur est envoyée pour validation au CODIR.</p>
+    <p>
+        {{ include('mail/_view/_action.html.twig') }}
+    </p>
+{% endblock %}

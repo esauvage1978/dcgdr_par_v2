@@ -4,6 +4,8 @@ namespace App\Dto;
 
 class ActionSearchDto
 {
+    const WRITERS_PRESENT='writers';
+
     private $id;
     private $axeId;
     private $poleId;
@@ -45,6 +47,25 @@ class ActionSearchDto
     private $jalonTo;
     private $jalonNotPresentValider;
     private $states;
+    private $hasWriters;
+
+    /**
+     * @return mixed
+     */
+    public function getHasWriters()
+    {
+        return $this->hasWriters;
+    }
+
+    /**
+     * @param mixed $hasWriters
+     * @return ActionSearchDto
+     */
+    public function setHasWriters($hasWriters)
+    {
+        $this->hasWriters = $hasWriters;
+        return $this;
+    }
 
     /**
      * @return mixed

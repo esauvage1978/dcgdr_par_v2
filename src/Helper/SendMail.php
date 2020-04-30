@@ -13,8 +13,8 @@ class SendMail
     const DEPLOYEMENT_JALON_TODAY = 'deployementJalonNotificator';
     const ACTION_JALON_TODAY = 'actionJalonNotificator';
 
-    const MailerAction = 'mailerAction';
-    const MailerDeployement = 'mailerDeployement';
+    const MailerAction = 'mailer/mailerAction';
+    const MailerDeployement = 'mailer/mailerDeployement';
 
     const USERS_TO = 'user';
     const USERS_FROM = 'user_from';

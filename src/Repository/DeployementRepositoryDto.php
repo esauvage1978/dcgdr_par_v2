@@ -97,7 +97,6 @@ class DeployementRepositoryDto extends ServiceEntityRepository
             ->andwhere(ThematiqueRepository::ALIAS . '.enable=' . ($dto->actionSearchDto->isThematiqueEnable() ? 'true' : 'false'))
             ->andwhere(CategoryRepository::ALIAS . '.enable=' . ($dto->actionSearchDto->isCategoryEnable() ? 'true' : 'false'))
             ->andwhere(AxeRepository::ALIAS . '.archiving=' . ($dto->actionSearchDto->isActionArchiving() ? 'true' : 'false'))
-            ->andwhere(CorbeilleRepository::ALIAS_DEPLOYEMENT_WRITERS . '.enable=' . ($dto->isCorbeilleEnable() ? 'true' : 'false'))
             ->andwhere(IndicatorRepository::ALIAS . '.enable=' . ($dto->isIndicatorEnable() ? 'true' : 'false'))
             ->andwhere(IndicatorValueRepository::ALIAS . '.enable=' . ($dto->isIndicatorValueEnable() ? 'true' : 'false'));
 
@@ -105,13 +104,19 @@ class DeployementRepositoryDto extends ServiceEntityRepository
 
         $this->initialise_where_jalon();
 
+        $this->initialise_where_date_end_of_deployement();
+
         $this->initialise_where_state();
 
         $this->initialise_where_states();
 
         $this->initialise_where_organisme();
 
+        $this->initialise_where_organismes();
+
         $this->initialise_where_search();
+
+        $this->initialise_where_has_corbeille();
 
         if (count($this->params) > 0) {
             $this->builder->setParameters($this->params);
@@ -146,6 +151,36 @@ class DeployementRepositoryDto extends ServiceEntityRepository
             $this->builder->andwhere(OrganismeRepository::ALIAS . '.id = :organismeid');
             $this->addParams('organismeid', $this->dto->getOrganismeId());
         }
+    }
+    private function initialise_where_organismes()
+    {
+        if (!empty($this->dto->getOrganismesId())) {
+            $this->builder->andwhere(OrganismeRepository::ALIAS . '.id in  (:organismes)');
+            $this->addParams('organismes', $this->dto->getOrganismesId());
+        }
+    }
+
+    private function initialise_where_has_corbeille()
+    {
+        if ($this->dto->getHasWriters()==DeployementSearchDto::WRITERS_PRESENT) {
+            $qBLu = $this->createQueryBuilder('id')
+                ->innerJoin( 'id.writers', 'cordw')
+                ->innerJoin( 'id.organisme', 'org')
+                ->where('org.id = :organismeid')
+                ->setParameter('organismeid',$this->dto->getOrganismeId());
+
+            $this->builder->andwhere(self::ALIAS. '.id NOT IN (' . $qBLu->getDQL() . ')');
+        }
+    }
+
+    private function initialise_where_date_end_of_deployement()
+    {
+        if ($this->dto->getHasDateEndOfDeployement()===DeployementSearchDto::DATE_STATUS_NULL) {
+            $this->builder->andwhere(DeployementRepository::ALIAS . '.endAt is null');
+        } else if ($this->dto->getHasDateEndOfDeployement()===DeployementSearchDto::DATE_STATUS_NOT_NULL) {
+            $this->builder->andwhere(DeployementRepository::ALIAS . '.endAt is not null');
+        }
+
     }
 
     private function initialise_where_jalon()

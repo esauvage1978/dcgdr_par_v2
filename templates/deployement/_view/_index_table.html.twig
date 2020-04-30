@@ -48,7 +48,13 @@
                 {{ include('action/_view/_regionendat.html.twig',{'regionendat':deployement.action.regionendat}) }}
             </td>
             <td class="text-center  align-middle">
-                {{ include('deployement/_view/_jalon.html.twig') }}
+                {% if deployement.endat %}
+                <span class="text-green">
+                   <i class="far fa-check-circle"></i> Terminé pour l'organisme
+                </span>
+                {% else %}
+                    {{ include('deployement/_view/_jalon.html.twig') }}
+                {% endif %}
             </td>
             <td class="text-center  align-middle">
 

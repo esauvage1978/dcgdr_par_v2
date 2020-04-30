@@ -1,7 +1,11 @@
-Bonjour,
-<br/><br/>
-Une action dont vous êtes le pilote est validé par le CODIR, merci de compléter la méthodologie.
-<br/><br/>
-{{ include('mail/_view/_action.html.twig') }}
-<br/><br/>
-L'équipe de l'application DCGDR PAR
+{% extends './mail/template.html.twig' %}
+
+{% block title %} Action à compléter{% endblock %}
+{% block title_content %} Action à compléter {% endblock %}
+
+{% block body %}
+    <p>Une action dont vous êtes le pilote est validé par le CODIR, merci de compléter la méthodologie.</p>
+    <p>
+        {{ include('mail/_view/_action.html.twig') }}
+    </p>
+{% endblock %}
